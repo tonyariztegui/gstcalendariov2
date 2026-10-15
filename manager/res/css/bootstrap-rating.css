@@ -1,0 +1,18 @@
+.symbol {
+  display: inline-block;
+  border-radius: 50%;
+  border: 5px double white;
+  width: 80px;
+  height: 80px;
+}
+
+.symbol-empty {
+  background-color: #ccc;
+}
+
+.symbol-filled {
+  background-color: black;
+}
+
+.rating-symbol {font-size:40px;color:#999;}
+.rating-symbol-foreground {font-size:40px;color:#f90}

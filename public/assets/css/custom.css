@@ -1,0 +1,1644 @@
+html {
+  overflow-x: hidden;
+  width: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Assicurare che il contenuto principale occupi tutto lo spazio disponibile */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Logo allineato al form di registrazione (stesso ingombro card, ma fuori dal contenitore) */
+.card-logo-wrapper {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 -1px 0;
+  padding: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.card-logo-img {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.card-logo-wrapper .brand-header-img {
+  width: 100vw !important;
+  max-width: none !important;
+  max-height: none !important;
+  height: auto;
+  margin-left: calc(50% - 50vw) !important;
+  margin-right: calc(50% - 50vw) !important;
+  border-radius: 0;
+  object-fit: contain;
+  object-position: center;
+}
+
+.registration-card {
+  box-shadow: none !important;
+  position: relative;
+  z-index: 1;
+  border: none !important;
+  margin-top: -1px;
+  border-top: 0 !important;
+}
+
+/* Rimuove ogni bordo dalle card del form e delle pagine di attesa/assistenza */
+.card.registration-card {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Armonizzazione accoglienza e login */
+.help-content {
+  color: #000;
+}
+
+.login-container {
+  max-width: 1000px;
+  width: 100%;
+  margin: 20px auto;
+  background: #fff;
+  background-image: url('../img/coop_images/sfondo bianco stelle.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 20px 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+main {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+form {
+  padding: 0px 0px 0px 0px !important;
+}
+
+.swal2-actions .btn {
+    margin-right: 0.5em;
+    min-width: 110px;
+    font-size: 1.1rem;
+    padding: 0.5em 1.5em;
+}
+.swal2-actions .btn:last-child {
+    margin-right: 0;
+}
+
+.swal2-confirm.swal2-styled {
+    background-color: #28a745 !important;
+    border: none !important;
+    color: #fff !important;
+}
+.swal2-confirm.swal2-styled:focus,
+.swal2-confirm.swal2-styled:hover {
+    background-color: #218838 !important;
+}
+
+.swal2-popup .swal2-actions .swal2-confirm.swal2-styled {
+    background-color: #28a745 !important;
+    border: none !important;
+    color: #fff !important;
+    box-shadow: none !important;
+}
+.swal2-popup .swal2-actions .swal2-confirm.swal2-styled:focus,
+.swal2-popup .swal2-actions .swal2-confirm.swal2-styled:hover {
+    background-color: #218838 !important;
+}
+
+/* Stili per il footer */
+footer {
+  margin-top: 0;
+  width: 100%;
+  background: #fff;
+  padding: 20px 0;
+}
+
+footer .txt-info {
+  color: #fff;
+  font-size: 1rem;
+}
+footer .txt-info a {
+  color: #fff;
+  text-decoration: underline;
+}
+footer .txt-info a:hover {
+  color: #ffd700;
+}
+
+.piede {
+  max-width: 420px;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+img.img-fluid {
+  max-width: 1000px;
+  width: 100%;
+  height: auto;
+}
+
+/* Allineamento perfetto label + input */
+.form-label {
+  text-align: left !important;
+  display: block;
+  margin-bottom: 0.5rem;
+  padding-left: 2px;
+}
+.input-group, .form-control, .form-select {
+  max-width: 680px;
+  margin-left: 0 !important;
+}
+/* Eccezione per i campi in col-12 nel modulo di registrazione */
+.col-12 > .form-control,
+.col-12 > .form-select,
+.col-12 .select2-container {
+  max-width: 100% !important;
+}
+
+/* Spaziatura per i campi personalizzati accanto a Email */
+.custom-field-next-to-email {
+  padding-left: 1rem !important;
+}
+
+@media (min-width: 768px) {
+  .custom-field-next-to-email {
+    padding-left: 1.5rem !important;
+  }
+}
+#message.form-control {
+  max-width: 100%;
+}
+#help-form .form-control {
+  max-width: 100%;
+}
+
+/* Allineamento delle caselle di controllo e testo */
+.checkbox-align {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 0.5rem auto;
+}
+.checkbox-align label {
+  margin-bottom: 0;
+  text-align: left;
+}
+
+/* Centratura della checkbox privacy in help.php */
+#help-form .form-check {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 auto;
+  max-width: 600px;
+}
+
+#help-form .form-check-label {
+  text-align: center;
+  margin-bottom: 0;
+}
+
+@media (max-width: 767.98px) {
+  .input-group, .form-control, .form-select {
+    max-width: 100%;
+  }
+}
+
+/* Rimozione del margine superiore sul contenitore principale di help.php */
+.login-container, .container.help-content {
+  color: #000;
+}
+
+.login-container {
+  margin-top: 20px !important;
+  margin-bottom: 20px !important;
+  border-radius: 0 !important;
+}
+
+/* Opzionale: se .col ha un margine superiore, annullarlo anche in questo contesto */
+#help-form .col,
+.login-container .col {
+  margin-top: 0 !important;
+}
+
+.login-container img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Assicurarsi che l'immagine piede rimanga attaccata in basso nel login-container */
+.login-container .piede {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: rgba(56, 166, 104, 0.25) !important;
+  color: #212529 !important;
+  box-shadow: none;
+  border-color: #38A668 !important;
+}
+
+/* Focus globale: usa la palette del concorso (hors formulaire inscription) */
+input:focus, textarea:focus, select:focus {
+  border-color: var(--contest-primary, #018a4a) !important;
+  box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--contest-primary, #018a4a) 25%, transparent) !important;
+  outline: none !important;
+}
+
+/* Formulaire inscription: focus allineato a Stile dei campi */
+#registration-form input:focus,
+#registration-form input:focus-visible,
+#registration-form textarea:focus,
+#registration-form textarea:focus-visible,
+#registration-form select:focus,
+#registration-form select:focus-visible,
+#registration-form .form-control:focus,
+#registration-form .form-control:focus-visible,
+#registration-form .form-select:focus,
+#registration-form .form-select:focus-visible {
+  border-color: var(--form-field-focus, var(--contest-primary, #018a4a)) !important;
+  box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--form-field-focus, var(--contest-primary, #018a4a)) 25%, transparent) !important;
+  outline: none !important;
+}
+
+#registration-form input[type="date"].form-control,
+#registration-form input[type="datetime-local"].form-control,
+#registration-form input[type="month"].form-control,
+#registration-form input[type="week"].form-control,
+#registration-form input[type="time"].form-control {
+  accent-color: var(--form-field-focus, var(--contest-primary, #018a4a));
+}
+
+/* Flatpickr: calendario Data scontrino (vars risolte in registration.php / get_theme_colors_block) */
+.flatpickr-calendar,
+.flatpickr-calendar .flatpickr-months,
+.flatpickr-calendar .flatpickr-innerContainer,
+.flatpickr-calendar .flatpickr-rContainer,
+.flatpickr-calendar .flatpickr-weekdays,
+.flatpickr-calendar .flatpickr-days,
+.flatpickr-calendar .dayContainer {
+  background: var(--form-field-calendar-popup-bg, var(--form-field-bg, #ffffff));
+}
+.flatpickr-months .flatpickr-month,
+.flatpickr-current-month .flatpickr-monthDropdown-months,
+.flatpickr-current-month input.cur-year {
+  color: var(--form-field-text, #212529);
+  fill: var(--form-field-text, #212529);
+}
+.flatpickr-months .flatpickr-prev-month,
+.flatpickr-months .flatpickr-next-month {
+  color: var(--form-field-text, #212529);
+  fill: var(--form-field-text, #212529);
+}
+.flatpickr-months .flatpickr-prev-month:hover,
+.flatpickr-months .flatpickr-next-month:hover {
+  color: var(--form-field-calendar-selected, var(--form-field-focus, var(--contest-primary, #018a4a)));
+  fill: var(--form-field-calendar-selected, var(--form-field-focus, var(--contest-primary, #018a4a)));
+}
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+  display: none !important;
+}
+.flatpickr-current-month .cur-month {
+  font-weight: 600;
+  pointer-events: none;
+}
+.flatpickr-current-month input.cur-year {
+  pointer-events: none;
+  -moz-appearance: textfield;
+}
+.flatpickr-current-month input.cur-year::-webkit-outer-spin-button,
+.flatpickr-current-month input.cur-year::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.flatpickr-current-month .numInputWrapper span.arrowUp,
+.flatpickr-current-month .numInputWrapper span.arrowDown {
+  display: none !important;
+}
+.flatpickr-current-month .numInputWrapper:hover {
+  background: transparent !important;
+}
+span.flatpickr-weekday {
+  color: color-mix(in srgb, var(--form-field-text, #212529) 70%, transparent);
+}
+.flatpickr-day {
+  color: var(--form-field-text, #212529);
+  border-color: transparent;
+}
+.flatpickr-calendar {
+  border: 1px solid var(--form-field-border, #dee2e6);
+  color: var(--form-field-text, #212529);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.14);
+}
+.flatpickr-day.today,
+.flatpickr-day.today:focus {
+  border-color: var(--form-field-calendar-selected, var(--form-field-focus, var(--contest-primary, #018a4a)));
+}
+.flatpickr-day:hover,
+.flatpickr-day:focus,
+.flatpickr-day.today:hover,
+.flatpickr-day.today:focus {
+  background: var(--form-field-calendar-hover-bg, var(--form-field-select2-highlight-bg, color-mix(in srgb, var(--form-field-focus, #018a4a) 80%, var(--form-field-bg, #ffffff))));
+  color: var(--form-field-calendar-hover-text, var(--form-field-select2-highlight-text, #ffffff));
+  border-color: transparent;
+}
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange,
+.flatpickr-day.selected.inRange,
+.flatpickr-day.startRange.inRange,
+.flatpickr-day.endRange.inRange,
+.flatpickr-day.selected:focus,
+.flatpickr-day.startRange:focus,
+.flatpickr-day.endRange:focus,
+.flatpickr-day.selected:hover,
+.flatpickr-day.startRange:hover,
+.flatpickr-day.endRange:hover,
+.flatpickr-day.selected.prevMonthDay,
+.flatpickr-day.startRange.prevMonthDay,
+.flatpickr-day.endRange.prevMonthDay,
+.flatpickr-day.selected.nextMonthDay,
+.flatpickr-day.startRange.nextMonthDay,
+.flatpickr-day.endRange.nextMonthDay {
+  background: var(--form-field-calendar-selected, var(--form-field-focus, var(--contest-primary, #018a4a)));
+  border-color: var(--form-field-calendar-selected, var(--form-field-focus, var(--contest-primary, #018a4a)));
+  color: #ffffff;
+}
+.flatpickr-day.selected:hover,
+.flatpickr-day.startRange:hover,
+.flatpickr-day.endRange:hover {
+  background: var(--form-field-calendar-selected, var(--form-field-focus, var(--contest-primary, #018a4a)));
+  color: #ffffff;
+}
+.flatpickr-day.flatpickr-disabled,
+.flatpickr-day.flatpickr-disabled:hover,
+.flatpickr-day.prevMonthDay,
+.flatpickr-day.nextMonthDay {
+  color: color-mix(in srgb, var(--form-field-text, #212529) 35%, transparent);
+}
+.flatpickr-day.flatpickr-disabled,
+.flatpickr-day.flatpickr-disabled:hover {
+  background: transparent;
+}
+.flatpickr-time input,
+.flatpickr-time .flatpickr-am-pm {
+  color: var(--form-field-text, #212529);
+}
+.flatpickr-time input:hover,
+.flatpickr-time .flatpickr-am-pm:hover,
+.flatpickr-time input:focus,
+.flatpickr-time .flatpickr-am-pm:focus {
+  background: var(--form-field-calendar-hover-bg, var(--form-field-select2-highlight-bg, color-mix(in srgb, var(--form-field-focus, #018a4a) 80%, var(--form-field-bg, #ffffff))));
+  color: var(--form-field-calendar-hover-text, var(--form-field-select2-highlight-text, #ffffff));
+}
+#registration-form .flatpickr-input.form-control[readonly] {
+  background-color: var(--form-field-bg, #ffffff);
+  color: var(--form-field-text, #000000);
+  -webkit-text-fill-color: var(--form-field-text, #000000);
+  cursor: pointer;
+}
+
+/* Autofill: mantieni sfondo ma rispetta Stile dei campi sulla registration */
+#registration-form input:-webkit-autofill,
+#registration-form .form-control:-webkit-autofill,
+#registration-form select:-webkit-autofill,
+#registration-form textarea:-webkit-autofill {
+  border-color: var(--form-field-border, #dee2e6) !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--form-field-bg, #ffffff) inset !important;
+  box-shadow: 0 0 0 1000px var(--form-field-bg, #ffffff) inset !important;
+  background-color: var(--form-field-bg, #ffffff) !important;
+}
+#registration-form input:-webkit-autofill:focus,
+#registration-form input:-webkit-autofill:focus-visible,
+#registration-form .form-control:-webkit-autofill:focus,
+#registration-form .form-control:-webkit-autofill:focus-visible {
+  border-color: var(--form-field-focus, var(--contest-primary)) !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--form-field-bg, #ffffff) inset, 0 0 0 0.2rem color-mix(in srgb, var(--form-field-focus, var(--contest-primary)) 25%, transparent) !important;
+  box-shadow: 0 0 0 1000px var(--form-field-bg, #ffffff) inset, 0 0 0 0.2rem color-mix(in srgb, var(--form-field-focus, var(--contest-primary)) 25%, transparent) !important;
+}
+
+.registration-form-container {
+  max-width: 800px !important;
+  width: 100%;
+  margin: 0 auto;
+  box-shadow: none;
+  background: transparent;
+}
+.registration-form-container .form-control,
+.registration-form-container .form-select,
+.registration-form-container .input-group {
+  max-width: 100%;
+}
+
+/* Spaziatura form: field-gap nella famiglia input, section-gap tra famiglie.
+   I consensi usano .registration-form-row senza --inputs (spacing invariato). */
+#registration-form {
+  --registration-field-gap: 10px;
+  --registration-section-gap: 25px;
+}
+
+#registration-form .registration-form-row {
+  margin-bottom: 10px;
+}
+
+#registration-form .registration-form-row--inputs {
+  --bs-gutter-y: 0;
+  margin-bottom: var(--registration-field-gap);
+  row-gap: var(--registration-field-gap);
+  align-items: flex-start;
+}
+
+#registration-form .registration-form-section-gap {
+  margin-top: var(--registration-section-gap);
+  margin-bottom: 0;
+}
+
+#registration-form .registration-form-section-gap .section-spacer {
+  margin: 0;
+  height: 0;
+}
+
+#registration-form .registration-form-row:has(+ .registration-form-section-gap),
+#registration-form .registration-form-row--inputs:has(+ .registration-form-section-gap) {
+  margin-bottom: 0;
+}
+
+#registration-form .pdv-cascata-block:has(+ .registration-form-section-gap) .registration-form-row--inputs:last-child {
+  margin-bottom: 0;
+}
+
+/* Gap solo dal row: niente margini/padding verticali Bootstrap sulle colonne input */
+#registration-form .registration-form-row--inputs > [class*="col-"] {
+  position: relative;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Select2 inline-block lascia spazio sotto (baseline): forza block per gap uguale al row */
+#registration-form .registration-form-row--inputs .select2-container {
+  display: block !important;
+  margin: 0 !important;
+  vertical-align: top;
+}
+
+#registration-form .registration-form-row--inputs .form-control,
+#registration-form .registration-form-row--inputs .form-select {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+#registration-form .registration-form-row--inputs .error-message:not(.d-block) {
+  display: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 0 !important;
+}
+
+/* Mobile: stesso field-gap tra colonne impilate (es. Provincia→Città), senza rompere prefisso|cellulare */
+@media (max-width: 767.98px) {
+  #registration-form .registration-form-row--inputs {
+    --bs-gutter-y: 0;
+    row-gap: var(--registration-field-gap) !important;
+  }
+
+  #registration-form .registration-form-row--inputs > [class*="col-"] {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+}
+
+/* Select2: evitare doppia altezza nel wrapper (select nascosto + widget visibile) */
+#registration-form .select2-wrapper select.select2-hidden-accessible,
+#registration-form select.select2-hidden-accessible {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+
+#registration-form .select2-wrapper {
+  margin: 0;
+  padding: 0;
+}
+
+/* Wrapper per il modulo help */
+.help-form-wrapper {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+#help-form {
+  padding-left: 0;
+  padding-right: 0;
+}
+@media (max-width: 600px) {
+  .help-form-wrapper {
+    padding: 0 6px;
+  }
+}
+
+#help-form .col-12,
+#help-form .col-md-6 {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+@media (max-width: 600px) {
+  #help-form .col-12,
+  #help-form .col-md-6 {
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+}
+
+#reset-password-form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+@media (max-width: 600px) {
+  #reset-password-form {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
+
+@media (max-width: 474px) {
+  .storico-codici-table-wrapper table,
+  .storico-codici-table {
+    min-width: unset !important;
+    font-size: 0.85rem;
+  }
+  .storico-codici-table-wrapper th,
+  .storico-codici-table-wrapper td,
+  .storico-codici-table th,
+  .storico-codici-table td {
+    padding: 0.25rem 0.2rem !important;
+    white-space: nowrap;
+    font-size: 0.85rem;
+  }
+  .storico-codici-table-wrapper {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+/* Forzare il bordo bianco di default per tutti i campi */
+.form-control,
+.form-select,
+input,
+select,
+textarea {
+  border-color: #dee2e6 !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+}
+
+/* Forzare il bordo coerente anche con l'autofill (pagine senza #registration-form) */
+.form-control:-webkit-autofill,
+.form-select:-webkit-autofill,
+input:-webkit-autofill,
+select:-webkit-autofill,
+textarea:-webkit-autofill {
+  border-color: var(--form-field-border, #dee2e6) !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--form-field-bg, #ffffff) inset !important;
+  box-shadow: 0 0 0 1000px var(--form-field-bg, #ffffff) inset !important;
+  background-color: var(--form-field-bg, #ffffff) !important;
+}
+
+/* Rimuovere le validazioni visive - tutti i campi rimangono bianchi TRANNE le password */
+.form-control.is-valid,
+.form-select.is-valid,
+input.is-valid,
+select.is-valid,
+textarea.is-valid {
+  border-color: #dee2e6 !important; /* Stesso colore dei campi normali */
+}
+
+/* Mantenere le icone di validazione SOLO per le password */
+#password.is-valid,
+#confirm_password.is-valid {
+  border-color: #198754 !important; /* Verde per le password */
+}
+
+/* Campi non validi in rosso */
+.form-control.is-invalid,
+.form-select.is-invalid,
+input.is-invalid,
+select.is-invalid,
+textarea.is-invalid {
+  border-color: #dc3545 !important;
+}
+
+/* Scorrimento automatico verso i messaggi di errore - già definito in alto */
+
+/* Evidenziazione dei messaggi di errore */
+#error-messages {
+  scroll-margin-top: 20px;
+}
+
+/* Tablet in modalità verticale e mobile - Legacy per compatibilità */
+@media (max-width: 767.98px) {
+  /* Il main-container ha la classe "container" di Bootstrap che aggiunge dei padding */
+  .main-container.container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Annullare anche i padding di main-content se presenti */
+  .main-content {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+  }
+  
+  /* Forzare login-container al 100% di larghezza senza margini */
+  main .login-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    border-radius: 0 !important;
+  }
+  
+  /* Assicurarsi che main non abbia margini */
+  main {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    width: 100% !important;
+  }
+}
+
+/* Anche per schermi molto piccoli */
+@media (max-width: 576px) {
+  .main-container.container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+  main .login-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+@media (max-width: 600px) {
+  main .login-container .btn.btn-lg {
+    font-size: var(--contest-btn-primary-font-size, 0.9rem) !important;
+    text-align: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  /* Pulsante REGOLAMENTO responsive - limita la larghezza a partire da 600px */
+  main .login-container .btn.btn-lg[href*="regolamento"],
+  main .login-container a.btn.btn-lg[style*="background-color:#EA5C11"] {
+    max-width: calc(100% - 24px) !important;
+    width: auto !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    font-size: 0.95rem !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+    display: inline-block !important;
+  }
+  
+  /* Contenitore del pulsante REGOLAMENTO - regolazione dei margini */
+  main .login-container .text-center .mt-3 {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* Regolazioni aggiuntive per schermi molto piccoli */
+@media (max-width: 480px) {
+  main .login-container .btn.btn-lg[href*="regolamento"],
+  main .login-container a.btn.btn-lg[style*="background-color:#EA5C11"] {
+    max-width: calc(100% - 16px) !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    font-size: 0.85rem !important;
+  }
+}
+
+@media (max-width: 360px) {
+  main .login-container .btn.btn-lg[href*="regolamento"],
+  main .login-container a.btn.btn-lg[style*="background-color:#EA5C11"] {
+    max-width: calc(100% - 12px) !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    font-size: 0.8rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  main .login-container .title-txt {
+    font-size: 2rem !important;
+  }
+}
+
+
+@media (max-width: 600px) {
+  main .login-container .title-txt {
+    font-size: 1.75rem !important;
+  }
+}
+
+
+@media (max-width: 500px) {
+  main .login-container .title-txt {
+    font-size: 1.5rem !important;
+    margin-bottom: 20px !important;
+  }
+}
+
+@media (max-width: 320px) {
+  main .login-container .title-txt {
+    font-size: 1.1rem !important;
+    margin-bottom: 10px !important;
+  }
+}
+
+
+
+
+@media (max-width: 768px) {
+  /* Titolo "NON HAI VINTO" */
+  main .login-container h3[style*="font-size: 30px"] {
+    font-size: 28px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  /* Paragrafo del messaggio di sconfitta */
+  main .login-container div[style*="background: linear-gradient(135deg, #dc3545"] p[style*="font-size: 16px"] {
+    font-size: 16px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  main .login-container h3[style*="font-size: 30px"] {
+    font-size: 26px !important;
+    margin-bottom: 10px !important;
+  }
+  
+  main .login-container div[style*="background: linear-gradient(135deg, #dc3545"] p[style*="font-size: 16px"] {
+    font-size: 15px !important;
+  }
+}
+
+@media (max-width: 500px) {
+  main .login-container h3[style*="font-size: 30px"] {
+    font-size: 24px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  main .login-container div[style*="background: linear-gradient(135deg, #dc3545"] p[style*="font-size: 16px"] {
+    font-size: 14px !important; /* Minimum footer size */
+  }
+}
+
+@media (max-width: 400px) {
+  main .login-container h3[style*="font-size: 30px"] {
+    font-size: 22px !important;
+    margin-bottom: 10px !important;
+  }
+  
+  main .login-container div[style*="background: linear-gradient(135deg, #dc3545"] p[style*="font-size: 16px"] {
+    font-size: 14px !important; /* Minimum footer size */
+  }
+}
+
+@media (max-width: 320px) {
+  main .login-container h3[style*="font-size: 30px"] {
+    font-size: 20px !important;
+    margin-bottom: 8px !important;
+  }
+  
+  main .login-container div[style*="background: linear-gradient(135deg, #dc3545"] p[style*="font-size: 16px"] {
+    font-size: 14px !important; /* Minimum footer size */
+  }
+}
+
+
+
+/* Riduzione progressiva a partire da 768px */
+@media (max-width: 768px) {
+  /* Titolo COMPLIMENTI! */
+  main .login-container .complimenti-title,
+  main .login-container h2[style*="font-size: 28px"] {
+    font-size: 26px !important;
+    margin-bottom: 15px !important;
+  }
+  
+  /* Titolo HAI VINTO! */
+  main .login-container h3[style*="font-size: 28px"] {
+    font-size: 26px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  /* Titolo Prepagata Todis */
+  main .login-container h4[style*="font-size: 24px"] {
+    font-size: 22px !important;
+    margin-bottom: 8px !important;
+  }
+  
+  /* Importo € */
+  main .login-container div[style*="font-size: 48px"] {
+    font-size: 42px !important;
+  }
+  
+  /* Paragrafi */
+  main .login-container p[style*="font-size: 16px"] {
+    font-size: 16px !important;
+    margin: 12px 0 !important;
+  }
+  
+  main .login-container p[style*="font-size: 14px"] {
+    font-size: 14px !important;
+    margin: 8px 0 !important;
+  }
+  
+  /* Padding delle div */
+  main .login-container div[style*="padding: 30px"] {
+    padding: 20px !important;
+  }
+  
+  main .login-container div[style*="padding: 20px"] {
+    padding: 15px !important;
+  }
+  
+  /* Titoli h5 e h6 */
+  main .login-container h5 {
+    font-size: 16px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  main .login-container h6 {
+    font-size: 14px !important;
+  }
+}
+
+/* A 600px */
+@media (max-width: 600px) {
+  /* Titolo COMPLIMENTI! */
+  main .login-container .complimenti-title,
+  main .login-container h2[style*="font-size: 28px"] {
+    font-size: 24px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  /* Titolo HAI VINTO! */
+  main .login-container h3[style*="font-size: 28px"] {
+    font-size: 24px !important;
+    margin-bottom: 10px !important;
+  }
+  
+  /* Titolo Prepagata Todis */
+  main .login-container h4[style*="font-size: 24px"] {
+    font-size: 20px !important;
+    margin-bottom: 6px !important;
+  }
+  
+  /* Importo € */
+  main .login-container div[style*="font-size: 48px"] {
+    font-size: 38px !important;
+  }
+  
+  /* Paragrafi - Minimo 0.875rem (14px) come il footer */
+  main .login-container p[style*="font-size: 16px"] {
+    font-size: 15px !important;
+    margin: 10px 0 !important;
+  }
+  
+  main .login-container p[style*="font-size: 14px"] {
+    font-size: 14px !important; /* Minimum footer size */
+    margin: 6px 0 !important;
+  }
+  
+  /* Padding delle div */
+  main .login-container div[style*="padding: 30px"] {
+    padding: 15px !important;
+  }
+  
+  main .login-container div[style*="padding: 20px"] {
+    padding: 12px !important;
+  }
+  
+  /* Titoli h5 e h6 - Dimensione minima footer per h6 */
+  main .login-container h5 {
+    font-size: 14px !important;
+    margin-bottom: 10px !important;
+  }
+  
+  main .login-container h6 {
+    font-size: 14px !important; /* Minimum footer size */
+  }
+}
+
+/* A 500px */
+@media (max-width: 500px) {
+  /* Titolo COMPLIMENTI! */
+  main .login-container .complimenti-title,
+  main .login-container h2[style*="font-size: 28px"] {
+    font-size: 22px !important;
+    margin-bottom: 10px !important;
+  }
+  
+  /* Titolo HAI VINTO! */
+  main .login-container h3[style*="font-size: 28px"] {
+    font-size: 22px !important;
+    margin-bottom: 8px !important;
+  }
+  
+  /* Titolo Prepagata Todis */
+  main .login-container h4[style*="font-size: 24px"] {
+    font-size: 18px !important;
+    margin-bottom: 5px !important;
+  }
+  
+  /* Importo € */
+  main .login-container div[style*="font-size: 48px"] {
+    font-size: 34px !important;
+  }
+  
+  /* Paragrafi - Minimo 0.875rem (14px) come il footer */
+  main .login-container p[style*="font-size: 16px"] {
+    font-size: 14px !important; /* Minimum footer size */
+    margin: 8px 0 !important;
+  }
+  
+  main .login-container p[style*="font-size: 14px"] {
+    font-size: 14px !important; /* Minimum footer size */
+    margin: 5px 0 !important;
+  }
+  
+  /* Padding delle div */
+  main .login-container div[style*="padding: 30px"] {
+    padding: 12px !important;
+  }
+  
+  main .login-container div[style*="padding: 20px"] {
+    padding: 10px !important;
+  }
+  
+  /* Titoli h5 e h6 - Dimensione minima footer */
+  main .login-container h5 {
+    font-size: 14px !important; /* Minimum footer size */
+    margin-bottom: 8px !important;
+  }
+  
+  main .login-container h6 {
+    font-size: 14px !important; /* Minimum footer size */
+  }
+}
+
+/* A 400px */
+@media (max-width: 400px) {
+  /* Titolo COMPLIMENTI! */
+  main .login-container .complimenti-title,
+  main .login-container h2[style*="font-size: 28px"] {
+    font-size: 20px !important;
+    margin-bottom: 8px !important;
+  }
+  
+  /* Titolo HAI VINTO! */
+  main .login-container h3[style*="font-size: 28px"] {
+    font-size: 20px !important;
+    margin-bottom: 6px !important;
+  }
+  
+  /* Titolo Prepagata Todis */
+  main .login-container h4[style*="font-size: 24px"] {
+    font-size: 16px !important;
+    margin-bottom: 4px !important;
+  }
+  
+  /* Importo € */
+  main .login-container div[style*="font-size: 48px"] {
+    font-size: 30px !important;
+  }
+  
+  /* Paragrafi - Minimo 0.875rem (14px) come il footer */
+  main .login-container p[style*="font-size: 16px"] {
+    font-size: 14px !important; /* Minimum footer size */
+    margin: 6px 0 !important;
+  }
+  
+  main .login-container p[style*="font-size: 14px"] {
+    font-size: 14px !important; /* Minimum footer size */
+    margin: 4px 0 !important;
+  }
+  
+  /* Padding delle div */
+  main .login-container div[style*="padding: 30px"] {
+    padding: 10px !important;
+  }
+  
+  main .login-container div[style*="padding: 20px"] {
+    padding: 8px !important;
+  }
+  
+  /* Titoli h5 e h6 - Dimensione minima footer */
+  main .login-container h5 {
+    font-size: 14px !important; /* Minimum footer size */
+    margin-bottom: 6px !important;
+  }
+  
+  main .login-container h6 {
+    font-size: 14px !important; /* Minimum footer size */
+  }
+}
+
+/* Schermi molto piccoli */
+@media (max-width: 320px) {
+  /* Titolo COMPLIMENTI! */
+  main .login-container .complimenti-title,
+  main .login-container h2[style*="font-size: 28px"] {
+    font-size: 18px !important;
+    margin-bottom: 6px !important;
+  }
+  
+  /* Titolo HAI VINTO! */
+  main .login-container h3[style*="font-size: 28px"] {
+    font-size: 18px !important;
+    margin-bottom: 5px !important;
+  }
+  
+  /* Titolo Prepagata Todis */
+  main .login-container h4[style*="font-size: 24px"] {
+    font-size: 15px !important;
+    margin-bottom: 3px !important;
+  }
+  
+  /* Importo € */
+  main .login-container div[style*="font-size: 48px"] {
+    font-size: 26px !important;
+  }
+  
+  /* Paragrafi - Minimo 0.875rem (14px) come il footer */
+  main .login-container p[style*="font-size: 16px"] {
+    font-size: 14px !important; /* Minimum footer size */
+    margin: 5px 0 !important;
+  }
+  
+  main .login-container p[style*="font-size: 14px"] {
+    font-size: 14px !important; /* Minimum footer size */
+    margin: 3px 0 !important;
+  }
+  
+  /* Padding delle div */
+  main .login-container div[style*="padding: 30px"] {
+    padding: 8px !important;
+  }
+  
+  main .login-container div[style*="padding: 20px"] {
+    padding: 6px !important;
+  }
+  
+  /* Titoli h5 e h6 - Dimensione minima footer */
+  main .login-container h5 {
+    font-size: 14px !important; /* Minimum footer size */
+    margin-bottom: 5px !important;
+  }
+  
+  main .login-container h6 {
+    font-size: 14px !important; /* Minimum footer size */
+  }
+}
+
+/* ========================================
+   AJUSTEMENTS SPÉCIFIQUES MESSAGE DE VICTOIRE
+   ======================================== */
+
+/* Ridurre la dimensione dei paragrafi "Dettagli del premio" in responsive - Dimensione minima footer */
+@media (max-width: 768px) {
+  /* Paragrafi nella sezione Dettagli del premio */
+  main .login-container div[style*="background: #f8f9fa"] p {
+    font-size: 15px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  main .login-container div[style*="background: #f8f9fa"] p {
+    font-size: 14px !important; /* Minimum footer size */
+  }
+}
+
+@media (max-width: 500px) {
+  main .login-container div[style*="background: #f8f9fa"] p {
+    font-size: 14px !important; /* Minimum footer size */
+  }
+}
+
+@media (max-width: 400px) {
+  main .login-container div[style*="background: #f8f9fa"] p {
+    font-size: 14px !important; /* Minimum footer size */
+  }
+}
+
+/* Aumentare la dimensione dei testi sotto "Prima email" e "Seconda email" */
+@media (max-width: 768px) {
+  /* Paragrafi sotto Prima email e Seconda email */
+  main .login-container div[style*="background: #e7f3ff"] .col-md-6 p[style*="font-size: 14px"] {
+    font-size: 16px !important;
+  }
+  
+  /* Regolare il testo "Importante" per renderlo coerente */
+  main .login-container div[style*="background: #e7f3ff"] small {
+    font-size: 15px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  main .login-container div[style*="background: #e7f3ff"] .col-md-6 p[style*="font-size: 14px"] {
+    font-size: 15px !important;
+  }
+  
+  main .login-container div[style*="background: #e7f3ff"] small {
+    font-size: 14px !important;
+  }
+}
+
+@media (max-width: 500px) {
+  main .login-container div[style*="background: #e7f3ff"] .col-md-6 p[style*="font-size: 14px"] {
+    font-size: 14px !important; /* Minimum footer size */
+  }
+  
+  main .login-container div[style*="background: #e7f3ff"] small {
+    font-size: 14px !important; /* Minimum footer size */
+  }
+}
+
+@media (max-width: 400px) {
+  main .login-container div[style*="background: #e7f3ff"] .col-md-6 p[style*="font-size: 14px"] {
+    font-size: 14px !important; /* Minimum footer size */
+  }
+  
+  main .login-container div[style*="background: #e7f3ff"] small {
+    font-size: 14px !important; /* Minimum footer size */
+  }
+}
+
+/* Stile pulito per il pulsante principale (layout; colori da get_button_style_block) */
+#submitBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  transition: all 0.2s ease;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#submitBtn .spinner-border,
+#submitBtn .spinner-border-sm {
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+#submitBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Responsive: layout only — font-size viene da Bottoni (get_button_style_block) */
+@media (max-width: 600px) {
+  #submitBtn {
+    min-height: 50px;
+    padding: 10px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  #submitBtn {
+    min-height: 45px;
+    padding: 8px 16px;
+    letter-spacing: 0.3px;
+  }
+}
+
+@media (max-width: 360px) {
+  #submitBtn {
+    min-height: 40px;
+    padding: 8px 12px;
+    letter-spacing: 0.2px;
+  }
+}
+/* =====================================================================
+   STILE "PLACEHOLDER DENTRO" (form_field_style = "placeholder")
+   Le label dei campi diventano invisibili (ma accessibili) e il loro
+   testo viene riportato come placeholder all'interno del campo via JS.
+   I checkbox dei consensi mantengono la loro label visibile.
+   ===================================================================== */
+
+/* Nascondi TUTTE le label all'interno del form, tranne le label dei
+   checkbox (.form-check-label). Foto scontrino: info formati nel controllo file. */
+body.form-style-placeholder #registration-form label.form-label,
+body.form-style-placeholder #registration-form .col label:not(.form-check-label) {
+  display: none !important;
+}
+
+/* I checkbox (privacy, marketing, profilazione, custom) mantengono la label visibile */
+body.form-style-placeholder #registration-form .form-check .form-check-label {
+  display: inline-block !important;
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: normal !important;
+  color: var(--form-consent-text, var(--form-field-text, #000000)) !important;
+}
+
+#registration-form .form-check-label {
+  color: var(--form-consent-text, var(--form-field-text, #000000));
+}
+
+#registration-form .registration-file-input {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+/* Etichette sopra: texte natif browser, pas d'overlay */
+body:not(.form-style-placeholder) #registration-form .registration-file-status {
+  display: none !important;
+}
+/* Bouton file: fond distinct + séparateur pleine hauteur, sans trait blanc */
+#registration-form input[type="file"].form-control {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  line-height: 1.5 !important;
+  min-height: calc(1.5em + 0.75rem + 2px) !important;
+  padding: 0 0.75rem 0 0 !important;
+}
+#registration-form input[type="file"].form-control::file-selector-button,
+#registration-form input[type="file"].form-control::-webkit-file-upload-button {
+  background-color: color-mix(in srgb, var(--form-field-border, #dee2e6) 45%, var(--form-field-bg, #ffffff)) !important;
+  color: var(--form-field-text, #000000) !important;
+  -webkit-text-fill-color: var(--form-field-text, #000000) !important;
+  border: 0 !important;
+  border-inline-end: 1px solid var(--form-field-border, #dee2e6) !important;
+  border-radius: 0 !important;
+  box-sizing: border-box !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0.375rem 0.75rem !important;
+  cursor: pointer !important;
+}
+/* Placeholder dentro: même taille que les autres inputs (42px) + pleine largeur */
+body.form-style-placeholder #registration-form .registration-file-input input[type="file"].form-control,
+body.form-style-placeholder #registration-form input[type="file"].form-control {
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+  min-height: 42px !important;
+  height: 42px !important;
+  padding: 0 0.85rem 0 0 !important;
+  font-size: var(--form-field-font-size, 0.95rem) !important;
+  line-height: 1.4 !important;
+  border-radius: var(--form-field-radius, 6px) !important;
+}
+body.form-style-placeholder #registration-form input[type="file"].form-control::file-selector-button,
+body.form-style-placeholder #registration-form input[type="file"].form-control::-webkit-file-upload-button {
+  font-weight: 700 !important;
+  letter-spacing: 0.3px !important;
+  text-transform: uppercase !important;
+  font-size: var(--form-field-font-size, 0.85rem) !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  padding: 0 0.85rem !important;
+  line-height: 42px !important;
+}
+body.form-style-placeholder #registration-form .registration-file-status {
+  display: block;
+  position: absolute;
+  left: 7.5rem;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--form-field-font-size, 0.85rem);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  opacity: var(--form-placeholder-opacity, 0.72);
+  color: var(--form-field-placeholder, color-mix(in srgb, var(--form-field-text, #000000) 55%, #ffffff));
+  -webkit-text-fill-color: var(--form-field-placeholder, color-mix(in srgb, var(--form-field-text, #000000) 55%, #ffffff));
+}
+body.form-style-placeholder #registration-form .registration-file-status.is-filled {
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: none;
+  opacity: 1;
+  color: var(--form-field-text, #000000);
+  -webkit-text-fill-color: var(--form-field-text, #000000);
+}
+
+#registration-form .error-message.d-block {
+  color: var(--form-error-inline-text, #dc3545) !important;
+  background-color: var(--form-error-inline-bg, transparent) !important;
+  text-shadow: var(--form-error-inline-shadow, none);
+  display: inline-block;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+}
+
+/* Stile compatto/elegante dei campi in modalita' placeholder */
+body.form-style-placeholder #registration-form .form-control,
+body.form-style-placeholder #registration-form .form-select:not(.select2-hidden-accessible) {
+  min-height: 42px;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--form-field-radius, 6px);
+  font-size: var(--form-field-font-size, 0.95rem);
+  font-family: var(--form-field-font-family, inherit);
+  line-height: 1.4;
+}
+
+body.form-style-placeholder #registration-form {
+  --form-placeholder-opacity: 0.72;
+}
+body.form-style-placeholder #registration-form .form-control::placeholder {
+  color: var(--form-field-placeholder, var(--form-field-text, #000000));
+  -webkit-text-fill-color: var(--form-field-placeholder, var(--form-field-text, #000000));
+  opacity: var(--form-placeholder-opacity);
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  font-size: var(--form-field-font-size, 0.85rem);
+  font-family: var(--form-field-font-family, inherit);
+}
+
+body.form-style-placeholder #registration-form #importo::placeholder,
+body.form-style-placeholder #registration-form #importo::-webkit-input-placeholder,
+body.form-style-placeholder #registration-form #importo::-moz-placeholder {
+  font-size: calc(var(--form-field-font-size, 0.85rem) * 0.8);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+body.form-style-placeholder #registration-form #importo.is-invalid {
+  background-image: none;
+  padding-right: 0.85rem;
+}
+
+/* Select2 in modalita' placeholder: stessa altezza dei normali input, testo centrato */
+body.form-style-placeholder #registration-form .select2-container--default .select2-selection--single {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+  height: 42px;
+  padding: 0 0.85rem;
+  border-radius: var(--form-field-radius, 6px);
+  box-sizing: border-box;
+}
+body.form-style-placeholder #registration-form .select2-container--default .select2-selection--single .select2-selection__rendered {
+  display: block;
+  width: 100%;
+  line-height: 1.4;
+  padding: 0 1.85rem 0 0;
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  font-size: var(--form-field-font-size, 0.85rem);
+  color: var(--form-field-placeholder, var(--form-field-text, #000000));
+  -webkit-text-fill-color: var(--form-field-placeholder, var(--form-field-text, #000000));
+}
+body.form-style-placeholder #registration-form .select2-container--default .select2-selection--single .select2-selection__placeholder {
+  color: var(--form-field-placeholder, var(--form-field-text, #000000));
+  -webkit-text-fill-color: var(--form-field-placeholder, var(--form-field-text, #000000));
+  opacity: var(--form-placeholder-opacity);
+}
+body.form-style-placeholder #registration-form .select2-container--default .select2-selection--single .select2-selection__clear {
+  position: absolute;
+  top: 50%;
+  right: 1.9rem;
+  margin: 0;
+  line-height: 1;
+  transform: translateY(-50%);
+  font-weight: 400;
+}
+body.form-style-placeholder #registration-form .select2-container--default .select2-selection--single .select2-selection__arrow {
+  position: absolute;
+  top: 50%;
+  right: 0.65rem;
+  width: 20px;
+  height: 20px;
+  margin-top: 0;
+  transform: translateY(-50%);
+}
+body.form-style-placeholder #registration-form .select2-container--default .select2-selection--single .select2-selection__arrow b {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 0;
+  transform: translate(-50%, -50%);
+}
+
+/* Le option native della select (mobile fallback): manteniamo leggibilita' */
+body.form-style-placeholder #registration-form select.form-select option {
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
+  color: #495057;
+}
+
+/* Prima option vuota = stesso look del placeholder (select nativi) */
+body.form-style-placeholder #registration-form select.form-select:invalid,
+body.form-style-placeholder #registration-form select.form-select:has(option[value=""]:checked) {
+  color: var(--form-field-text, #000000);
+  -webkit-text-fill-color: var(--form-field-text, #000000);
+  opacity: var(--form-placeholder-opacity);
+}
+body.form-style-placeholder #registration-form select.form-select:not(:has(option[value=""]:checked)):not(:invalid) {
+  color: var(--form-field-text, #000000);
+  -webkit-text-fill-color: var(--form-field-text, #000000);
+  opacity: 1;
+}
+
+/* Su mobile riduciamo leggermente l'altezza */
+@media (max-width: 575.98px) {
+  body.form-style-placeholder #registration-form .form-control,
+  body.form-style-placeholder #registration-form .form-select,
+  body.form-style-placeholder #registration-form .select2-container--default .select2-selection--single {
+    min-height: 38px;
+    padding: 0.35rem 0.7rem;
+    font-size: var(--form-field-font-size, 0.9rem);
+  }
+  body.form-style-placeholder #registration-form .select2-container--default .select2-selection--single {
+    height: 38px;
+  }
+  body.form-style-placeholder #registration-form .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 20px;
+  }
+  body.form-style-placeholder #registration-form .form-control::placeholder,
+  body.form-style-placeholder #registration-form .select2-container--default .select2-selection--single .select2-selection__rendered {
+    font-size: var(--form-field-font-size, 0.8rem);
+  }
+  body.form-style-placeholder #registration-form #importo::placeholder,
+  body.form-style-placeholder #registration-form #importo::-webkit-input-placeholder,
+  body.form-style-placeholder #registration-form #importo::-moz-placeholder {
+    font-size: calc(var(--form-field-font-size, 0.8rem) * 0.78);
+  }
+}
+
+
+/* Testo aiuto campi (fidelity / scontrino / codice) + footer sotto PARTECIPA */
+.logo-stack .registration-hint-text {
+  color: var(--registration-hint-color, var(--contest-text, #ffffff)) !important;
+  -webkit-text-fill-color: var(--registration-hint-color, var(--contest-text, #ffffff)) !important;
+  font-size: 0.7rem !important;
+  line-height: 1.4 !important;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+}
+#registration-form .registration-hint-text + .error-message {
+  margin-top: 0.35rem;
+}
+.logo-stack .registration-button-footer-text {
+  color: var(--registration-button-footer-color, var(--contest-text, #ffffff)) !important;
+  -webkit-text-fill-color: var(--registration-button-footer-color, var(--contest-text, #ffffff)) !important;
+  font-size: 0.7rem !important;
+  line-height: 1.4 !important;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+/* Footer — layout centrato compatto */
+footer.footer-layout-centered .container {
+  max-width: 900px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--bs-gutter-x, 0.75rem);
+  padding-right: var(--bs-gutter-x, 0.75rem);
+}
+
+footer.footer-layout-centered .footer-layout-centered-inner {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+footer.footer-layout-centered .footer-logo-img {
+  position: relative;
+  z-index: 2;
+  object-fit: contain;
+}
+
+footer.footer-layout-centered .footer-legal-block {
+  width: 100%;
+  max-width: 720px;
+  line-height: 1.45;
+  text-align: center;
+}
+
+footer.footer-layout-centered .footer-legal-block > div {
+  text-align: center;
+}
+
+footer.footer-layout-centered .footer-text {
+  width: 100%;
+  max-width: 720px;
+  text-align: center;
+}
+
+footer.footer-layout-centered .footer-links-inline {
+  width: 100%;
+  max-width: 720px;
+  text-align: center;
+}
+
+footer.footer-layout-centered .fw-bold.text-uppercase.text-success {
+  width: 100%;
+  max-width: 720px;
+  text-align: center;
+}
+
+footer.footer-layout-centered .footer-links-inline a {
+  text-decoration: none;
+}
+
+footer.footer-layout-centered .footer-links-inline a:hover {
+  text-decoration: underline;
+}

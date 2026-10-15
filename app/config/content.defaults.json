@@ -1,0 +1,1356 @@
+{
+  "_comment": "Configurazione di default: usata se content.json non è presente.",
+  "base_url": "",
+  "published": false,
+  "name": "Concorso Generico",
+  "start_date": "today",
+  "end_date": "+30 days",
+  "_comment_display_dates": "Date mostrate nei testi pubblici (footer, email, placeholder). Vuoto = stesse date di start_date/end_date.",
+  "display_start_date": "",
+  "display_end_date": "",
+  "date_format": "d/m/Y",
+  "contest_mode": "estrazione",
+  "_comment_instantwin_shared_thankyou_page": "Se true (solo Instant Win): una sola pagina thank-you per vincita e non vincita. Le email restano separate.",
+  "instantwin_shared_thankyou_page": false,
+  "_comment_form_field_style": "Stile delle etichette dei campi del form pubblico: 'label_top' (etichette sopra) o 'placeholder' (placeholder dentro al campo).",
+  "form_field_style": "label_top",
+  "_comment_form_field_border_radius": "Arrotondamento angoli campi form (px). 0 = angoli a spigolo, valori alti = più arrotondati. Default: 6.",
+  "form_field_border_radius": 6,
+  "_comment_form_field_text_color": "Colore (HEX) del testo digitato negli input. Default: #000000.",
+  "form_field_text_color": "#000000",
+  "_comment_form_field_placeholder_color": "Colore (HEX) dei placeholder. Vuoto = mix automatico dal testo campi.",
+  "form_field_placeholder_color": "",
+  "_comment_form_field_border_color": "Colore (HEX) del bordo degli input/select. Default: #dee2e6.",
+  "form_field_border_color": "#dee2e6",
+  "_comment_form_field_bg_color": "Colore (HEX) di sfondo degli input/select. Default: #ffffff.",
+  "form_field_bg_color": "#ffffff",
+  "_comment_form_field_focus_color": "Colore focus input/select. Vuoto = Primario palette.",
+  "form_field_focus_color": "",
+  "_comment_form_field_checkbox_color": "Colore checkbox e consensi (registrazione + privacy Assistenza). Vuoto = Secondario palette.",
+  "form_field_checkbox_color": "",
+  "_comment_form_field_consent_text_color": "Colore testo Consensi (escluso il link privacy). Default: #000000.",
+  "form_field_consent_text_color": "#000000",
+  "_comment_form_field_consent_link_color": "Colore link nei testi consensi (es. informativa privacy). Vuoto = Secondario palette.",
+  "form_field_consent_link_color": "",
+  "_comment_form_field_consent_link_hover_color": "Colore hover/focus link consensi. Vuoto = Terziario palette.",
+  "form_field_consent_link_hover_color": "",
+  "_comment_form_field_bg_opacity": "Opacita sfondo campi (0-100). 0 = trasparente.",
+  "form_field_bg_opacity": 100,
+  "_comment_form_field_focus_opacity": "Opacita colore focus (bordo e alone). 0 = invisibile.",
+  "form_field_focus_opacity": 100,
+  "_comment_form_field_consent_link_hover_opacity": "Opacita colore hover link consensi.",
+  "form_field_consent_link_hover_opacity": 100,
+  "_comment_form_field_error_mode": "Stile messaggi errore: classic | on_color_background (leggibile su sfondo colorato).",
+  "form_field_error_mode": "classic",
+  "_comment_form_field_select2_highlight_bg": "Sfondo opzione evidenziata Select2. Vuoto = mix focus + sfondo campo.",
+  "form_field_select2_highlight_bg": "",
+  "_comment_form_field_select2_highlight_text": "Testo opzione evidenziata Select2. Vuoto = contrasto automatico.",
+  "form_field_select2_highlight_text": "",
+  "_comment_form_field_calendar_popup_bg": "Sfondo popup calendario Data scontrino (Flatpickr). Vuoto = sfondo campi.",
+  "form_field_calendar_popup_bg": "",
+  "_comment_form_field_calendar_selected_color": "Colore giorno selezionato nel calendario. Vuoto = colore focus campi.",
+  "form_field_calendar_selected_color": "",
+  "_comment_form_field_calendar_hover_bg": "Sfondo giorno al survol nel calendario. Vuoto = evidenziazione Select2.",
+  "form_field_calendar_hover_bg": "",
+  "_comment_form_field_calendar_hover_text": "Testo giorno al survol nel calendario. Vuoto = contrasto automatico su hover bg.",
+  "form_field_calendar_hover_text": "",
+  "quiz_enabled": false,
+  "qr_access": {
+    "enabled": false,
+    "verify_signature": true,
+    "signature_algorithms": ["sha256", "sha1"],
+    "public_key_sp": "-----BEGIN PUBLIC KEY-----\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAMtCSk+rTkZNYm/kObsnfI4mUeXFEiGL\nxLig3fywI3/GI9eXGaLkuAo2sd2h9Rn/jmlnrkew3a8gERzXaZQ1akUCAwEAAQ==\n-----END PUBLIC KEY-----",
+    "public_key_mc": "-----BEGIN PUBLIC KEY-----\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJSpnLWkqSen/zFHjqf9sNp9WXryZC91\nqC488YL6J2DQ8yFK8yqcTVypvBe3MgG5iorqj5rPL/BQa9n/sOtrossCAwEAAQ==\n-----END PUBLIC KEY-----",
+    "contest_code": "",
+    "verify_contest_code_sp": false,
+    "verify_contest_code_mc": false,
+    "max_uses_per_code": 1,
+    "use_payload_giocate": true,
+    "rate_limit_seconds": 10,
+    "receipt_date_mode": "contest_dates",
+    "receipt_date_min": "",
+    "errors": {
+      "qr_missing": {
+        "title": "Attenzione! Codice non rilevato",
+        "text": ""
+      },
+      "qr_invalid": {
+        "title": "Attenzione! Il codice non e valido o e gia stato utilizzato.",
+        "text": ""
+      },
+      "qr_rate": {
+        "title": "Ops! Puoi giocare una volta ogni 10 secondi.",
+        "text": ""
+      }
+    }
+  },
+  "quiz": {
+    "num_questions": 4,
+    "mode": "standard",
+    "require_all_correct": true,
+    "instantwin_separate_thankyou_quiz_failed": false,
+    "thankyou_instantwin_headline_quiz_ok": "NON HAI VINTO",
+    "thankyou_instantwin_lead_quiz_ok": "Questa volta non hai vinto, ma puoi partecipare di nuovo con un nuovo scontrino!",
+    "thankyou_instantwin_headline_quiz_failed": "RISPOSTE NON CORRETTE",
+    "thankyou_instantwin_lead_quiz_failed": "Non hai risposto correttamente a tutte le domande del quiz."
+  },
+  "instantwin_auto_prize_with_receipt": false,
+  "instantwin_prize_distribution": "default",
+  "instantwin_per_pdv": false,
+  "instantwin_per_cedi": false,
+  "premi_matrix": {},
+  "premi_matrix_weeks_custom": false,
+  "cedi_definitions": [
+    {
+      "code": "1",
+      "label": "Generale test"
+    }
+  ],
+  "cedi_prize_values": [],
+  "cedi_prize_definitions": [],
+  "instantwin_codice_label": "Codice partecipazione",
+  "instantwin_codice_length": 12,
+  "instantwin_codice_length_auto": false,
+  "codice_partecipazione_mode": "pool",
+  "codice_partecipazione_strict_validation": false,
+  "codice_partecipazione_security_enabled": false,
+  "instantwin_codice_mode": "instantwin",
+  "min_spend": 10,
+  "prize_total": 1000,
+  "_comment_premi": "Tipi di premi (solo Instant Win): source DB table premi. Valore vuoto = nessun default.",
+  "premi": [],
+  "prize_email_templates": {},
+  "_comment_prize_email_templates": "Template premio IW per chiave valore|tipo_premio. template_path + overlay (immagine GD). email.custom_body_enabled + email.body = corpo HTML opzionale (oggetto sempre globale). File generati: uploads/premi/generated/cp_{codici_premio_id}.png",
+  "max_file_size": 5242880,
+  "receipt_allowed_extensions": ["jpg", "png", "pdf"],
+  "promoter": "Promoter Srl",
+  "promoter_link": "",
+  "delegate": "Delegato Srl",
+  "delegate_link": "",
+  "helpdesk_email": "",
+  "_comment_smtp": "Credenziali SMTP solo nel file .env (SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD, SMTP_FROM_EMAIL, SMTP_FROM_NAME). Le chiavi json restano vuote per compatibilità; non salvarci segreti.",
+  "smtp_host": "",
+  "smtp_port": 587,
+  "smtp_username": "",
+  "smtp_password": "",
+  "smtp_from_email": "",
+  "smtp_from_name": "",
+  "privacy_link": "",
+  "rules_link": "",
+  "cookie_policy_link": "",
+  "_comment_cookie_consent": "Banner cookie + tracking (GTM/Meta/TikTok). enabled=false = niente banner/tag. Liste cookie e pagine configurabili per concorso.",
+  "cookie_consent": {
+    "enabled": false,
+    "sync_registration_marketing": true,
+    "consent_cookie_name": "gst_cookie_consent",
+    "banner": {
+      "text": "Utilizziamo cookie tecnici e, previo consenso, cookie di analytics/marketing. Puoi accettare tutti i cookie o gestire le tue preferenze.",
+      "accept_label": "Accetto tutti i cookies",
+      "preferences_label": "Le mie preferenze sui cookies",
+      "save_label": "Salva preferenze",
+      "necessary_title": "Cookie necessari",
+      "necessary_desc": "Sempre attivi. Servono al funzionamento del sito (sessione, sicurezza, preferenze).",
+      "marketing_title": "Cookie analytics e marketing",
+      "marketing_desc": "Ci aiutano a misurare il traffico e a personalizzare le comunicazioni promozionali.",
+      "policy_link_label": "Privacy & Cookie Policy"
+    },
+    "style": {
+      "bg_color": "#ffffff",
+      "text_color": "#333333",
+      "link_color": "#0d6efd",
+      "border_color": "#0d6efd",
+      "button_bg": "#0d6efd",
+      "button_text": "#ffffff",
+      "button_secondary_bg": "#ffffff",
+      "button_secondary_text": "#0d6efd"
+    },
+    "tracking": {
+      "gtm_container_id": "",
+      "meta_pixel_id": "",
+      "tiktok_pixel_id": ""
+    },
+    "cookies": {
+      "technical": [
+        { "name": "PHPSESSID", "purpose": "Sessione utente", "duration": "Sessione", "provider": "Sito" },
+        { "name": "gst_cookie_consent", "purpose": "Memorizzazione preferenze cookie", "duration": "90 giorni", "provider": "Sito" }
+      ],
+      "marketing": []
+    },
+    "pages": {
+      "registration": { "banner": true, "tracking": true },
+      "waiting": { "banner": true, "tracking": true },
+      "waiting_ended": { "banner": true, "tracking": true },
+      "participation": { "banner": true, "tracking": true },
+      "thankyou": { "banner": true, "tracking": true },
+      "help": { "banner": true, "tracking": true },
+      "quiz": { "banner": true, "tracking": true },
+      "error": { "banner": false, "tracking": false }
+    }
+  },
+  "logo_enabled": true,
+  "logo_display_mode": "logo",
+  "logo": "assets/img/default_img/logo-generic.png",
+  "logo_mobile": "assets/img/default_img/logo_mobile.png",
+  "header_image": "assets/img/default_img/header-desktop.png",
+  "header_image_mobile": "assets/img/default_img/header-mobile.png",
+  "logo_desktop_size": "medium",
+  "logo_desktop_width_percent": 85,
+  "logo_desktop_max_height_px": 0,
+  "logo_top_spacing": {
+    "mobile_px": 0,
+    "tablet_px": 0,
+    "desktop_px": 0
+  },
+  "brand_header_logo_gap": {
+    "mobile_px": 0,
+    "tablet_px": 0,
+    "desktop_px": 0
+  },
+  "brand_header_top_spacing": {
+    "mobile_px": 0,
+    "tablet_px": 0,
+    "desktop_px": 0
+  },
+  "brand_page_layout": {
+    "registration": { "preset": "attached", "customize_per_size": true, "mobile": { "overlap_px": 0 }, "tablet": { "overlap_px": 0 }, "desktop": { "overlap_px": 0 } },
+    "help": { "preset": "attached", "customize_per_size": true, "mobile": { "overlap_px": 0 }, "tablet": { "overlap_px": 0 }, "desktop": { "overlap_px": 0 } },
+    "waiting_page": { "preset": "attached", "customize_per_size": true, "mobile": { "overlap_px": 0 }, "tablet": { "overlap_px": 0 }, "desktop": { "overlap_px": 0 } },
+    "participation_page": { "preset": "attached", "customize_per_size": true, "mobile": { "overlap_px": 0 }, "tablet": { "overlap_px": 0 }, "desktop": { "overlap_px": 0 } },
+    "waiting_page_ended": { "preset": "attached", "customize_per_size": true, "mobile": { "overlap_px": 0 }, "tablet": { "overlap_px": 0 }, "desktop": { "overlap_px": 0 } },
+    "thankyou_instantwin_win_page": { "preset": "attached", "customize_per_size": true, "mobile": { "overlap_px": 0 }, "tablet": { "overlap_px": 0 }, "desktop": { "overlap_px": 0 } },
+    "thankyou_instantwin_loss_page": { "preset": "attached", "customize_per_size": true, "mobile": { "overlap_px": 0 }, "tablet": { "overlap_px": 0 }, "desktop": { "overlap_px": 0 } },
+    "thankyou_instantwin_quiz_failed_page": { "preset": "attached", "customize_per_size": true, "mobile": { "overlap_px": 0 }, "tablet": { "overlap_px": 0 }, "desktop": { "overlap_px": 0 } },
+    "thankyou_estrazione_page": { "preset": "attached", "customize_per_size": true, "mobile": { "overlap_px": 0 }, "tablet": { "overlap_px": 0 }, "desktop": { "overlap_px": 0 } },
+    "thankyou_estrazione_quiz_failed_page": { "preset": "attached", "customize_per_size": true, "mobile": { "overlap_px": 0 }, "tablet": { "overlap_px": 0 }, "desktop": { "overlap_px": 0 } },
+    "quiz_page": { "preset": "attached", "customize_per_size": true, "mobile": { "overlap_px": 0 }, "tablet": { "overlap_px": 0 }, "desktop": { "overlap_px": 0 } },
+    "quiz_choice_page": { "preset": "attached", "customize_per_size": true, "mobile": { "overlap_px": 0 }, "tablet": { "overlap_px": 0 }, "desktop": { "overlap_px": 0 } }
+  },
+  "favicon": "assets/img/default_img/favicon.png",
+  "favicon_mobile": "assets/img/default_img/favicon_mobile.png",
+  "mail_banner": "assets/img/default_img/banner.png",
+  "_comment_backgrounds": "Usa 'image' o 'color' per lo sfondo. Le immagini sono per breakpoint diversi.",
+  "background_mode": "image",
+  "background_color": "#ffffff",
+  "backgrounds": {
+    "default": "assets/img/default_img/background_default.svg",
+    "mobile": "assets/img/default_img/background_mobile.svg",
+    "tablet": "assets/img/default_img/background_tablet.svg",
+    "laptop": "assets/img/default_img/background_laptop.svg",
+    "desktop": "assets/img/default_img/background_desktop.svg",
+    "ultrawide": "assets/img/default_img/background_ultrawide.svg"
+  },
+  "background_style": {
+    "position_vertical": "center",
+    "position_horizontal": "center",
+    "size": "cover",
+    "size_custom": "",
+    "repeat": "no-repeat",
+    "attachment": "fixed",
+    "customize_per_size": false,
+    "mobile": {
+      "position_vertical": "center",
+      "position_horizontal": "center",
+      "size": "cover",
+      "size_custom": "",
+      "repeat": "no-repeat",
+      "attachment": "fixed"
+    },
+    "tablet": {
+      "position_vertical": "center",
+      "position_horizontal": "center",
+      "size": "cover",
+      "size_custom": "",
+      "repeat": "no-repeat",
+      "attachment": "fixed"
+    },
+    "laptop": {
+      "position_vertical": "center",
+      "position_horizontal": "center",
+      "size": "cover",
+      "size_custom": "",
+      "repeat": "no-repeat",
+      "attachment": "fixed"
+    },
+    "desktop": {
+      "position_vertical": "center",
+      "position_horizontal": "center",
+      "size": "cover",
+      "size_custom": "",
+      "repeat": "no-repeat",
+      "attachment": "fixed"
+    },
+    "ultrawide": {
+      "position_vertical": "center",
+      "position_horizontal": "center",
+      "size": "cover",
+      "size_custom": "",
+      "repeat": "no-repeat",
+      "attachment": "fixed"
+    }
+  },
+  "_comment_fonts": "Font caricati (woff2/woff/ttf). Non cambiano la tipografia globale: usati in Summernote e nei selettori opzionali.",
+  "fonts": {
+    "items": []
+  },
+  "_comment_form_field_font": "Famiglia font opzionale per campi form (registrazione/assistenza). Vuoto = tipografia pagina.",
+  "form_field_font": "",
+  "form_field_font_size": "",
+  "_comment_colors": "Palette tema: primary per accenti principali, secondary per link, tertiary per hover/focus dei link, text per testi.",
+  "colors": {
+    "primary": "#0d6efd",
+    "secondary": "#6c757d",
+    "tertiary": "#ffffff",
+    "text": "#212529"
+  },
+  "_comment_style_customization": "Override colori per sezione: false = eredita palette.",
+  "style_customization": {
+    "buttons_colors": false,
+    "footer_text_colors": false,
+    "help_page_colors": false,
+    "form_field_colors": false,
+    "cookie_banner_colors": false
+  },
+  "_comment_footer": "Colori e bordi del footer.",
+  "footer_style": {
+    "mode": "color",
+    "background": "#ffffff",
+    "image": "",
+    "opacity": 100,
+    "image_position_vertical": "center",
+    "image_position_horizontal": "center",
+    "image_size": "cover",
+    "image_size_custom": "",
+    "image_repeat": "no-repeat",
+    "text_primary": "#212529",
+    "text_secondary": "#6c757d",
+    "link": "#0d6efd",
+    "link_hover": "#0a58ca",
+    "border_color": "#000000",
+    "border_opacity": 10,
+    "border_width": 0,
+    "border_sides": []
+  },
+  "_comment_footer_layout": "Disposizione e contenuti del footer pubblico.",
+  "footer_layout": {
+    "template": "three_columns",
+    "show_logo": false,
+    "use_contest_logo": true,
+    "logo_image": "",
+    "logo_height_px": 60,
+    "font_family": "",
+    "font_size": "",
+    "blocks": {
+      "contest_title": true,
+      "contest_dates": true,
+      "prize_total": true,
+      "links_regolamento": true,
+      "links_privacy": true,
+      "links_cookie_policy": false,
+      "links_assistenza": true,
+      "promoter": true,
+      "delegate": true,
+      "legal_block_1": false,
+      "legal_block_2": false
+    },
+    "texts": {
+      "contest_title": "",
+      "intro_line": "",
+      "legal_html_1": "",
+      "legal_html_2": "",
+      "link_regolamento_label": "Regolamento completo",
+      "link_privacy_label": "Privacy Policy",
+      "link_cookie_policy_label": "Cookie Policy",
+      "link_assistenza_label": "Assistenza"
+    }
+  },
+  "_comment_buttons": "Configurazione dei pulsanti.",
+  "buttons": {
+    "primary": {
+      "text": "PARTECIPA",
+      "mode": "color",
+      "bg": "#0d6efd",
+      "text_color": "#ffffff",
+      "border": "#0d6efd",
+      "hover_bg": "#0b5ed7",
+      "hover_border": "#0b5ed7",
+      "radius": 8,
+      "font": "",
+      "font_size": "",
+      "use_gradient": false,
+      "gradient_style": "center",
+      "gradient_direction": "horizontal",
+      "gradient_from": "#e55a1a",
+      "gradient_to": "#ff9a4a",
+      "gradient_hover_from": "#d44f14",
+      "gradient_hover_to": "#ffb06a",
+      "image": "",
+      "hover_image": "",
+      "image_size": "cover",
+      "image_size_custom": "",
+      "image_position_vertical": "center",
+      "image_position_horizontal": "center",
+      "hide_text_on_image": true
+    },
+    "secondary": {
+      "text": "SECONDARIO",
+      "mode": "color",
+      "bg": "#6c757d",
+      "text_color": "#ffffff",
+      "border": "#6c757d",
+      "hover_bg": "#5c636a",
+      "hover_border": "#5c636a",
+      "radius": 8,
+      "font": "",
+      "font_size": "",
+      "use_gradient": false,
+      "gradient_style": "center",
+      "gradient_direction": "horizontal",
+      "gradient_from": "#5c636a",
+      "gradient_to": "#adb5bd",
+      "gradient_hover_from": "#495057",
+      "gradient_hover_to": "#ced4da",
+      "image": "",
+      "hover_image": "",
+      "image_size": "cover",
+      "image_size_custom": "",
+      "image_position_vertical": "center",
+      "image_position_horizontal": "center",
+      "hide_text_on_image": true
+    },
+    "regolamento": {
+      "text": "REGOLAMENTO"
+    },
+    "thankyou": {
+      "regolamento_text": "REGOLAMENTO",
+      "retry_text": "PARTECIPA DI NUOVO"
+    },
+    "help": {
+      "text": "INVIA"
+    },
+    "quiz_submit_text": "INVIA RISPOSTE"
+  },
+  "_comment_email_templates": "Template email utenti: oggetto + HTML (solo contenuto interno). Placeholder: {{CONTEST_NAME}}, {{USER_NAME}}, {{START_DATE}}, {{END_DATE}}, {{MIN_SPEND}}, {{PRIZE_AMOUNT}}, {{PRIZE_WIN_AMOUNT}}, {{HELP_URL}}, {{REGOLAMENTO_LINK}}, {{VOUCHER_CODE}}, {{VOUCHER_CODE_BLOCK}}, {{PRIZE_IMAGE_BLOCK}}, {{PRIZE_TYPE}}. Nota: {{VOUCHER_CODE_BLOCK}} = solo la box stilizzata con il codice; {{PRIZE_IMAGE_BLOCK}} = immagine premio (template o generata con codice).",
+  "email_templates": {
+    "partecipazione": {
+      "subject": "Conferma partecipazione - {{CONTEST_NAME}}",
+      "body": "<p>Ciao {{USER_NAME}},</p><p>La tua partecipazione al concorso {{CONTEST_NAME}} &egrave; stata registrata con successo.</p><p>Informazioni importanti:</p><ul><li>Conserva lo scontrino originale fino al termine delle verifiche previste dal regolamento.</li><li>Le comunicazioni ufficiali saranno inviate all'indirizzo email che hai indicato.</li><li>Partecipazioni non conformi al regolamento potranno essere escluse.</li></ul><p>Se hai domande, consulta la <a href=\"{{HELP_URL}}\">pagina di assistenza</a>.</p><p>Ti ringraziamo per aver preso parte al concorso {{CONTEST_NAME}}.</p><p>Ti auguriamo buona fortuna!</p>"
+    },
+    "instantwin_confirm": {
+      "subject": "Vincita da confermare - {{CONTEST_NAME}}",
+      "body": "<p>Ciao {{USER_NAME}},</p><p>La tua partecipazione al concorso {{CONTEST_NAME}} &egrave; risultata vincente. Premio previsto: &euro;{{PRIZE_AMOUNT}}.</p><p>Stiamo completando le verifiche previste dal regolamento. Riceverai un'ulteriore email di conferma con le istruzioni per il ritiro del premio.</p><p>Cosa fare ora:</p><ul><li>Conserva lo scontrino originale.</li><li>Controlla la casella di posta (e la cartella spam) nelle prossime ore.</li><li>Per dubbi o assistenza scrivi all'<a href=\"{{HELP_URL}}\">assistenza</a>.</li></ul><p>Grazie per aver partecipato!</p>"
+    },
+    "instantwin_loss": {
+      "subject": "Grazie per la partecipazione - {{CONTEST_NAME}}",
+      "body": "<p>Gentile {{USER_NAME}},</p><p>Ti ringraziamo per aver preso parte al concorso {{CONTEST_NAME}}. L'estrazione odierna non ha rilevato una vincita associata alla tua partecipazione.</p><p>Il concorso prosegue:</p><p>L'iniziativa &egrave; attiva dal {{START_DATE}} al {{END_DATE}}. Puoi partecipare ogni giorno: ogni ingresso rappresenta una nuova opportunit&agrave; di vincita Instant Win.</p><p>Suggerimenti utili:</p><ul><li>Partecipa quotidianamente per massimizzare le possibilit&agrave; di vincita.</li><li>Ricorda che ogni partecipazione richiede una spesa minima di &euro;{{MIN_SPEND}}.</li></ul><p>Per qualsiasi ulteriore chiarimento, puoi contattare l'<a href=\"{{HELP_URL}}\">assistenza</a>.</p><p>Ti auguriamo buona fortuna per le prossime estrazioni e ti ringraziamo ancora per la fiducia accordata.</p>"
+    },
+    "instantwin_prize": {
+      "subject": "Conferma vittoria - {{CONTEST_NAME}}",
+      "body": "<p>Gentilissimo/a {{USER_NAME}},</p><p>Che bella notizia: sei tra i vincitori del concorso {{CONTEST_NAME}}! La tua partecipazione &egrave; stata verificata con successo e ti sei aggiudicato/a una prepagata dal valore di &euro;{{PRIZE_AMOUNT}}.</p><p style=\"margin:24px 0 12px 0; font-weight:bold;\">Il tuo codice voucher per ritirare la prepagata:</p>{{VOUCHER_CODE_BLOCK}}<p>Ecco cosa devi fare per riceverla:</p><ul><li>Ritira il premio presso: {{PDV}}. Riceverai subito la tua prepagata come riconoscimento della tua vincita!</li><li>Mostra al personale questa email di conferma (puoi farlo dallo smartphone o con una stampa) e il tuo documento d'identit&agrave;.</li></ul><p>Ti ricordiamo che:</p><p>&Egrave; preferibile conservare lo scontrino originale fino ad almeno due mesi dalla fine del concorso, in caso di eventuali verifiche.</p><p>Grazie per aver partecipato e per aver scelto di partecipare ogni giorno. Continua a fare la tua spesa con noi: le sorprese non finiscono mai!</p><p>A presto,<br>Il Team</p>"
+    },
+    "instantwin_cancel": {
+      "subject": "Vittoria annullata - {{CONTEST_NAME}}",
+      "body": "<p>Gentile {{USER_NAME}},</p><p>A seguito delle verifiche relative al concorso {{CONTEST_NAME}}, la tua precedente vincita &egrave; stata annullata.</p><p>Se ritieni ci sia un errore puoi contattare l'<a href=\"{{HELP_URL}}\">assistenza</a>.</p><p>Ti ringraziamo per la partecipazione e restiamo a disposizione.</p>"
+    }
+  },
+  "_comment_email_sending": "Abilitazione invio email per template.",
+  "email_sending": {
+    "partecipazione": true,
+    "instantwin_confirm": true,
+    "instantwin_loss": true,
+    "instantwin_cancel": true,
+    "instantwin_prize": true
+  },
+  "_comment_sms": "SMS MailUp: abilitazione globale, provider e campaign_code (statistiche MailUp). Credenziali invio in .env (MAILUP_SMS_*).",
+  "sms": {
+    "enabled": false,
+    "provider": "mailup",
+    "campaign_code": ""
+  },
+  "_comment_sms_sending": "Abilitazione invio SMS per tipo (indipendente dalle email).",
+  "sms_sending": {
+    "partecipazione": false,
+    "instantwin_confirm": false,
+    "instantwin_loss": false,
+    "instantwin_cancel": false,
+    "instantwin_prize": false
+  },
+  "_comment_sms_templates": "Messaggi SMS in testo semplice su una riga, solo caratteri GSM-7 (no a capo, elenchi puntati o simboli speciali). Placeholder: {{nome}}, {{codice}}, {{contest}}. Massimo 150 unità GSM = 1 credito SMS; caratteri ^ { } \\ [ ] ~ | € contano doppio.",
+  "sms_templates": {
+    "partecipazione": "Ciao {{nome}}, la tua partecipazione a {{contest}} e' stata registrata.",
+    "instantwin_confirm": "Ciao {{nome}}, hai una vincita in attesa di conferma per {{contest}}.",
+    "instantwin_loss": "Ciao {{nome}}, grazie per aver partecipato a {{contest}}. Questa volta non hai vinto.",
+    "instantwin_cancel": "Ciao {{nome}}, la tua vincita a {{contest}} e' stata annullata.",
+    "instantwin_prize": "Complimenti {{nome}}! Hai vinto. Codice: {{codice}}"
+  },
+  "_comment_email_bcc": "CCN dinamiche per email premio Instant Win: include email_pdv da punti_vendita e responsabili globali/per insegna.",
+  "email_bcc": {
+    "instantwin_prize": {
+      "enabled": false,
+      "use_pdv_email": true,
+      "global": "",
+      "by_insegna": {}
+    }
+  },
+  "_comment_email_instantwin_prize_attach_pdf": "Se true, allega automaticamente il PDF voucher (da codici_premio.pdf_path) all'email Instant Win Premio se disponibile.",
+  "email_instantwin_prize_attach_pdf": false,
+  "_comment_email_voucher_code_display": "Modalità placeholder {{VOUCHER_CODE_BLOCK}}: text | barcode | both (barcode PNG Picqer solo se codice EAN-13 valido).",
+  "email_voucher_code_display": "text",
+  "_comment_email_voucher_block_style": "Colori del blocco {{VOUCHER_CODE_BLOCK}} nell'email premio: border_color (bordo), bg_color (sfondo), text_color (testo codice). Valori hex es. #198754.",
+  "email_voucher_block_style": {
+    "border_color": "#198754",
+    "bg_color": "#f0f0f0",
+    "text_color": "#198754"
+  },
+  "_comment_thankyou_messages": "Messaggi HTML per la thank-you. Placeholder: {{CONTEST_NAME}}, {{START_DATE}}, {{END_DATE}}, {{REGOLAMENTO_LINK}}, {{PRIZE_WIN_AMOUNT}}, {{PRIZE_TYPE}}.",
+  "thankyou_messages": {
+    "instantwin_win_html": "<h2 class=\"fs-3 mb-3\"><strong>COMPLIMENTI!</strong></h2><h3 class=\"fs-4 mb-3\"><strong>HAI VINTO!</strong></h3><div class=\"fs-1 mb-3\"><strong>&euro;{{PRIZE_WIN_AMOUNT}}</strong></div><p class=\"fs-5 mb-2\">Riceverai tutte le informazioni per ritirare il tuo premio all'indirizzo email indicato.</p><p class=\"mb-0\">Conserva lo scontrino originale per eventuali verifiche.</p>",
+    "instantwin_loss_html": "<h3 class=\"fs-3 mb-3\"><strong>NON HAI VINTO</strong></h3><p class=\"fs-5 mb-2\">Questa volta non hai vinto, ma puoi partecipare di nuovo con un nuovo scontrino!</p><p class=\"mb-0\">Ogni scontrino valido pu&ograve; essere caricato una sola volta.</p>",
+    "estrazione_html": "<div class=\"text-center\"><p class=\"fs-5 mb-3\"><strong>La tua partecipazione a \"{{CONTEST_NAME}}\" è stata registrata con successo.</strong></p><p class=\"mb-1\">Riceverai comunicazioni all'indirizzo email indicato. Conserva lo scontrino fino alla chiusura delle verifiche.</p><p class=\"mb-0\">Per ogni dettaglio consulta il regolamento completo.</p></div>"
+  },
+  "_comment_cellulare_digits": "Intervallo di cifre per il cellulare. Lascia vuoto = 10 cifre. cellulare_digits_min/max tra 6 e 12, oppure numero esatto.",
+  "cellulare_digits_min": 10,
+  "cellulare_digits_max": 10,
+  "_comment_fidelity": "Configurazione codice fidelity: type = numeric|alphanumeric, length = numero esatto di caratteri.",
+  "fidelity": {
+    "type": "numeric",
+    "length": 13,
+    "unique_participation": false,
+    "field_width": "large",
+    "help_text": "",
+    "help_text_color": ""
+  },
+  "_comment_scontrino_help": "Testo di aiuto sotto Foto scontrino (Scegli file). help_text_color vuoto = palette Testo.",
+  "scontrino_help_text": "",
+  "scontrino_help_text_color": "",
+  "_comment_codice_help": "Testo di aiuto sotto Codice partecipazione. help_text_color vuoto = palette Testo.",
+  "codice_partecipazione_help_text": "",
+  "codice_partecipazione_help_text_color": "",
+  "_comment_fields": "Abilita/disabilita i campi del form.",
+  "fields_enabled": {
+    "nome": true,
+    "cognome": true,
+    "email": true,
+    "prefisso": true,
+    "cellulare": true,
+    "prov_pdv": true,
+    "citta_pdv": true,
+    "indirizzo_pdv": true,
+    "importo": true,
+    "data_scontrino": true,
+    "provincia": true,
+    "cap": false,
+    "citta": true,
+    "indirizzo": true,
+    "scontrino": true,
+    "privacy": true,
+    "marketing": true,
+    "profilazione": true,
+    "fidelity": true,
+    "codice_partecipazione": true
+  },
+  "_comment_standard_fields_order": "Ordine dei campi standard nel form pubblico (senza consensi). CAP/Provincia = cap_provincia (stesso slot). I consensi restano sempre in coda.",
+  "standard_fields_order": [
+    "nome",
+    "cognome",
+    "email",
+    "prefisso_cellulare",
+    "cap_provincia",
+    "citta",
+    "indirizzo",
+    "fidelity",
+    "indirizzo_pdv",
+    "importo",
+    "data_scontrino",
+    "scontrino",
+    "codice_partecipazione"
+  ],
+  "_comment_fields_required": "Rende obbligatori o facoltativi i campi standard abilitati del form.",
+  "fields_required": {
+    "nome": true,
+    "cognome": true,
+    "email": true,
+    "prefisso": true,
+    "cellulare": true,
+    "prov_pdv": true,
+    "citta_pdv": true,
+    "indirizzo_pdv": true,
+    "importo": true,
+    "data_scontrino": true,
+    "provincia": true,
+    "cap": false,
+    "citta": true,
+    "indirizzo": true,
+    "scontrino": true,
+    "privacy": true,
+    "marketing": false,
+    "profilazione": false,
+    "fidelity": true,
+    "codice_partecipazione": true
+  },
+  "_comment_consensi_texts": "Testi personalizzabili dei consensi (privacy, marketing, profilazione). Per privacy usare {{PRIVACY_LINK}} come placeholder per il link all'informativa.",
+  "consensi_texts": {
+    "privacy": "Dichiaro di aver preso visione e di accettare {{PRIVACY_LINK}} *",
+    "marketing": "Autorizzo il trattamento dei dati per finalità di marketing (i.e. attività promozionale, commerciale e pubblicitaria)",
+    "profilazione": "Autorizzo il trattamento dei dati per finalità di profilazione (per ricevere comunicazioni personalizzate in base ai miei gusti e interessi)"
+  },
+  "_comment_pdv_config": "Configurazione selezione Punto Vendita: mode combinato (campo unico) o cascata (provincia/regione->citta->indirizzo).",
+  "pdv_config": {
+    "mode": "combinato",
+    "combinato": {
+      "label_fields": ["ragsoc", "indirizzo", "citta", "prov"],
+      "separator": " - ",
+      "search_limit": 50
+    },
+    "cascata": {
+      "geographic_mode": "provincia",
+      "punto_vendita_display": "insegna_indirizzo"
+    }
+  },
+  "_comment_custom_fields": "Campi personalizzabili del form. Ogni campo: id, label, type, required.",
+  "custom_fields": [],
+  "_comment_form_container": "Sfondo del contenitore del form (registrazione, help, waiting, thank-you).",
+  "form_container": {
+    "mode": "color",
+    "color": "#ffffff",
+    "opacity": 100,
+    "image": "",
+    "radius": {
+      "top": 0,
+      "right": 0,
+      "bottom": 12,
+      "left": 12
+    }
+  },
+  "_comment_public_page_containers": "Container esterno per singola pagina pubblica. Se una pagina non viene personalizzata, usa form_container come fallback.",
+  "public_page_containers": {
+    "registration": {},
+    "help": {},
+    "waiting_page": {},
+    "participation_page": {},
+    "waiting_page_ended": {},
+    "thankyou_instantwin_win_page": {},
+    "thankyou_instantwin_loss_page": {},
+    "thankyou_instantwin_quiz_failed_page": {},
+    "thankyou_estrazione_page": {},
+    "thankyou_estrazione_quiz_failed_page": {},
+    "quiz_page": {},
+    "quiz_choice_page": {}
+  },
+  "_comment_help_form_enabled": "Se true, mostra il form nella pagina Assistenza/FAQ. Se false, mostra i container configurati in pages.help_page al posto del form.",
+  "help_form_enabled": true,
+  "_comment_participation_page_enabled": "Se true, quando il concorso e' attivo la homepage pubblica mostra pages.participation_page prima del form di registrazione.",
+  "participation_page_enabled": false,
+  "_comment_help_page_style": "Stile pagina Assistenza/FAQ. Campi colore vuoti = default da palette (o form_field_text_color per il modulo help).",
+  "help_page_style": {
+    "font_family": "",
+    "font_size": "",
+    "accordion": {
+      "header_bg": "",
+      "header_text": "",
+      "header_bg_open": "",
+      "header_text_open": "",
+      "body_bg": "",
+      "body_text": "",
+      "title_text": "",
+      "title_font_size": "",
+      "title_margin_top": 0,
+      "border_color": ""
+    },
+    "form": {
+      "heading_text": "",
+      "subtitle_text": "",
+      "field_text": "",
+      "placeholder_text": "",
+      "field_bg": "",
+      "field_border": "",
+      "checkbox": "",
+      "consent_text": "",
+      "consent_link": "",
+      "consent_link_hover": ""
+    }
+  },
+  "_comment_faq": "FAQ inline. Usa i placeholder {{MIN_SPEND}}, {{START_DATE}}, {{END_DATE}} se servono.",
+  "faq": [
+    {
+      "q": "Come posso partecipare al concorso?",
+      "a": "Effettua una spesa minima di {{MIN_SPEND}} tra {{START_DATE}} e {{END_DATE}}, conserva lo scontrino e registrati sul sito compilando il form."
+    },
+    {
+      "q": "Quali documenti devo conservare?",
+      "a": "Tieni lo scontrino originale e la conferma di partecipazione finche le verifiche non sono concluse."
+    },
+    {
+      "q": "Quando termina il concorso?",
+      "a": "Il concorso termina in data {{END_DATE}}. Dopo tale data non saranno accettate nuove partecipazioni."
+    }
+  ],
+  "_comment_pages": "Struttura unificata per le pagine: Container > Blocks",
+  "pages": {
+    "waiting_page": {
+      "containers": [
+        {
+          "id": "container-1",
+          "order": 1,
+          "background": {
+            "mode": "color",
+            "color": "#d4edda",
+            "image": "",
+            "opacity": 100
+          },
+          "style": {
+            "width": "auto",
+            "padding": {
+              "top": 20,
+              "right": 20,
+              "bottom": 20,
+              "left": 20
+            },
+            "align": "center",
+            "visible": {
+              "desktop": true,
+              "mobile": true
+            }
+          },
+          "blocks": [
+            {
+              "id": "block-1",
+              "type": "text",
+              "order": 1,
+              "content": "<h2>Il concorso inizierà presto!</h2><p>Dal {{START_DATE}} al {{END_DATE}} effettua una spesa minima di €{{MIN_SPEND}} presso un punto vendita aderente e partecipa.</p>"
+            },
+            {
+              "id": "block-2",
+              "type": "button",
+              "order": 2,
+              "text": "REGOLAMENTO",
+              "url": "{{REGOLAMENTO_LINK}}",
+              "target": "_blank",
+              "style": {
+                "type": "primary",
+                "size": "lg"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "participation_page": {
+      "button_footer_text": "",
+      "button_footer_text_color": "",
+      "button_footer_text_font": "",
+      "containers": [
+        {
+          "id": "container-1-participation",
+          "order": 1,
+          "background": {
+            "mode": "color",
+            "color": "#ffffff",
+            "image": "",
+            "opacity": 100
+          },
+          "style": {
+            "width": "auto",
+            "padding": {
+              "top": 20,
+              "right": 20,
+              "bottom": 20,
+              "left": 20
+            },
+            "margin": {
+              "top": 0,
+              "right": 0,
+              "bottom": 16,
+              "left": 0
+            },
+            "radius": {
+              "top": 8,
+              "right": 8,
+              "bottom": 8,
+              "left": 8
+            },
+            "align": "center",
+            "visible": {
+              "desktop": true,
+              "mobile": true
+            }
+          },
+          "content_type": "text",
+          "blocks": [
+            {
+              "id": "block-1-participation",
+              "type": "text",
+              "order": 1,
+              "content": "<h2>Partecipa al concorso</h2><p>Il concorso {{CONTEST_NAME}} e' attivo. Clicca sul pulsante per compilare il form di partecipazione.</p><p><a class=\"btn btn-success btn-lg fw-bold text-uppercase\" href=\"registration.php\">PARTECIPA</a></p>"
+            }
+          ],
+          "image": null,
+          "html": "<h2>Partecipa al concorso</h2><p>Il concorso {{CONTEST_NAME}} e' attivo. Clicca sul pulsante per compilare il form di partecipazione.</p><p><a class=\"btn btn-success btn-lg fw-bold text-uppercase\" href=\"registration.php\">PARTECIPA</a></p>"
+        }
+      ],
+      "align": "center"
+    },
+    "waiting_page_ended": {
+      "containers": [
+        {
+          "id": "container-1-ended",
+          "order": 1,
+          "background": {
+            "mode": "color",
+            "color": "#d1e7dd",
+            "image": "",
+            "opacity": 100
+          },
+          "style": {
+            "width": "auto",
+            "padding": {
+              "top": 20,
+              "right": 20,
+              "bottom": 20,
+              "left": 20
+            },
+            "align": "center",
+            "visible": {
+              "desktop": true,
+              "mobile": true
+            }
+          },
+          "blocks": [
+            {
+              "id": "block-1-ended",
+              "type": "text",
+              "order": 1,
+              "content": "<h2>Il concorso è terminato</h2><p>Grazie per aver partecipato.</p>"
+            },
+            {
+              "id": "block-2-ended",
+              "type": "button",
+              "order": 2,
+              "text": "REGOLAMENTO",
+              "url": "{{REGOLAMENTO_LINK}}",
+              "target": "_blank",
+              "style": {
+                "type": "primary",
+                "size": "lg"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "form_page": {
+      "button_footer_text": "",
+      "button_footer_text_color": "",
+      "button_footer_text_font": "",
+      "containers": [
+        {
+          "id": "container-1-form",
+          "order": 1,
+          "background": {
+            "mode": "color",
+            "color": "#ffffff",
+            "image": "",
+            "opacity": 100
+          },
+          "style": {
+            "width": "auto",
+            "padding": {
+              "top": 12,
+              "right": 12,
+              "bottom": 12,
+              "left": 12
+            },
+            "align": "center",
+            "visible": {
+              "desktop": true,
+              "mobile": true
+            }
+          },
+          "blocks": [
+            {
+              "id": "block-1-form",
+              "type": "text",
+              "order": 1,
+              "content": "<h2>Partecipa al concorso</h2><p>Compila il form per partecipare a {{CONTEST_NAME}}.</p>"
+            }
+          ]
+        }
+      ]
+    },
+    "help_page": {
+      "containers": [
+        {
+          "id": "container-1-help",
+          "order": 1,
+          "background": {
+            "mode": "color",
+            "color": "#ffffff",
+            "image": "",
+            "opacity": 100
+          },
+          "style": {
+            "width": "auto",
+            "padding": {
+              "top": 20,
+              "right": 20,
+              "bottom": 20,
+              "left": 20
+            },
+            "margin": {
+              "top": 0,
+              "right": 0,
+              "bottom": 16,
+              "left": 0
+            },
+            "radius": {
+              "top": 8,
+              "right": 8,
+              "bottom": 8,
+              "left": 8
+            },
+            "align": "center",
+            "visible": {
+              "desktop": true,
+              "mobile": true
+            }
+          },
+          "content_type": "text",
+          "blocks": [
+            {
+              "id": "block-1-help",
+              "type": "text",
+              "order": 1,
+              "content": "<h2>Hai bisogno di assistenza?</h2><p>Consulta le FAQ o usa i contatti indicati nel regolamento di {{CONTEST_NAME}}.</p>"
+            }
+          ],
+          "image": null,
+          "html": "<h2>Hai bisogno di assistenza?</h2><p>Consulta le FAQ o usa i contatti indicati nel regolamento di {{CONTEST_NAME}}.</p>"
+        }
+      ],
+      "align": "center"
+    },
+    "thankyou_instantwin_win_page": {
+      "containers": [
+        {
+          "id": "container_1768394715422_727",
+          "order": 1,
+          "background": {
+            "mode": "color",
+            "color": "#ffffff",
+            "image": "",
+            "opacity": 100
+          },
+          "style": {
+            "width": "auto",
+            "padding": {
+              "top": 20,
+              "right": 20,
+              "bottom": 20,
+              "left": 20
+            },
+            "margin": {
+              "top": 0,
+              "right": 0,
+              "bottom": 16,
+              "left": 0
+            },
+            "radius": {
+              "top": 8,
+              "right": 8,
+              "bottom": 8,
+              "left": 8
+            },
+            "align": "center",
+            "visible": {
+              "desktop": true,
+              "mobile": true
+            }
+          },
+          "content_type": "text",
+          "blocks": [
+            {
+              "id": "block-69679055e9aaf",
+              "type": "text",
+              "order": 1,
+              "content": "<h3 class=\"fs-3 mb-3\"><span style=\"font-weight: bolder;\">GRAZIE PER AVER PARTECIPATO!</span></h3>"
+            }
+          ],
+          "image": null,
+          "html": "<h3 class=\"fs-3 mb-3\"><span style=\"font-weight: bolder;\">GRAZIE PER AVER PARTECIPATO!</span></h3>"
+        },
+        {
+          "id": "container-1-win",
+          "order": 2,
+          "background": {
+            "mode": "color",
+            "color": "#d4edda",
+            "image": "",
+            "opacity": 100
+          },
+          "style": {
+            "width": "auto",
+            "padding": {
+              "top": 20,
+              "right": 20,
+              "bottom": 20,
+              "left": 20
+            },
+            "margin": {
+              "top": 0,
+              "right": 0,
+              "bottom": 16,
+              "left": 0
+            },
+            "radius": {
+              "top": 8,
+              "right": 8,
+              "bottom": 8,
+              "left": 8
+            },
+            "align": "center",
+            "visible": {
+              "desktop": true,
+              "mobile": true
+            }
+          },
+          "content_type": "text",
+          "blocks": [
+            {
+              "id": "block-69679055e9abc",
+              "type": "text",
+              "order": 1,
+              "content": "<h2 class=\"fs-3 mb-3\"><strong>COMPLIMENTI!</strong></h2><h3 class=\"fs-4 mb-3\"><strong>HAI VINTO!</strong></h3><div class=\"fs-1 mb-3\"><strong>€{{PRIZE_WIN_AMOUNT}}</strong></div><p class=\"fs-5 mb-2\">Riceverai tutte le informazioni per ritirare il tuo premio all'indirizzo email indicato.</p><p class=\"mb-0\">Conserva lo scontrino originale per eventuali verifiche.</p><p class=\"mb-0\"><br></p>\r\n<p><a class=\"btn btn-success btn-lg fw-bold text-uppercase\" href=\"{{REGOLAMENTO_LINK}}\" target=\"_blank\" rel=\"noopener noreferrer\">REGOLAMENTO</a></p>"
+            }
+          ],
+          "image": null,
+          "html": "<h2 class=\"fs-3 mb-3\"><strong>COMPLIMENTI!</strong></h2><h3 class=\"fs-4 mb-3\"><strong>HAI VINTO!</strong></h3><div class=\"fs-1 mb-3\"><strong>€{{PRIZE_WIN_AMOUNT}}</strong></div><p class=\"fs-5 mb-2\">Riceverai tutte le informazioni per ritirare il tuo premio all'indirizzo email indicato.</p><p class=\"mb-0\">Conserva lo scontrino originale per eventuali verifiche.</p><p class=\"mb-0\"><br></p>\r\n<p><a class=\"btn btn-success btn-lg fw-bold text-uppercase\" href=\"{{REGOLAMENTO_LINK}}\" target=\"_blank\" rel=\"noopener noreferrer\">REGOLAMENTO</a></p>"
+        }
+      ],
+      "align": "center",
+      "title": "GRAZIE PER AVER PARTECIPATO!"
+    },
+    "thankyou_instantwin_loss_page": {
+      "containers": [
+        {
+          "id": "container_1768394667109_21",
+          "order": 1,
+          "background": {
+            "mode": "color",
+            "color": "#ffffff",
+            "image": "",
+            "opacity": 100
+          },
+          "style": {
+            "width": "auto",
+            "padding": {
+              "top": 20,
+              "right": 20,
+              "bottom": 20,
+              "left": 20
+            },
+            "margin": {
+              "top": 0,
+              "right": 0,
+              "bottom": 16,
+              "left": 0
+            },
+            "radius": {
+              "top": 8,
+              "right": 8,
+              "bottom": 8,
+              "left": 8
+            },
+            "align": "center",
+            "visible": {
+              "desktop": true,
+              "mobile": true
+            }
+          },
+          "content_type": "text",
+          "blocks": [
+            {
+              "id": "block-69679055e9d67",
+              "type": "text",
+              "order": 1,
+              "content": "<h3 class=\"fs-3 mb-3\"><span style=\"font-weight: bolder;\">GRAZIE PER AVER PARTECIPATO!</span></h3>"
+            }
+          ],
+          "image": null,
+          "html": "<h3 class=\"fs-3 mb-3\"><span style=\"font-weight: bolder;\">GRAZIE PER AVER PARTECIPATO!</span></h3>"
+        },
+        {
+          "id": "container-1-loss",
+          "order": 2,
+          "background": {
+            "mode": "color",
+            "color": "#f8d7da",
+            "image": "",
+            "opacity": 100
+          },
+          "style": {
+            "width": "auto",
+            "padding": {
+              "top": 20,
+              "right": 20,
+              "bottom": 20,
+              "left": 20
+            },
+            "margin": {
+              "top": 0,
+              "right": 0,
+              "bottom": 16,
+              "left": 0
+            },
+            "radius": {
+              "top": 8,
+              "right": 8,
+              "bottom": 8,
+              "left": 8
+            },
+            "align": "center",
+            "visible": {
+              "desktop": true,
+              "mobile": true
+            }
+          },
+          "content_type": "text",
+          "blocks": [
+            {
+              "id": "block-69679055e9d8f",
+              "type": "text",
+              "order": 1,
+              "content": "<h3 class=\"fs-3 mb-3\"><strong>NON HAI VINTO</strong></h3><p class=\"fs-5 mb-2\">Questa volta non hai vinto, ma puoi partecipare di nuovo con un nuovo scontrino!</p><p class=\"mb-0\">Ogni scontrino valido può essere caricato una sola volta.</p><p class=\"mb-0\"><br></p>\r\n<p><a class=\"btn btn-secondary btn-lg fw-bold text-uppercase\" href=\"registration.php\" target=\"_self\">PARTECIPA DI NUOVO</a>  <a class=\"btn btn-success btn-lg fw-bold text-uppercase\" href=\"{{REGOLAMENTO_LINK}}\" target=\"_blank\" rel=\"noopener noreferrer\">REGOLAMENTO</a></p>"
+            }
+          ],
+          "image": null,
+          "html": "<h3 class=\"fs-3 mb-3\"><strong>NON HAI VINTO</strong></h3><p class=\"fs-5 mb-2\">Questa volta non hai vinto, ma puoi partecipare di nuovo con un nuovo scontrino!</p><p class=\"mb-0\">Ogni scontrino valido può essere caricato una sola volta.</p><p class=\"mb-0\"><br></p>\r\n<p><a class=\"btn btn-secondary btn-lg fw-bold text-uppercase\" href=\"registration.php\" target=\"_self\">PARTECIPA DI NUOVO</a>  <a class=\"btn btn-success btn-lg fw-bold text-uppercase\" href=\"{{REGOLAMENTO_LINK}}\" target=\"_blank\" rel=\"noopener noreferrer\">REGOLAMENTO</a></p>"
+        }
+      ],
+      "align": "center",
+      "title": "GRAZIE PER AVER PARTECIPATO!"
+    },
+    "thankyou_instantwin_quiz_failed_page": {
+      "containers": [
+        {
+          "id": "container_qfail_header",
+          "order": 1,
+          "background": {
+            "mode": "color",
+            "color": "#ffffff",
+            "image": "",
+            "opacity": 100
+          },
+          "style": {
+            "width": "auto",
+            "padding": { "top": 20, "right": 20, "bottom": 20, "left": 20 },
+            "margin": { "top": 0, "right": 0, "bottom": 16, "left": 0 },
+            "radius": { "top": 8, "right": 8, "bottom": 8, "left": 8 },
+            "align": "center",
+            "visible": { "desktop": true, "mobile": true }
+          },
+          "content_type": "text",
+          "blocks": [
+            {
+              "id": "block-qfail-h",
+              "type": "text",
+              "order": 1,
+              "content": "<h3 class=\"fs-3 mb-3\"><span style=\"font-weight: bolder;\">GRAZIE PER AVER PARTECIPATO!</span></h3>"
+            }
+          ],
+          "image": null,
+          "html": "<h3 class=\"fs-3 mb-3\"><span style=\"font-weight: bolder;\">GRAZIE PER AVER PARTECIPATO!</span></h3>"
+        },
+        {
+          "id": "container_qfail_body",
+          "order": 2,
+          "background": {
+            "mode": "color",
+            "color": "#fff3cd",
+            "image": "",
+            "opacity": 100
+          },
+          "style": {
+            "width": "auto",
+            "padding": { "top": 20, "right": 20, "bottom": 20, "left": 20 },
+            "margin": { "top": 0, "right": 0, "bottom": 16, "left": 0 },
+            "radius": { "top": 8, "right": 8, "bottom": 8, "left": 8 },
+            "align": "center",
+            "visible": { "desktop": true, "mobile": true }
+          },
+          "content_type": "text",
+          "blocks": [
+            {
+              "id": "block-qfail-b",
+              "type": "text",
+              "order": 1,
+              "content": "<h3 class=\"fs-3 mb-3\"><strong>RISPOSTE NON CORRETTE</strong></h3><p class=\"fs-5 mb-2\">Non hai risposto correttamente a tutte le domande del quiz.</p><p class=\"mb-0\">Grazie per aver partecipato. Puoi riprovare con una nuova partecipazione, se previsto dal regolamento.</p><p class=\"mb-0\"><br></p><p><a class=\"btn btn-secondary btn-lg fw-bold text-uppercase\" href=\"registration.php\" target=\"_self\">PARTECIPA DI NUOVO</a>  <a class=\"btn btn-success btn-lg fw-bold text-uppercase\" href=\"{{REGOLAMENTO_LINK}}\" target=\"_blank\" rel=\"noopener noreferrer\">REGOLAMENTO</a></p>"
+            }
+          ],
+          "image": null,
+          "html": "<h3 class=\"fs-3 mb-3\"><strong>RISPOSTE NON CORRETTE</strong></h3><p class=\"fs-5 mb-2\">Non hai risposto correttamente a tutte le domande del quiz.</p><p class=\"mb-0\">Grazie per aver partecipato. Puoi riprovare con una nuova partecipazione, se previsto dal regolamento.</p><p class=\"mb-0\"><br></p><p><a class=\"btn btn-secondary btn-lg fw-bold text-uppercase\" href=\"registration.php\" target=\"_self\">PARTECIPA DI NUOVO</a>  <a class=\"btn btn-success btn-lg fw-bold text-uppercase\" href=\"{{REGOLAMENTO_LINK}}\" target=\"_blank\" rel=\"noopener noreferrer\">REGOLAMENTO</a></p>"
+        }
+      ],
+      "align": "center",
+      "title": "GRAZIE PER AVER PARTECIPATO!"
+    },
+    "thankyou_estrazione_quiz_failed_page": {
+      "containers": [
+        {
+          "id": "container-estrazione-qfail",
+          "order": 1,
+          "background": {
+            "mode": "color",
+            "color": "#fff3cd",
+            "image": "",
+            "opacity": 100
+          },
+          "style": {
+            "width": "auto",
+            "padding": { "top": 20, "right": 20, "bottom": 20, "left": 20 },
+            "margin": { "top": 0, "right": 0, "bottom": 16, "left": 0 },
+            "radius": { "top": 8, "right": 8, "bottom": 8, "left": 8 },
+            "align": "center",
+            "visible": { "desktop": true, "mobile": true }
+          },
+          "content_type": "text",
+          "blocks": [
+            {
+              "id": "block-estrazione-qfail",
+              "type": "text",
+              "order": 1,
+              "content": "<h3 class=\"fs-4 fw-bold mb-3\">Quiz non superato</h3><p class=\"fs-5 mb-2\">Non hai risposto correttamente al quiz. Non sei eligibile per l'estrazione finale.</p><p class=\"mb-0\">Puoi partecipare di nuovo con una nuova iscrizione e un nuovo scontrino.</p><p class=\"mb-0\"><br></p><p><a class=\"btn btn-secondary btn-lg fw-bold text-uppercase\" href=\"registration.php\" target=\"_self\">PARTECIPA DI NUOVO</a>  <a class=\"btn btn-success btn-lg fw-bold text-uppercase\" href=\"{{REGOLAMENTO_LINK}}\" target=\"_blank\" rel=\"noopener noreferrer\">REGOLAMENTO</a></p>"
+            }
+          ],
+          "image": null,
+          "html": "<h3 class=\"fs-4 fw-bold mb-3\">Quiz non superato</h3><p class=\"fs-5 mb-2\">Non hai risposto correttamente al quiz. Non sei eligibile per l'estrazione finale.</p><p class=\"mb-0\">Puoi partecipare di nuovo con una nuova iscrizione e un nuovo scontrino.</p><p class=\"mb-0\"><br></p><p><a class=\"btn btn-secondary btn-lg fw-bold text-uppercase\" href=\"registration.php\" target=\"_self\">PARTECIPA DI NUOVO</a>  <a class=\"btn btn-success btn-lg fw-bold text-uppercase\" href=\"{{REGOLAMENTO_LINK}}\" target=\"_blank\" rel=\"noopener noreferrer\">REGOLAMENTO</a></p>"
+        }
+      ],
+      "align": "center",
+      "title": "GRAZIE PER AVER PARTECIPATO!"
+    },
+    "thankyou_estrazione_page": {
+      "containers": [
+        {
+          "id": "container-1-estrazione",
+          "order": 1,
+          "background": {
+            "mode": "color",
+            "color": "#d1ecf1",
+            "image": "",
+            "opacity": 100
+          },
+          "style": {
+            "width": "auto",
+            "padding": {
+              "top": 20,
+              "right": 20,
+              "bottom": 20,
+              "left": 20
+            },
+            "margin": {
+              "top": 0,
+              "right": 0,
+              "bottom": 16,
+              "left": 0
+            },
+            "radius": {
+              "top": 8,
+              "right": 8,
+              "bottom": 8,
+              "left": 8
+            },
+            "align": "center",
+            "visible": {
+              "desktop": true,
+              "mobile": true
+            }
+          },
+          "content_type": "text",
+          "blocks": [
+            {
+              "id": "block-1-estrazione",
+              "type": "text",
+              "order": 1,
+              "content": "<p class=\"fs-5 fw-semibold mb-3\">La tua partecipazione a \"{{CONTEST_NAME}}\" è stata registrata con successo.</p><p class=\"mb-1\">Riceverai comunicazioni all'indirizzo email indicato. Conserva lo scontrino fino alla chiusura delle verifiche.</p><p class=\"mb-0\">Per ogni dettaglio consulta il regolamento completo.</p><p class=\"mb-0\"><br></p><p><a class=\"btn btn-success btn-lg fw-bold text-uppercase\" href=\"{{REGOLAMENTO_LINK}}\" target=\"_blank\" rel=\"noopener noreferrer\">REGOLAMENTO</a>  <a class=\"btn btn-secondary btn-lg fw-bold text-uppercase\" href=\"registration.php\" target=\"_self\">PARTECIPA DI NUOVO</a></p>"
+            }
+          ],
+          "image": null,
+          "html": "<p class=\"fs-5 fw-semibold mb-3\">La tua partecipazione a \"{{CONTEST_NAME}}\" è stata registrata con successo.</p><p class=\"mb-1\">Riceverai comunicazioni all'indirizzo email indicato. Conserva lo scontrino fino alla chiusura delle verifiche.</p><p class=\"mb-0\">Per ogni dettaglio consulta il regolamento completo.</p><p class=\"mb-0\"><br></p><p><a class=\"btn btn-success btn-lg fw-bold text-uppercase\" href=\"{{REGOLAMENTO_LINK}}\" target=\"_blank\" rel=\"noopener noreferrer\">REGOLAMENTO</a>  <a class=\"btn btn-secondary btn-lg fw-bold text-uppercase\" href=\"registration.php\" target=\"_self\">PARTECIPA DI NUOVO</a></p>"
+        }
+      ]
+    },
+    "quiz_choice_page": {
+      "align": "center",
+      "choice_labels": {
+        "standard": "Testo (domande scritte)",
+        "audio": "Audio (ascolto, poi risposte A/B/C/D)",
+        "submit": "Avvia quiz"
+      },
+      "containers": [
+        {
+          "id": "quiz-choice-intro",
+          "order": 1,
+          "background": {
+            "mode": "color",
+            "color": "#f8f9fa",
+            "image": "",
+            "opacity": 100
+          },
+          "style": {
+            "width": "auto",
+            "padding": { "top": 20, "right": 20, "bottom": 20, "left": 20 },
+            "margin": { "top": 0, "right": 0, "bottom": 16, "left": 0 },
+            "radius": { "top": 8, "right": 8, "bottom": 8, "left": 8 },
+            "align": "center",
+            "visible": { "desktop": true, "mobile": true }
+          },
+          "blocks": [
+            {
+              "id": "block-quiz-choice-intro",
+              "type": "text",
+              "order": 1,
+              "content": "<h2 class=\"h4 mb-2\">Quiz – {{CONTEST_NAME}}</h2><p class=\"mb-0\">Scegli tra <strong>testo</strong> e <strong>audio</strong> per il percorso del quiz.</p>"
+            }
+          ]
+        }
+      ]
+    },
+    "quiz_page": {
+      "question_block_style": {
+        "content": "<p>{{DOMANDA_N}}</p><div>{{TESTO_DOMANDA}}</div><p>{{RISPOSTA}}</p><div>{{OPZIONI}}</div>",
+        "answer_input_style": "radio",
+        "answer_tick_color": "#333333",
+        "submit_button_text": "Invia risposte",
+        "submit_button_bg_color": "#0d6efd",
+        "submit_button_align": "center"
+      },
+      "containers": [
+        {
+          "id": "quiz-header",
+          "order": 1,
+          "background": {
+            "mode": "color",
+            "color": "#f8f9fa",
+            "image": "",
+            "opacity": 100
+          },
+          "style": {
+            "width": "auto",
+            "padding": { "top": 20, "right": 20, "bottom": 20, "left": 20 },
+            "margin": { "top": 0, "right": 0, "bottom": 16, "left": 0 },
+            "radius": { "top": 8, "right": 8, "bottom": 8, "left": 8 },
+            "align": "center",
+            "visible": { "desktop": true, "mobile": true }
+          },
+          "blocks": [
+            {
+              "id": "block-quiz-header",
+              "type": "text",
+              "order": 1,
+              "content": "<p><strong>Quiz – {{CONTEST_NAME}}</strong></p><p>Risposte: A, B, C o D.</p>"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

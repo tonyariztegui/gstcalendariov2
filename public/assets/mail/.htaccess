@@ -1,0 +1,19 @@
+# Protection des fichiers PHP dans le dossier mail
+# TEMPORAIREMENT DÉSACTIVÉE POUR LE DÉVELOPPEMENT
+# Empêche l'accès direct aux fichiers de template SAUF via view.php avec token
+
+# Autoriser seulement view.php
+# <Files "view.php">
+#     Order Allow,Deny
+#     Allow from all
+# </Files>
+
+# Bloquer tous les autres fichiers PHP
+# <Files "*.php">
+#     Order Allow,Deny
+#     Deny from all
+# </Files>
+
+# Autoriser seulement les inclusions depuis d'autres fichiers PHP
+# Cette règle permet aux fichiers PHP du projet d'inclure ces templates
+# mais bloque l'accès direct via URL (sauf via view.php avec token)

@@ -1,0 +1,84 @@
+# Fichiers de configuration sensibles
+*.env
+config.local.php
+# Non versionare i contenuti per-ambiente: solo i default restano tracciati
+app/config/content.json
+
+# Logs
+*.log
+logs/
+
+# Cache
+cache/
+tmp/
+
+# Uploads temporaires
+#uploads/temp/
+# Uploads (contenuti utente, non versionare)
+uploads/
+
+# Concorso uploads (immagini e PDF caricati dal configuratore)
+public/assets/img/*
+!public/assets/img/default_img/
+!public/assets/img/default_img/**
+public/assets/pdf/*
+!public/assets/pdf/default_pdf/
+!public/assets/pdf/default_pdf/**
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# SonarQube
+sonar-project.properties
+.scannerwork/
+.scannerwork/.sonar_lock
+.scannerwork/report-task.txt
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
+vendor/
+composer.phar
+
+# Tests (scaffolding local + artefacts — ne pas versionner pour l’instant)
+.env.testing
+.env.testing.example
+tests/
+e2e/
+phpunit.xml
+playwright.config.js
+test.bat
+test-e2e.bat
+package.json
+package-lock.json
+docs/TEST-CATALOG.md
+sql/contest_app_test_schema.sql
+sql/contest_app_test_seed.sql
+.cursor/skills/test/
+
+# Test artefacts / caches
+test-results/
+playwright-report/
+e2e/playwright-report/
+e2e/test-results/
+tests/.phpunit.cache/
+.phpunit.result.cache
+.phpunit.cache/
+
+# Backup files
+*.bak
+*.backup
+#uploads/
+
+# Scripts locaux (CLI, migrations ponctuelles, outils) — ne plus versionner
+scripts/
+
+# Copie / projet local (ne pas versionner)
+md_petfood2/
+

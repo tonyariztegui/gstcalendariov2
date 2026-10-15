@@ -1,0 +1,55 @@
+<?php
+
+return [
+    'manager' => [
+        'default' => 'homepage',
+        'legacy_uri' => [
+            'setpwd' => 'set_password',
+        ],
+        'aliases' => [
+            'anteprima-quiz' => 'preview_quiz',
+            'anteprima-ringraziamento' => 'preview_thankyou',
+            'dashboard' => 'homepage',
+            'password' => 'set_password',
+            'statistiche-pdv' => 'stats_pdv',
+        ],
+        'routes' => [
+            'access_denied' => ['view' => 'access_denied.php'],
+            'concorso' => ['view' => 'concorso.php'],
+            'dashboard' => ['view' => 'homepage.php'],
+            'edit' => ['view' => 'edit.php'],
+            'security' => ['view' => 'security.php'],
+            'email_blacklist' => ['view' => 'email_blacklist.php'],
+            'gestione_dati' => ['view' => 'gestione_dati.php'],
+            'homepage' => ['view' => 'homepage.php'],
+            'not_logged_in' => ['view' => 'not_logged_in.php'],
+            'partecipazioni' => ['view' => 'partecipazioni.php'],
+            'password_reset' => ['view' => 'password_reset.php'],
+            'premi' => ['view' => 'premi.php'],
+            'premi_pdv' => ['view' => 'premi_pdv.php'],
+            'preview_quiz' => ['view' => '../ajax/preview_quiz.php'],
+            'preview_thankyou' => ['view' => '../ajax/preview_thankyou.php'],
+            'quiz_domande' => ['view' => 'quiz_domande.php'],
+            'set_password' => ['view' => 'set_password.php'],
+            'stats_pdv' => ['view' => 'stats_pdv.php'],
+            'utenti' => ['view' => 'utenti.php'],
+        ],
+    ],
+    'public' => [
+        'default' => 'registrazione',
+        'aliases' => [],
+        'routes' => [
+            'assistenza' => ['view' => 'help.php'],
+            'attesa' => ['view' => 'waiting_page.php'],
+            'benvenuto' => ['view' => 'welcome.php'],
+            'concorso-terminato' => ['view' => 'waiting_page_ended.php'],
+            'errore' => ['view' => 'error.php'],
+            'grazie' => ['view' => 'thank-you.php'],
+            'non-consentito' => ['view' => 'error.php'],
+            'partecipazione' => ['view' => 'participation_page.php'],
+            'quiz' => ['view' => 'quiz_flow.php'],
+            'registrazione' => ['view' => 'registration.php'],
+            'verifica' => ['view' => 'verify.php'],
+        ],
+    ],
+];

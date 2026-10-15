@@ -1,0 +1,23 @@
+.badge.bg-success,
+.badge-success {
+    background-color: #198754 !important;
+    color: #fff !important;
+}
+
+.badge.bg-secondary,
+.badge-secondary {
+    background-color: #6c757d !important;
+    color: #fff !important;
+}
+
+.badge.bg-warning,
+.badge-warning {
+    background-color: #ffc107 !important;
+    color: #212529 !important;
+}
+
+.badge.bg-danger,
+.badge-danger {
+    background-color: #dc3545 !important;
+    color: #fff !important;
+}

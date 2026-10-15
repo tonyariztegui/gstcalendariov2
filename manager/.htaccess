@@ -1,0 +1,41 @@
+Options -MultiViews
+
+# Limiti upload CSV (Gestione Dati) — evita UPLOAD_ERR_INI_SIZE su file > 2M
+<IfModule mod_php.c>
+    php_value upload_max_filesize 64M
+    php_value post_max_size 64M
+    php_value max_execution_time 0
+</IfModule>
+<IfModule mod_php8.c>
+    php_value upload_max_filesize 64M
+    php_value post_max_size 64M
+    php_value max_execution_time 0
+</IfModule>
+
+RewriteEngine On
+
+RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.php[?\s]
+RewriteCond %{REQUEST_METHOD} !POST
+RewriteCond %{REQUEST_URI} ^(.*/manager/)
+RewriteRule ^index\.php$ %1dashboard [R=302,L]
+
+RewriteCond %{THE_REQUEST} \s/+(.*/)?ajax/preview_thankyou\.php[?\s]
+RewriteCond %{REQUEST_URI} ^(.*/manager/)
+RewriteRule ^ajax/preview_thankyou\.php$ %1anteprima-ringraziamento [R=302,L,QSA]
+
+RewriteCond %{THE_REQUEST} \s/+(.*/)?ajax/preview_quiz\.php[?\s]
+RewriteCond %{REQUEST_URI} ^(.*/manager/)
+RewriteRule ^ajax/preview_quiz\.php$ %1anteprima-quiz [R=302,L,QSA]
+
+RewriteCond %{REQUEST_URI} ^(.*/manager/)
+RewriteRule ^homepage/?$ %1dashboard [R=302,L]
+RewriteCond %{REQUEST_URI} ^(.*/manager/)
+RewriteRule ^set_password/?$ %1password [R=302,L]
+RewriteCond %{REQUEST_URI} ^(.*/manager/)
+RewriteRule ^stats_pdv/?$ %1statistiche-pdv [R=302,L]
+
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+RewriteRule ^([A-Za-z0-9_-]+)/?$ index.php?pg=$1 [L,QSA]

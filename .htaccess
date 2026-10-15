@@ -1,0 +1,26 @@
+RewriteEngine On
+
+# Block secrets even when DocumentRoot is the project root (existing files would otherwise be served)
+RewriteRule ^\.env(\..+)?$ - [F,L]
+RewriteRule ^app/config/.+\.json$ - [F,L]
+
+<FilesMatch "^\.env">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order Deny,Allow
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Quando si accede alla root del progetto, servire /public/ senza cambiare URL
+RewriteRule ^$ public/index.php [L]
+
+# Instrada verso /public evitando loop e rispettando file/cartelle esistenti
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteCond %{REQUEST_URI} !^/manager/
+RewriteCond %{REQUEST_URI} !^/uploads/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ public/$1 [L]

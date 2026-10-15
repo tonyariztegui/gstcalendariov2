@@ -1,0 +1,20 @@
+# Protection des fichiers de configuration
+# Empêche l'accès direct aux fichiers de config et fonctions
+
+# Bloquer l'accès direct aux fichiers PHP
+# Compatible Apache 2.2 et 2.4+
+<FilesMatch "\.php$">
+    # Apache 2.4+
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    # Apache 2.2 (fallback)
+    <IfModule !mod_authz_core.c>
+        Order Deny,Allow
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Autoriser seulement les inclusions depuis d'autres fichiers PHP
+# Cette règle permet aux fichiers PHP du projet d'inclure ces fichiers
+# mais bloque l'accès direct via URL

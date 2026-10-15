@@ -1,0 +1,36 @@
+Options -MultiViews
+RewriteEngine On
+
+RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.php[?\s]
+RewriteCond %{REQUEST_METHOD} !POST
+RewriteCond %{REQUEST_URI} ^(.*/public/)
+RewriteRule ^index\.php$ %1 [R=302,L]
+
+RewriteCond %{REQUEST_URI} ^(.*/public/)
+RewriteRule ^registration\.php$ %1registrazione [R=302,L]
+RewriteCond %{REQUEST_URI} ^(.*/public/)
+RewriteRule ^participation_page\.php$ %1partecipazione [R=302,L]
+RewriteCond %{REQUEST_URI} ^(.*/public/)
+RewriteRule ^waiting_page\.php$ %1attesa [R=302,L]
+RewriteCond %{REQUEST_URI} ^(.*/public/)
+RewriteRule ^waiting_page_ended\.php$ %1concorso-terminato [R=302,L]
+RewriteCond %{REQUEST_URI} ^(.*/public/)
+RewriteRule ^thank-you\.php$ %1grazie [R=302,L]
+RewriteCond %{REQUEST_URI} ^(.*/public/)
+RewriteRule ^help\.php$ %1assistenza [R=302,L]
+RewriteCond %{REQUEST_URI} ^(.*/public/)
+RewriteRule ^verify\.php$ %1verifica [R=302,L]
+RewriteCond %{REQUEST_URI} ^(.*/public/)
+RewriteRule ^quiz_flow\.php$ %1quiz [R=302,L]
+RewriteCond %{THE_REQUEST} \s/+(.*/)?search_pdv\.php[?\s]
+RewriteCond %{REQUEST_URI} ^(.*/public/)
+RewriteRule ^search_pdv\.php$ %1cerca-pdv [R=302,L]
+
+RewriteRule ^invia-registrazione/?$ do_registration.php [L,QSA]
+RewriteRule ^cerca-pdv/?$ search_pdv.php [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+RewriteRule ^([A-Za-z0-9_-]+)/?$ index.php?route=$1 [L,QSA]

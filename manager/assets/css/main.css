@@ -1,0 +1,136 @@
+:root{
+  --dashboard-navbar-height:64px;
+  --dashboard-sidebar-width:280px;
+}
+
+body{
+  min-height:100vh;
+  background-color:#f8f9fa;
+}
+
+body.sidebar-open{
+  overflow:hidden;
+}
+
+.dashboard-navbar{
+  position:sticky;
+  top:0;
+  z-index:1030;
+  min-height:var(--dashboard-navbar-height);
+}
+
+.dashboard-wrapper{
+  display:flex;
+  min-height:calc(100vh - var(--dashboard-navbar-height));
+}
+
+.dashboard-sidebar{
+  flex:0 0 var(--dashboard-sidebar-width);
+  max-width:var(--dashboard-sidebar-width);
+  padding:2rem 1.5rem;
+}
+
+.dashboard-sidebar .sidebar-inner{
+  position:sticky;
+  top:calc(var(--dashboard-navbar-height) + 1rem);
+}
+
+.dashboard-content{
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+}
+
+.sidebar-nav .list-group-item{
+  border:none;
+  border-radius:.85rem;
+  padding:1rem;
+  margin-bottom:.35rem;
+  transition:background-color .15s, box-shadow .15s;
+}
+
+.sidebar-nav .sidebar-icon{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:#edf1f7;
+  color:#5c6b80;
+  font-size:1rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.05);
+}
+
+.sidebar-nav .list-group-item.active,
+.sidebar-nav .list-group-item:hover{
+  background:#f0f4ff;
+  box-shadow:0 .5rem 1rem rgba(36,65,161,.12);
+}
+
+.sidebar-nav .list-group-item.active .sidebar-icon{
+  background:#1f55ff;
+  color:#fff;
+  box-shadow:none;
+}
+
+.dashboard-content__inner{
+  flex:1;
+  min-height:0;
+}
+
+.sidebar-backdrop{
+  display:none;
+}
+
+@media (max-width: 991.98px){
+  .dashboard-wrapper{
+    position:relative;
+    flex-direction:column;
+  }
+  .dashboard-sidebar{
+    flex:0 0 auto;
+    width:0;
+    padding:0;
+  }
+  .dashboard-sidebar .sidebar-inner{
+    position:fixed;
+    top:var(--dashboard-navbar-height);
+    bottom:0;
+    left:0;
+    width:var(--dashboard-sidebar-width);
+    max-width:calc(100% - 2.5rem);
+    overflow-y:auto;
+    background-color:#fff;
+    border-right:1px solid rgba(0,0,0,.1);
+    padding:1.5rem;
+    transform:translateX(-110%);
+    transition:transform .3s ease;
+    z-index:1040;
+  }
+  body.sidebar-open .dashboard-sidebar .sidebar-inner{
+    transform:translateX(0);
+    box-shadow:0 .5rem 1.5rem rgba(0,0,0,.2);
+  }
+  .sidebar-backdrop{
+    display:block;
+    position:fixed;
+    top:var(--dashboard-navbar-height);
+    right:0;
+    bottom:0;
+    left:0;
+    background:rgba(0,0,0,.35);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .3s ease;
+    z-index:1035;
+  }
+  body.sidebar-open .sidebar-backdrop{
+    opacity:1;
+    pointer-events:auto;
+  }
+  .dashboard-content{
+    width:100%;
+  }
+}
