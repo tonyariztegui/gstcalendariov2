@@ -1,0 +1,59 @@
+/* Footer — layout centrato compatto */
+footer.footer-layout-centered .container {
+  max-width: 900px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--bs-gutter-x, 0.75rem);
+  padding-right: var(--bs-gutter-x, 0.75rem);
+}
+
+footer.footer-layout-centered .footer-layout-centered-inner {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+footer.footer-layout-centered .footer-logo-img {
+  position: relative;
+  z-index: 2;
+  object-fit: contain;
+}
+
+footer.footer-layout-centered .footer-legal-block {
+  width: 100%;
+  max-width: 720px;
+  line-height: 1.45;
+  text-align: center;
+}
+
+footer.footer-layout-centered .footer-legal-block > div {
+  text-align: center;
+}
+
+footer.footer-layout-centered .footer-text {
+  width: 100%;
+  max-width: 720px;
+  text-align: center;
+}
+
+footer.footer-layout-centered .footer-links-inline {
+  width: 100%;
+  max-width: 720px;
+  text-align: center;
+}
+
+footer.footer-layout-centered .fw-bold.text-uppercase.text-success {
+  width: 100%;
+  max-width: 720px;
+  text-align: center;
+}
+
+footer.footer-layout-centered .footer-links-inline a {
+  text-decoration: none;
+}
+
+footer.footer-layout-centered .footer-links-inline a:hover {
+  text-decoration: underline;
+}

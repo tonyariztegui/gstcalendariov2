@@ -3,6 +3,8 @@
 config.local.php
 # Non versionare i contenuti per-ambiente: solo i default restano tracciati
 app/config/content.json
+app/config/advent.json
+app/config/advent.pre-natale-*.json
 
 # Logs
 *.log

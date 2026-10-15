@@ -38,6 +38,15 @@ $sidebarLinks = [
 // Aggiungi Concorso e Sicurezza solo se l'utente è pm_admin
 if ($isAdmin) {
     $sidebarLinks[] = [
+        'id' => 'calendari-avvento',
+        'label' => 'Calendari d’Avvento',
+        'description' => 'Caselle e premi giornalieri',
+        'href' => 'calendari-avvento',
+        'icon' => 'fa-calendar-alt',
+        'match' => ['calendari-avvento', 'anteprima-calendario'],
+        'pill' => null
+    ];
+    $sidebarLinks[] = [
         'id' => 'security',
         'label' => 'Sicurezza',
         'description' => 'Blacklist e anti-abuso',

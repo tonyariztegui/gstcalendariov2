@@ -16,6 +16,8 @@ return [
         'routes' => [
             'access_denied' => ['view' => 'access_denied.php'],
             'concorso' => ['view' => 'concorso.php'],
+            'calendari-avvento' => ['view' => 'calendari_avvento.php'],
+            'anteprima-calendario' => ['view' => 'anteprima_calendario.php'],
             'dashboard' => ['view' => 'homepage.php'],
             'edit' => ['view' => 'edit.php'],
             'security' => ['view' => 'security.php'],
@@ -40,6 +42,7 @@ return [
         'aliases' => [],
         'routes' => [
             'assistenza' => ['view' => 'help.php'],
+            'calendario-avvento' => ['view' => 'calendario_avvento.php'],
             'attesa' => ['view' => 'waiting_page.php'],
             'benvenuto' => ['view' => 'welcome.php'],
             'concorso-terminato' => ['view' => 'waiting_page_ended.php'],

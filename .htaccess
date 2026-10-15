@@ -3,6 +3,7 @@ RewriteEngine On
 # Block secrets even when DocumentRoot is the project root (existing files would otherwise be served)
 RewriteRule ^\.env(\..+)?$ - [F,L]
 RewriteRule ^app/config/.+\.json$ - [F,L]
+RewriteRule ^app/config/\.advent- - [F,L]
 
 <FilesMatch "^\.env">
     <IfModule mod_authz_core.c>

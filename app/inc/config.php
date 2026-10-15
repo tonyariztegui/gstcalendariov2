@@ -5974,7 +5974,7 @@ if (!function_exists('render_footer_links_list_html')) {
         if (!empty($blocks['links_privacy'])) {
             $parts[] = '<a class="text-success fw-semibold text-decoration-none" href="' . $privacyUrl . '" target="_blank" rel="noopener" aria-label="' . $privacyLabel . '">' . $privacyLabel . '</a>';
         }
-        if (!empty($blocks['links_cookie_policy']) && $cookiePolicyUrl !== '' && !empty($contest_config['cookie_consent']['enabled'])) {
+        if (!empty($blocks['links_cookie_policy']) && $cookiePolicyUrl !== '' && (!empty($contest_config['cookie_consent']['enabled']) || !empty($contest_config['footer_cookie_link_enabled']))) {
             $parts[] = '<a class="text-success fw-semibold text-decoration-none" href="' . $cookiePolicyUrl . '" target="_blank" rel="noopener" aria-label="' . $cookiePolicyLabel . '">' . $cookiePolicyLabel . '</a>';
         }
         $ccEnabled = !empty($contest_config['cookie_consent']['enabled']);
@@ -5982,7 +5982,11 @@ if (!function_exists('render_footer_links_list_html')) {
             $parts[] = '<a class="text-success fw-semibold text-decoration-none" href="#" id="cc-open-preferences" aria-label="Preferenze cookie">Preferenze cookie</a>';
         }
         if (!empty($blocks['links_assistenza'])) {
-            if (is_assistenza_page_accessible()) {
+            if (array_key_exists('assistenza_link', $contest_config)) {
+                if ($contest_config['assistenza_link'] !== '') {
+                    $parts[] = '<a class="text-success fw-semibold text-decoration-none" href="' . htmlspecialchars($contest_config['assistenza_link'], ENT_QUOTES, 'UTF-8') . '">' . $assistLabel . '</a>';
+                }
+            } elseif (is_assistenza_page_accessible()) {
                 $parts[] = '<a class="text-success fw-semibold text-decoration-none" href="assistenza" aria-label="' . $assistLabel . '">' . $assistLabel . '</a>';
             } else {
                 $parts[] = '<a class="text-success fw-semibold text-decoration-none" href="#" onclick="event.preventDefault();" aria-label="' . $assistLabel . '" aria-disabled="true">' . $assistLabel . '</a>';
