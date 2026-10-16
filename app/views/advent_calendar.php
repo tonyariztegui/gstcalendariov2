@@ -73,6 +73,17 @@ $footerBorderColor = 'rgba(' . implode(',', $footerBorderChannels) . ',' . max(0
 $footerBorder = !empty($calendar['footer_border_enabled']) ? max(0, min(20, (int) $calendar['footer_border_width'])) . 'px solid ' . $footerBorderColor : '0 solid transparent';
 $footerSides = is_array($calendar['footer_border_sides'] ?? null) ? $calendar['footer_border_sides'] : [];
 $footerImageSize = $calendar['footer_image_size'] === 'custom' ? ($calendar['footer_image_size_custom'] ?: 'cover') : $calendar['footer_image_size'];
+$gridMobile = max(1, min(2, (int) ($calendar['grid_columns_mobile'] ?? 2)));
+$gridTablet = max(2, min(4, (int) ($calendar['grid_columns_tablet'] ?? 3)));
+$gridDesktop = max(2, min(6, (int) ($calendar['grid_columns_desktop'] ?? 4)));
+$gridGap = max(0, min(40, (int) ($calendar['grid_gap'] ?? 16)));
+$gridRadius = max(0, min(32, (int) ($calendar['grid_tile_radius'] ?? 16)));
+$gridRatio = ['square' => '1', 'classic' => '1.2', 'wide' => '1.5'][$calendar['grid_tile_ratio'] ?? 'classic'] ?? '1.2';
+$gridImageFit = ($calendar['grid_image_fit'] ?? 'contain') === 'cover' ? 'cover' : 'contain';
+$logoWidthMobile = max(60, min(1000, (int) ($calendar['logo_width_mobile'] ?? 320)));
+$logoWidthTablet = max(60, min(1000, (int) ($calendar['logo_width_tablet'] ?? 480)));
+$logoWidthDesktop = max(60, min(1000, (int) ($calendar['logo_width_desktop'] ?? 700)));
+$logoWidthWide = max(60, min(1000, (int) ($calendar['logo_width_wide'] ?? 850)));
 $style = '--calendar-accent:' . $accent . ';--calendar-accent-text:' . $accentText . ';--calendar-modal-overlay:' . $overlayColor . ';--calendar-bg:url(' . json_encode($background) . ');--calendar-mobile-bg:url(' . json_encode($mobileBackground ?: $background) . ');--calendar-tablet-bg:url(' . json_encode($tabletBackground ?: $background) . ');--calendar-wide-bg:url(' . json_encode($wideBackground ?: $background) . ');--calendar-footer-bg:' . $footerBgColor . ';--calendar-footer-image:url(' . json_encode($footerBackgroundImage) . ');--calendar-footer-text:' . $footerTextColor . ';--calendar-footer-secondary:' . $footerSecondaryColor . ';--calendar-footer-link:' . $footerLinkColor . ';--calendar-footer-link-hover:' . $footerLinkHover . ';--calendar-footer-font:' . ($calendar['footer_font_family'] ?: 'inherit') . ';--calendar-footer-font-size:' . ($calendar['footer_font_size'] ?: 'inherit') . ';--calendar-footer-position:' . $calendar['footer_image_position_horizontal'] . ' ' . $calendar['footer_image_position_vertical'] . ';--calendar-footer-size:' . $footerImageSize . ';--calendar-footer-repeat:' . $calendar['footer_image_repeat'] . ';--calendar-footer-border-top:' . (in_array('top', $footerSides, true) ? $footerBorder : '0 solid transparent') . ';--calendar-footer-border-right:' . (in_array('right', $footerSides, true) ? $footerBorder : '0 solid transparent') . ';--calendar-footer-border-bottom:' . (in_array('bottom', $footerSides, true) ? $footerBorder : '0 solid transparent') . ';--calendar-footer-border-left:' . (in_array('left', $footerSides, true) ? $footerBorder : '0 solid transparent') . ';';
 ?>
 <!doctype html>
@@ -82,13 +93,22 @@ $style = '--calendar-accent:' . $accent . ';--calendar-accent-text:' . $accentTe
     <title><?= advent_escape($calendar['title']) ?></title>
     <link rel="stylesheet" href="<?= advent_escape($adventBase) ?>/public/assets/css/advent-calendar.css">
     <style>
+        .advent-grid{grid-template-columns:repeat(<?= $gridMobile ?>,minmax(0,1fr));gap:<?= $gridGap ?>px}
+        .advent-tile{border-radius:<?= $gridRadius ?>px}
+        .advent-tile-art{aspect-ratio:<?= $gridRatio ?>}
+        .advent-tile-art img{object-fit:<?= $gridImageFit ?>}
+        @media(min-width:600px){.advent-grid{grid-template-columns:repeat(<?= $gridTablet ?>,minmax(0,1fr))}}
+        @media(min-width:1000px){.advent-grid{grid-template-columns:repeat(<?= $gridDesktop ?>,minmax(0,1fr))}}
         .advent-modal::backdrop{background:var(--calendar-modal-overlay,#102a23b8)}
         .advent-tile.is-past.is-revealed{border-style:dashed;border-color:#a9a69d;background:#f2f0e9}
         .advent-tile.is-past.is-revealed .advent-tile-art{filter:saturate(.58);opacity:.84}
         .advent-tile.is-past.is-revealed .advent-tile-caption{background:#f2f0e9;color:#59615c}
         .advent-expired-badge{position:absolute;z-index:2;top:10px;left:10px;padding:4px 9px;border-radius:999px;background:#3d4943dd;color:#fff;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 2px 8px #0002}
         .advent-visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
-        .advent-logo.is-heading{max-width:min(100%,850px);max-height:none;width:auto}
+        .advent-hero .advent-logo.is-heading{display:block;width:min(100%,<?= $logoWidthMobile ?>px);max-width:none;max-height:none;height:auto;margin:0 auto 20px;object-fit:contain}
+        @media(min-width:600px){.advent-hero .advent-logo.is-heading{width:min(100%,<?= $logoWidthTablet ?>px)}}
+        @media(min-width:1000px){.advent-hero .advent-logo.is-heading{width:min(100%,<?= $logoWidthDesktop ?>px)}}
+        @media(min-width:1921px){.advent-hero .advent-logo.is-heading{width:min(100%,<?= $logoWidthWide ?>px)}}
         .advent-footer{position:relative;color:var(--calendar-footer-text);font-family:var(--calendar-footer-font);font-size:var(--calendar-footer-font-size);background-color:var(--calendar-footer-bg);background-image:var(--calendar-footer-image);background-position:var(--calendar-footer-position);background-size:var(--calendar-footer-size);background-repeat:var(--calendar-footer-repeat);border-top:var(--calendar-footer-border-top);border-right:var(--calendar-footer-border-right);border-bottom:var(--calendar-footer-border-bottom);border-left:var(--calendar-footer-border-left)}
         .advent-footer-inner{max-width:1120px;margin:auto;padding:32px 20px;display:grid;gap:20px;align-items:center}
         .advent-footer.is-centered .advent-footer-inner{text-align:center;justify-items:center}
@@ -112,7 +132,7 @@ $style = '--calendar-accent:' . $accent . ';--calendar-accent-text:' . $accentTe
     </form>
 </aside>
 <?php endif; ?>
-<main class="advent-main">
+<main class="advent-main" id="inizio">
     <header class="advent-hero">
         <?php $logoIsHeading = $visible && $calendar['logo'] !== '' && !empty($calendar['logo_replaces_heading']); ?>
         <?php if ($visible && $calendar['logo'] !== ''): ?><img class="advent-logo<?= $logoIsHeading ? ' is-heading' : '' ?>" src="<?= advent_escape(advent_asset_url($calendar['logo'], $adventBase)) ?>" alt="<?= $logoIsHeading ? '' : 'Logo ' . advent_escape($calendar['title']) ?>"><?php endif; ?>

@@ -13,6 +13,19 @@
 .advent-editor .advent-footer-blocks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 18px; }
 .advent-editor .advent-footer-blocks label { display: flex; align-items: center; gap: 8px; margin: 0; font-weight: 500; }
 .advent-editor .advent-image-preview { display: block; max-width: 180px; max-height: 100px; object-fit: contain; border: 1px solid #dbe3ef; border-radius: 8px; padding: 5px; margin-top: 12px; }
+.advent-editor .advent-logo-sizes { padding: 18px; border: 1px solid #dbe3ef; border-radius: 12px; background: #f8fafc; }
+.advent-editor .advent-logo-sizes h6 { margin: 0 0 6px; font-weight: 700; }
+.advent-editor .advent-logo-sizes > p { margin-bottom: 16px; }
+.advent-editor .advent-logo-size-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; }
+.advent-editor .advent-logo-size-fields label { margin: 0; font-size: 13px; font-weight: 600; }
+.advent-editor .advent-logo-size-input { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.advent-editor .advent-logo-size-input input { max-width: 140px; }
+.advent-editor .advent-logo-size-input span { color: #526174; }
+.advent-editor .advent-logo-size-preview { display: grid; gap: 8px; margin-top: 18px; }
+.advent-editor .advent-logo-size-preview > label { margin: 0; font-size: 13px; font-weight: 600; }
+.advent-editor .advent-logo-size-preview select { width: auto; max-width: 220px; }
+.advent-editor .advent-logo-preview-canvas { display: grid; place-items: center; width: 100%; max-width: 620px; min-height: 190px; padding: 20px; border: 1px dashed #b8c5d8; border-radius: 10px; background: #fff; overflow: hidden; }
+.advent-editor .advent-logo-preview-canvas img { display: block; max-width: 100%; height: auto; object-fit: contain; }
 .advent-editor .advent-day-list { display: grid; gap: 10px; }
 .advent-editor .advent-day-editor { border: 1px solid #dbe3ef; border-radius: 10px; overflow: hidden; background: white; }
 .advent-editor .advent-day-editor summary { display: flex; align-items: center; gap: 14px; cursor: pointer; padding: 16px; background: #f8fafc; list-style: none; }
@@ -22,10 +35,41 @@
 .advent-editor .advent-day-number { display: flex; align-items: center; justify-content: center; flex-shrink: 0; width: 36px; height: 36px; background: #eef2ff; color: #3949ab; border-radius: 10px; font-weight: 700; }
 .advent-editor .advent-day-status { margin-left: auto; font-size: 12px; color: #64748b; }
 .advent-editor .advent-day-editor > .advent-fields { padding: 20px; }
+.advent-editor .advent-grid-presets { max-width: 980px; border: 0; padding: 0; margin: 0 auto 20px; min-width: 0; }
+.advent-editor .advent-grid-presets legend { width: auto; margin-bottom: 10px; color: #334155; }
+.advent-editor .advent-grid-preset-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.advent-editor .advent-grid-preset { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; min-width: 0; padding: 14px; border: 2px solid #dbe3ef; border-radius: 12px; background: #fff; color: #233047; text-align: left; cursor: pointer; }
+.advent-editor .advent-grid-preset:hover { border-color: #8998e9; background: #f8faff; }
+.advent-editor .advent-grid-preset[aria-pressed="true"] { border-color: #4c6ef5; background: #eef2ff; box-shadow: 0 0 0 2px #4c6ef522; }
+.advent-editor .advent-grid-preset strong { font-size: 14px; }
+.advent-editor .advent-grid-preset small { color: #64748b; }
+.advent-editor .advent-grid-preset-art { display: grid; width: 100%; height: 54px; gap: 4px; margin-bottom: 7px; }
+.advent-editor .advent-grid-preset-art--classic { grid-template-columns: repeat(4, 1fr); }
+.advent-editor .advent-grid-preset-art--compact { grid-template-columns: repeat(6, 1fr); gap: 2px; }
+.advent-editor .advent-grid-preset-art--gallery { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.advent-editor .advent-grid-preset-art i { border: 1px solid #c7d2fe; border-radius: 5px; background: linear-gradient(135deg, #dbeafe, #eef2ff); }
+.advent-editor .advent-grid-live-preview { max-width: 980px; margin: 0 auto 20px; padding: 16px; border: 1px solid #dbe3ef; border-radius: 12px; background: #f8fafc; }
+.advent-editor .advent-grid-live-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.advent-editor .advent-grid-live-header label { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 13px; }
+.advent-editor .advent-grid-live-header select { width: auto; min-width: 120px; }
+.advent-editor .advent-grid-preview { display: grid; width: 100%; max-width: 620px; margin: 0 auto 10px; }
+.advent-editor .advent-grid-preview-tile { display: block; min-width: 0; overflow: hidden; border: 1px solid #cbd5e1; border-radius: var(--preview-radius, 16px); background: #fff; }
+.advent-editor .advent-grid-preview-art { display: grid; place-items: center; aspect-ratio: var(--preview-ratio, 1.2); background: linear-gradient(135deg, #e0e7ff, #f8fafc); color: #4c5eb5; font: 700 20px Georgia, serif; }
+.advent-editor .advent-grid-preview[data-fit="cover"] .advent-grid-preview-art { background: linear-gradient(135deg, #a5b4fc, #c7d2fe); }
+.advent-editor .advent-grid-preview-caption { display: block; height: 14px; border-top: 1px solid #e2e8f0; background: #fff; }
+.advent-editor .advent-grid-advanced { max-width: 980px; margin: 12px auto 0; border: 1px solid #dbe3ef; border-radius: 10px; background: #fff; }
+.advent-editor .advent-grid-advanced > summary { padding: 12px 16px; color: #34445f; font-size: 13px; font-weight: 650; cursor: pointer; }
+.advent-editor .advent-grid-advanced[open] > summary { border-bottom: 1px solid #e2e8f0; }
+.advent-editor .advent-grid-advanced > .advent-fields { padding: 16px; }
 .advent-editor :focus-visible { outline: 3px solid #3949ab; outline-offset: 3px; }
 .advent-editor [hidden] { display: none !important; }
 @media (max-width: 767px) {
+    .advent-editor .advent-grid-preset-list { grid-template-columns: 1fr; }
+    .advent-editor .advent-grid-preset { display: grid; grid-template-columns: 100px 1fr; column-gap: 12px; align-items: center; }
+    .advent-editor .advent-grid-preset-art { grid-row: span 2; height: 40px; margin: 0; }
+    .advent-editor .advent-grid-live-header { align-items: flex-start; flex-direction: column; }
     .advent-editor .advent-fields { grid-template-columns: 1fr; }
+    .advent-editor .advent-logo-size-fields { grid-template-columns: 1fr; }
     .advent-editor .advent-footer-blocks { grid-template-columns: 1fr; }
     .advent-editor .advent-day-editor > .advent-fields { padding: 16px; }
     .advent-editor .advent-day-status { display: none; }

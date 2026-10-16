@@ -24,10 +24,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 $base = advent_editor_base();
 $contest_config = advent_footer_config($calendar, $base);
+$buttonAccent = preg_match('/^#[0-9a-fA-F]{6}$/D', (string) $calendar['accent']) ? $calendar['accent'] : '#185844';
+$buttonRgb = array_map(static function ($hex) {
+    $channel = hexdec($hex) / 255;
+    return $channel <= 0.04045 ? $channel / 12.92 : (($channel + 0.055) / 1.055) ** 2.4;
+}, str_split(substr($buttonAccent, 1), 2));
+$buttonText = ($buttonRgb[0] * 0.2126 + $buttonRgb[1] * 0.7152 + $buttonRgb[2] * 0.0722) > 0.179 ? '#000000' : '#ffffff';
 ?>
 <!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="<?= advent_escape($base) ?>/public/assets/css/custom.css">
-<?= get_footer_style_block() ?><style>body{margin:0;background:#e9ecef}</style></head><body>
-<?php render_public_footer($contest_config); ?>
+<link rel="stylesheet" href="<?= advent_escape($base) ?>/public/assets/css/advent-footer.css">
+<?= get_footer_style_block() ?><style>body{margin:0;background:#e9ecef;--calendar-accent:<?= advent_escape($buttonAccent) ?>;--calendar-accent-text:<?= $buttonText ?>}</style></head><body>
+<?php render_public_footer($contest_config, advent_footer_button_html($calendar)); ?>
 </body></html>

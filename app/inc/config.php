@@ -6171,7 +6171,7 @@ if (!function_exists('render_footer_centered_compact_html')) {
 }
 
 if (!function_exists('render_public_footer')) {
-    function render_public_footer(array $contest_config): void
+    function render_public_footer(array $contest_config, string $extraInner = ''): void
     {
         $layout = normalize_footer_layout(
             is_array($contest_config['footer_layout'] ?? null) ? $contest_config['footer_layout'] : [],
@@ -6183,11 +6183,11 @@ if (!function_exists('render_public_footer')) {
             ? render_footer_centered_compact_html($contest_config)
             : render_footer_three_columns_html($contest_config);
         $layoutClass = $template === 'centered_compact' ? 'footer-layout-centered' : 'footer-layout-three-columns';
-        if ($inner !== '') {
+        if ($inner !== '' || $extraInner !== '') {
             echo '<footer class="bg-white border-top text-dark w-100 mt-auto ' . htmlspecialchars($layoutClass, ENT_QUOTES, 'UTF-8') . '" role="contentinfo" aria-labelledby="footer-heading">';
             echo '<h2 id="footer-heading" class="visually-hidden">Informazioni sul concorso ' . htmlspecialchars($contestName, ENT_QUOTES, 'UTF-8') . '</h2>';
             echo '<div class="container py-4">';
-            echo $inner;
+            echo $inner . $extraInner;
             echo '</div></footer>';
         }
 

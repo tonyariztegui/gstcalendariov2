@@ -14,6 +14,7 @@ require_once __DIR__ . '/calendari_avvento/editor.php';
 $errors = [];
 try { $calendar = advent_load(); }
 catch (Throwable $e) { $calendar = advent_defaults(); $errors[] = 'Impossibile leggere la configurazione del calendario.'; }
+$configVersion = is_file(advent_config_path()) ? (hash_file('sha256', advent_config_path()) ?: '') : '';
 if (empty($_SESSION['advent_csrf'])) { $_SESSION['advent_csrf'] = bin2hex(random_bytes(32)); }
 $saved = !empty($_SESSION['advent_saved']);
 unset($_SESSION['advent_saved']);
@@ -21,6 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $saved = false;
     if (!is_string($_POST['csrf'] ?? null) || !hash_equals($_SESSION['advent_csrf'], $_POST['csrf'])) {
         $errors[] = 'Sessione del modulo scaduta. Ricarica la pagina e riprova.';
+    } elseif (!is_string($_POST['config_version'] ?? null) || !hash_equals($configVersion, $_POST['config_version'])) {
+        $errors[] = 'Il calendario è stato aggiornato dopo l’apertura di questa scheda. Ricarica il manager e riapri l’anteprima per vedere le immagini aggiornate.';
     } else {
         try {
             $input = advent_footer_from_post($_POST);
@@ -35,11 +38,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!$errors) {
                 if (($_POST['action'] ?? '') === 'preview') {
                     $_SESSION['advent_preview'] = $calendar;
+                    $_SESSION['advent_preview_config_hash'] = hash_file('sha256', advent_config_path());
                     header('Location: anteprima-calendario?' . http_build_query(['mode' => 'date', 'date' => $calendar['end_date']]));
                     exit;
                 }
                 advent_save($calendar);
                 unset($_SESSION['advent_preview']);
+                unset($_SESSION['advent_preview_config_hash']);
                 $_SESSION['advent_saved'] = true;
                 header('Location: calendari-avvento?step=' . max(1, min(4, (int) ($_POST['calendar_step'] ?? 1))));
                 exit;
@@ -55,7 +60,7 @@ include __DIR__ . '/_header.php';
 include __DIR__ . '/../res/inc/header.php';
 ?>
 <link rel="stylesheet" href="views/concorso/concorso.css">
-<link rel="stylesheet" href="views/calendari_avvento/editor.css">
+<link rel="stylesheet" href="views/calendari_avvento/editor.css?v=<?= (int) filemtime(__DIR__ . '/calendari_avvento/editor.css') ?>">
 <main class="advent-editor app-main__outer"><div class="app-main__inner"><div class="row"><div class="col-12"><div class="card mb-4 config-shell-card">
     <header class="card-header config-header">
         <div class="config-header-main">
@@ -96,6 +101,7 @@ include __DIR__ . '/../res/inc/header.php';
     </div>
     <form method="post" enctype="multipart/form-data" id="advent-form">
         <input type="hidden" name="csrf" value="<?= advent_escape($_SESSION['advent_csrf']) ?>">
+        <input type="hidden" name="config_version" value="<?= advent_escape($configVersion) ?>">
         <input type="hidden" name="calendar_step" id="advent-current-step" value="<?= max(1, min(4, (int) ($_POST['calendar_step'] ?? $_GET['step'] ?? 1))) ?>">
         <div class="config-columns">
         <section class="card mt-3 mb-4 config-step configurazione-section" id="advent-step-1" role="tabpanel" aria-labelledby="advent-tab-1" tabindex="0"><div class="card-body">
@@ -122,6 +128,16 @@ include __DIR__ . '/../res/inc/header.php';
                     <select id="cal-logo-replaces-heading" name="logo_replaces_heading" class="form-control" aria-describedby="logo-replaces-heading-help"><option value="0" <?= empty($calendar['logo_replaces_heading']) ? 'selected' : '' ?>>Logo con titolo e descrizione separati</option><option value="1" <?= !empty($calendar['logo_replaces_heading']) ? 'selected' : '' ?>>Testata completa: il logo contiene tutte le scritte</option></select>
                     <small id="logo-replaces-heading-help" class="text-muted">Con “Testata completa” vengono nascosti visivamente titolo, etichetta e testo introduttivo, perché sono già presenti nell’immagine.</small>
                 </div>
+                <div class="advent-field advent-field--wide advent-logo-sizes" <?= empty($calendar['logo_replaces_heading']) ? 'hidden' : '' ?>>
+                    <h6>Dimensione della testata completa per dispositivo</h6>
+                    <p class="text-muted small">Imposta la larghezza massima. L’altezza si adatta automaticamente e l’immagine non supera la larghezza dello schermo.</p>
+                    <div class="advent-logo-size-fields">
+                        <?php foreach (['mobile' => 'Smartphone', 'tablet' => 'Tablet', 'desktop' => 'Computer', 'wide' => 'Schermi grandi'] as $device => $label): ?>
+                            <label for="cal-logo-width-<?= $device ?>"><?= $label ?><span class="advent-logo-size-input"><input class="form-control" id="cal-logo-width-<?= $device ?>" name="logo_width_<?= $device ?>" type="number" min="60" max="1000" step="1" value="<?= (int) $calendar['logo_width_' . $device] ?>" required><span>px</span></span></label>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="advent-logo-size-preview"><label for="cal-logo-preview-device">Anteprima della testata</label><select id="cal-logo-preview-device" class="form-control form-control-sm"><option value="mobile">Smartphone</option><option value="tablet">Tablet</option><option value="desktop" selected>Computer</option><option value="wide">Schermi grandi</option></select><div class="advent-logo-preview-canvas"><img id="cal-logo-size-preview" <?php if ($calendar['logo'] !== ''): ?>src="<?= advent_escape(advent_asset_url($calendar['logo'], advent_editor_base())) ?>"<?php else: ?>hidden<?php endif; ?> alt="Anteprima dimensione della testata completa"><span id="cal-logo-preview-empty" <?= $calendar['logo'] !== '' ? 'hidden' : '' ?>>Carica una testata completa per vedere l’anteprima.</span></div></div>
+                </div>
                 <?php advent_editor_field('accent', 'Colore principale', $calendar['accent'], 'color'); ?>
                 <?php advent_editor_field('modal_overlay', 'Colore velatura popup', $calendar['modal_overlay'], 'color'); ?>
                 <div class="advent-field">
@@ -133,6 +149,29 @@ include __DIR__ . '/../res/inc/header.php';
         </div></section>
         <section class="card mt-3 mb-4 config-step configurazione-section" id="advent-step-3" role="tabpanel" aria-labelledby="advent-tab-3" tabindex="0"><div class="card-body">
             <div class="configurazione-hero"><div><div class="section-title configurazione-title"><i class="fa fa-gift mr-2" aria-hidden="true"></i>Caselle e premi</div><p class="text-muted small mb-0">Ogni premio si apre soltanto nella sua data. Le caselle passate risultano scadute, quelle future non sono ancora disponibili.</p></div></div>
+            <div class="configurazione-panel"><div class="configurazione-panel-header"><span class="configurazione-panel-icon"><i class="fa fa-th" aria-hidden="true"></i></span><div><h6>Griglia delle caselle</h6><p>Personalizza la disposizione nella pagina pubblica. Le colonne si adattano al dispositivo.</p></div></div>
+                <fieldset class="advent-grid-presets"><legend class="small font-weight-bold">Scegli un modello</legend>
+                    <div class="advent-grid-preset-list">
+                        <button type="button" class="advent-grid-preset" data-grid-preset="classic" data-mobile="2" data-tablet="3" data-desktop="4" data-gap="16" data-ratio="classic" data-radius="16" data-fit="contain" aria-pressed="false"><span class="advent-grid-preset-art advent-grid-preset-art--classic" aria-hidden="true"><i></i><i></i><i></i><i></i></span><strong>Classico</strong><small>4 colonne, arioso</small></button>
+                        <button type="button" class="advent-grid-preset" data-grid-preset="compact" data-mobile="2" data-tablet="4" data-desktop="6" data-gap="8" data-ratio="square" data-radius="8" data-fit="contain" aria-pressed="false"><span class="advent-grid-preset-art advent-grid-preset-art--compact" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span><strong>Compatto</strong><small>6 colonne, ravvicinate</small></button>
+                        <button type="button" class="advent-grid-preset" data-grid-preset="gallery" data-mobile="1" data-tablet="2" data-desktop="3" data-gap="24" data-ratio="wide" data-radius="20" data-fit="cover" aria-pressed="false"><span class="advent-grid-preset-art advent-grid-preset-art--gallery" aria-hidden="true"><i></i><i></i><i></i></span><strong>Galleria</strong><small>3 colonne, immagini ampie</small></button>
+                    </div>
+                </fieldset>
+                <div class="advent-grid-live-preview" aria-label="Anteprima della griglia">
+                    <div class="advent-grid-live-header"><strong>Anteprima del modello</strong><label for="cal-grid-preview-device">Dispositivo <select id="cal-grid-preview-device" class="form-control form-control-sm"><option value="desktop">Computer</option><option value="tablet">Tablet</option><option value="mobile">Smartphone</option></select></label></div>
+                    <div id="cal-grid-preview" class="advent-grid-preview" aria-hidden="true"><?php for ($n=1; $n<=8; $n++): ?><span class="advent-grid-preview-tile"><span class="advent-grid-preview-art"><?= $n ?></span><span class="advent-grid-preview-caption"></span></span><?php endfor; ?></div>
+                    <p id="cal-grid-preset-status" class="text-muted small mb-0" role="status"></p>
+                </div>
+                <details class="advent-grid-advanced"><summary>Regola il modello manualmente</summary><div class="advent-fields">
+                    <div class="advent-field"><label for="cal-grid-columns-mobile">Colonne su smartphone</label><select class="form-control" id="cal-grid-columns-mobile" name="grid_columns_mobile"><?php foreach ([1,2] as $n): ?><option value="<?= $n ?>" <?= (int) ($calendar['grid_columns_mobile'] ?? 2) === $n ? 'selected' : '' ?>><?= $n ?></option><?php endforeach; ?></select></div>
+                    <div class="advent-field"><label for="cal-grid-columns-tablet">Colonne su tablet</label><select class="form-control" id="cal-grid-columns-tablet" name="grid_columns_tablet"><?php foreach ([2,3,4] as $n): ?><option value="<?= $n ?>" <?= (int) ($calendar['grid_columns_tablet'] ?? 3) === $n ? 'selected' : '' ?>><?= $n ?></option><?php endforeach; ?></select></div>
+                    <div class="advent-field"><label for="cal-grid-columns-desktop">Colonne su computer</label><select class="form-control" id="cal-grid-columns-desktop" name="grid_columns_desktop"><?php foreach ([2,3,4,5,6] as $n): ?><option value="<?= $n ?>" <?= (int) ($calendar['grid_columns_desktop'] ?? 4) === $n ? 'selected' : '' ?>><?= $n ?></option><?php endforeach; ?></select></div>
+                    <div class="advent-field"><label for="cal-grid-gap">Spazio tra le caselle (px)</label><input class="form-control" id="cal-grid-gap" name="grid_gap" type="number" min="0" max="40" step="1" value="<?= (int) ($calendar['grid_gap'] ?? 16) ?>"></div>
+                    <div class="advent-field"><label for="cal-grid-tile-ratio">Proporzione dell’immagine</label><select class="form-control" id="cal-grid-tile-ratio" name="grid_tile_ratio"><?php foreach (['square'=>'Quadrata','classic'=>'Rettangolare classica','wide'=>'Rettangolare larga'] as $value=>$label): ?><option value="<?= $value ?>" <?= ($calendar['grid_tile_ratio'] ?? 'classic') === $value ? 'selected' : '' ?>><?= $label ?></option><?php endforeach; ?></select></div>
+                    <div class="advent-field"><label for="cal-grid-tile-radius">Angoli arrotondati (px)</label><input class="form-control" id="cal-grid-tile-radius" name="grid_tile_radius" type="number" min="0" max="32" step="1" value="<?= (int) ($calendar['grid_tile_radius'] ?? 16) ?>"></div>
+                    <div class="advent-field advent-field--wide"><label for="cal-grid-image-fit">Adattamento immagini delle caselle</label><select class="form-control" id="cal-grid-image-fit" name="grid_image_fit"><option value="contain" <?= ($calendar['grid_image_fit'] ?? 'contain') === 'contain' ? 'selected' : '' ?>>Mostra l’immagine intera</option><option value="cover" <?= ($calendar['grid_image_fit'] ?? 'contain') === 'cover' ? 'selected' : '' ?>>Riempi la casella ritagliando l’immagine</option></select></div>
+                </div></details><p class="text-muted small mt-3 mb-0">Scegli un modello, controlla l’anteprima e salva la configurazione.</p>
+            </div>
             <p class="text-muted small">Il titolo rende il premio disponibile. Immagini, descrizione e codice sono facoltativi. Il barcode EAN-13 viene generato a partire dal codice.</p>
             <?php if (!$days): ?><p role="status">Imposta un intervallo di date valido per configurare le caselle.</p><?php endif; ?>
             <div class="advent-day-list">
@@ -142,7 +181,7 @@ include __DIR__ . '/../res/inc/header.php';
                     <div class="advent-fields">
                         <?php advent_editor_field($prefix . '[title]', 'Titolo del premio', $prize['title'] ?? ''); advent_editor_field($prefix . '[code]', 'Codice premio', $prize['code'] ?? ''); ?>
                         <div class="advent-field advent-field--wide"><label for="description-<?= $number ?>">Descrizione del premio</label><textarea id="description-<?= $number ?>" name="<?= $prefix ?>[description]" rows="2" maxlength="2000" class="form-control"><?= advent_escape($prize['description'] ?? '') ?></textarea></div>
-                        <?php foreach (['cover' => 'Immagine della casella', 'active_cover' => 'Immagine della casella attiva (anche GIF)', 'image' => 'Immagine del premio'] as $key => $label) { advent_editor_image($prefix . '[' . $key . ']', $label, $prize[$key] ?? '', 'day_' . $number . '_' . $key); } ?>
+                        <?php foreach (['cover' => 'Immagine della casella', 'active_cover' => 'Immagine della casella attiva (anche GIF)', 'image' => 'Immagine del premio'] as $key => $label) { advent_editor_image($prefix . '[' . $key . ']', $label, $prize[$key] ?? '', 'day_' . $number . '_' . $key, $calendar['grid_tile_ratio'] ?? 'classic'); } ?>
                     </div>
                 </details>
             <?php endforeach; ?>
@@ -153,5 +192,5 @@ include __DIR__ . '/../res/inc/header.php';
         <div class="wizard-actions wizard-actions-bottom"><button class="btn btn-outline-secondary btn-sm" type="button" id="advent-prev"><i class="fa fa-arrow-left mr-1" aria-hidden="true"></i>Indietro</button><span class="text-muted small" id="advent-save-status" role="status">Le modifiche vengono salvate con Salva configurazione.</span><button class="btn btn-primary btn-sm" type="button" id="advent-next">Avanti<i class="fa fa-arrow-right ml-1" aria-hidden="true"></i></button></div>
     </form>
 </div></div></div></div></div></main>
-<script src="views/calendari_avvento/editor.js"></script>
+<script src="views/calendari_avvento/editor.js?v=<?= (int) filemtime(__DIR__ . '/calendari_avvento/editor.js') ?>"></script>
 <?php $scripts = ($scripts ?? '') . '<script src="views/calendari_avvento/footer-editor.js"></script><script src="views/concorso/footer-editor.js"></script>'; include __DIR__ . '/_footer.php'; ?>

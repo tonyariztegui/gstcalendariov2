@@ -7,4 +7,4 @@ $contest_config = advent_footer_config($calendar, $adventBase);
 <link rel="stylesheet" href="<?= advent_escape($adventBase) ?>/public/assets/css/advent-footer.css">
 <link rel="stylesheet" href="<?= advent_escape($adventBase) ?>/public/assets/css/footer-layout.css">
 <?= get_footer_style_block() ?>
-<?php render_public_footer($contest_config); $contest_config = $savedFooterConfig; ?>
+<?php render_public_footer($contest_config, advent_footer_button_html($calendar, $adventBase)); $contest_config = $savedFooterConfig; ?>

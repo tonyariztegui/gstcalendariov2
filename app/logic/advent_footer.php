@@ -63,6 +63,31 @@ function advent_footer_config(array $calendar, string $base): array
     return $out;
 }
 
+function advent_footer_button_html(array $calendar, string $base = ''): string
+{
+    $label = trim((string) ($calendar['footer_button_label'] ?? ''));
+    $url = trim((string) ($calendar['footer_button_url'] ?? ''));
+    if (str_starts_with($url, '/public/')) { $url = rtrim($base, '/') . $url; }
+    if ($label === '' || $url === '' || !preg_match('~^(?:https?://[^\s<>"\x27]+|/(?!/)[^\s<>"\x27]+)$~D', $url)) { return ''; }
+    $defaults = advent_defaults();
+    $colors = [];
+    foreach (['footer_button_background', 'footer_button_text_color', 'footer_button_hover_background'] as $key) {
+        $value = (string) ($calendar[$key] ?? $defaults[$key]);
+        $colors[$key] = preg_match('/^#[0-9a-fA-F]{6}$/D', $value) ? $value : $defaults[$key];
+    }
+    $size = in_array($calendar['footer_button_size'] ?? '', ['small', 'medium', 'large'], true) ? $calendar['footer_button_size'] : 'medium';
+    $width = ($calendar['footer_button_width'] ?? '') === 'full' ? 'full' : 'auto';
+    $radius = max(0, min(32, (int) ($calendar['footer_button_radius'] ?? 8)));
+    $style = '--advent-button-bg:' . $colors['footer_button_background']
+        . ';--advent-button-text:' . $colors['footer_button_text_color']
+        . ';--advent-button-hover:' . $colors['footer_button_hover_background']
+        . ';--advent-button-radius:' . $radius . 'px';
+    $newTab = !empty($calendar['footer_button_new_tab']) ? ' target="_blank" rel="noopener noreferrer"' : '';
+    return '<div class="advent-footer-action"><a class="advent-footer-button advent-footer-button--' . $size
+        . ' advent-footer-button--' . $width . '" href="' . advent_escape($url) . '" style="'
+        . advent_escape($style) . '"' . $newTab . '>' . advent_escape($label) . '</a></div>';
+}
+
 function advent_footer_safe_html(string $html): string
 {
     if ($html === '') return '';

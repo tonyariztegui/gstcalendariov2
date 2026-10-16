@@ -5,6 +5,11 @@ config.local.php
 app/config/content.json
 app/config/advent.json
 app/config/advent.pre-natale-*.json
+# Calendario natalizio locale: contenuti e immagini non vengono inclusi nei commit
+docs/natale-2026-calendario.json
+public/assets/images/natale-2026-background.png
+public/assets/images/natale-2026-logo.svg
+public/assets/images/natale-2026/
 
 # Logs
 *.log
