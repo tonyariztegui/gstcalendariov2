@@ -28,11 +28,12 @@ function advent_editor_image(string $name, string $label, string $value, ?string
         str_ends_with($uploadKey, '_image') => '1200 × 1200 px',
         default => '1200 × 1200 px',
     };
+    $previewUrl = ($value !== '' && advent_image_url($value)) ? advent_asset_url($value, advent_editor_base()) : '';
     ?><div class="advent-field advent-image-field"><label for="<?= $id ?>"><?= advent_escape($label) ?></label>
     <input class="form-control" id="<?= $id ?>" name="<?= advent_escape($name) ?>" value="<?= advent_escape($value) ?>" placeholder="https://… oppure /uploads/…" aria-describedby="hint-<?= $id ?>">
     <input type="file" name="<?= $uploadKey ?>_upload" accept="image/png,image/jpeg,image/webp,image/gif" aria-label="Carica <?= advent_escape($label) ?>">
     <small id="hint-<?= $id ?>" class="text-muted"><strong>Risoluzione consigliata: <?php if ($isTileCover): ?><span data-advent-cover-resolution><?= advent_escape($resolution) ?></span><?php else: ?><?= advent_escape($resolution) ?><?php endif; ?>.</strong> <?php if ($isTileCover): ?><span data-advent-fit-note>Usa la stessa proporzione della casella per evitare tagli o margini.</span> <?php endif; ?>PNG, JPG, WebP o GIF, massimo 6 MB. Svuota il percorso per rimuovere l’immagine.</small>
-    <?php if ($value !== '' && advent_image_url($value)): ?><img class="advent-image-preview" src="<?= advent_escape(advent_asset_url($value, advent_editor_base())) ?>" alt="Anteprima <?= advent_escape($label) ?>" loading="lazy"><?php endif; ?></div><?php
+    <img class="advent-image-preview" alt="Anteprima <?= advent_escape($label) ?>" <?php if ($previewUrl !== ''): ?>src="<?= advent_escape($previewUrl) ?>"<?php else: ?>hidden<?php endif; ?>></div><?php
 }
 
 function advent_editor_uploads(array &$input): void

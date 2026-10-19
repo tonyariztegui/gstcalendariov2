@@ -140,6 +140,60 @@
     updateLogoPreview();
     updateUsage();
 })();
+(() => {
+    document.querySelectorAll('.advent-image-field').forEach(field => {
+        const fileInput = field.querySelector('input[type="file"]');
+        const pathInput = field.querySelector('input.form-control');
+        const preview = field.querySelector('.advent-image-preview');
+        if (!fileInput || !pathInput || !preview) return;
+        const savedSrc = preview.getAttribute('src') || '';
+        let temporaryUrl = '';
+        const show = src => {
+            if (!src) {
+                preview.removeAttribute('src');
+                preview.hidden = true;
+                return;
+            }
+            preview.hidden = false;
+            if (preview.getAttribute('src') !== src) preview.src = src;
+        };
+        const syncLogoHeading = src => {
+            if (fileInput.name !== 'logo_upload') return;
+            const logoPreview = document.getElementById('cal-logo-size-preview');
+            const empty = document.getElementById('cal-logo-preview-empty');
+            if (!logoPreview) return;
+            if (src) {
+                logoPreview.hidden = false;
+                if (logoPreview.getAttribute('src') !== src) logoPreview.src = src;
+                if (empty) empty.hidden = true;
+            } else {
+                logoPreview.removeAttribute('src');
+                logoPreview.hidden = true;
+                if (empty) empty.hidden = false;
+            }
+        };
+        fileInput.addEventListener('change', () => {
+            if (temporaryUrl) URL.revokeObjectURL(temporaryUrl);
+            const file = fileInput.files && fileInput.files[0];
+            if (file && file.type.indexOf('image/') === 0) {
+                temporaryUrl = URL.createObjectURL(file);
+                show(temporaryUrl);
+                syncLogoHeading(temporaryUrl);
+                return;
+            }
+            temporaryUrl = '';
+            const fallback = pathInput.value.trim() || savedSrc;
+            show(fallback);
+            syncLogoHeading(fallback);
+        });
+        pathInput.addEventListener('input', () => {
+            if (temporaryUrl) return;
+            const value = pathInput.value.trim();
+            show(value);
+            syncLogoHeading(value);
+        });
+    });
+})();
 const adventOverlayOpacity = document.getElementById('cal-modal-overlay-opacity');
 if (adventOverlayOpacity) {
     const adventOverlayOutput = adventOverlayOpacity.parentElement.querySelector('output');

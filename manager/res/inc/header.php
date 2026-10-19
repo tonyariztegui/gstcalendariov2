@@ -39,7 +39,7 @@ $sidebarLinks = [
 if ($isAdmin) {
     $sidebarLinks[] = [
         'id' => 'calendari-avvento',
-        'label' => 'Calendari d’Avvento',
+        'label' => 'Calendario',
         'description' => 'Caselle e premi giornalieri',
         'href' => 'calendari-avvento',
         'icon' => 'fa-calendar-alt',
@@ -58,7 +58,7 @@ if ($isAdmin) {
     $sidebarLinks[] = [
         'id' => 'concorso',
         'label' => 'Concorso',
-        'description' => 'Configurazione contenuti',
+        'description' => 'Configurazione concorso',
         'href' => 'concorso',
         'icon' => 'fa-cog',
         'match' => ['concorso'],

@@ -91,7 +91,7 @@ $style = '--calendar-accent:' . $accent . ';--calendar-accent-text:' . $accentTe
 <head>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= advent_escape($calendar['title']) ?></title>
-    <link rel="stylesheet" href="<?= advent_escape($adventBase) ?>/public/assets/css/advent-calendar.css">
+    <link rel="stylesheet" href="<?= advent_escape($adventBase) ?>/public/assets/css/advent-calendar.css?v=<?= (int) filemtime(__DIR__ . '/../../public/assets/css/advent-calendar.css') ?>">
     <style>
         .advent-grid{grid-template-columns:repeat(<?= $gridMobile ?>,minmax(0,1fr));gap:<?= $gridGap ?>px}
         .advent-tile{border-radius:<?= $gridRadius ?>px}
@@ -114,7 +114,7 @@ $style = '--calendar-accent:' . $accent . ';--calendar-accent-text:' . $accentTe
         .advent-footer.is-centered .advent-footer-inner{text-align:center;justify-items:center}
         .advent-footer.is-columns .advent-footer-inner{grid-template-columns:minmax(0,1fr);text-align:center}
         .advent-footer-logo{display:block;max-width:240px;max-height:100px;object-fit:contain}
-        .advent-footer h2{margin:0 0 8px;font:600 22px/1.3 Georgia,serif}.advent-footer p{margin:6px 0}.advent-footer-secondary,.advent-footer-legal{color:var(--calendar-footer-secondary)}.advent-footer-legal{font-size:12px;max-width:760px}.advent-footer-links{display:flex;gap:8px 18px;flex-wrap:wrap;justify-content:center}.advent-footer a{color:var(--calendar-footer-link);font-weight:700;text-underline-offset:3px}.advent-footer a:hover,.advent-footer a:focus{color:var(--calendar-footer-link-hover)}
+        .advent-footer h2{margin:0 0 8px;font-weight:600;font-size:22px;line-height:1.3;font-family:inherit}.advent-footer p{margin:6px 0}.advent-footer-secondary,.advent-footer-legal{color:var(--calendar-footer-secondary)}.advent-footer-legal{font-size:12px;max-width:760px}.advent-footer-links{display:flex;gap:8px 18px;flex-wrap:wrap;justify-content:center}.advent-footer a{color:var(--calendar-footer-link);font-weight:700;text-underline-offset:3px}.advent-footer a:hover,.advent-footer a:focus{color:var(--calendar-footer-link-hover)}
         @media (min-width:760px){.advent-footer.is-columns .advent-footer-inner{grid-template-columns:repeat(3,minmax(0,1fr));text-align:left}.advent-footer.is-columns .advent-footer-links{justify-content:center;flex-direction:column;align-items:center}.advent-footer.is-columns .advent-footer-entities{text-align:right}.advent-footer.is-columns .advent-footer-legal{grid-column:1/-1}}
         @media (min-width:600px) and (max-width:999px){.advent-page{background-image:var(--calendar-tablet-bg)}}
         @media (min-width:1600px){.advent-page{background-image:var(--calendar-wide-bg)}}

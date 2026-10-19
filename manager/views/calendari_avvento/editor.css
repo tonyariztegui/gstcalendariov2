@@ -1,5 +1,8 @@
 /* Shell, wizard and panels share the Concorso stylesheet. */
 .advent-editor .advent-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.advent-editor input.form-control:not([type="color"]),
+.advent-editor textarea.form-control,
+.advent-editor .note-editor .note-editable { font-family: Arial, Helvetica, sans-serif; }
 .advent-editor .advent-field { min-width: 0; }
 .advent-editor .advent-field--wide { grid-column: 1 / -1; }
 .advent-editor .advent-field label { display: block; }
@@ -54,7 +57,7 @@
 .advent-editor .advent-grid-live-header select { width: auto; min-width: 120px; }
 .advent-editor .advent-grid-preview { display: grid; width: 100%; max-width: 620px; margin: 0 auto 10px; }
 .advent-editor .advent-grid-preview-tile { display: block; min-width: 0; overflow: hidden; border: 1px solid #cbd5e1; border-radius: var(--preview-radius, 16px); background: #fff; }
-.advent-editor .advent-grid-preview-art { display: grid; place-items: center; aspect-ratio: var(--preview-ratio, 1.2); background: linear-gradient(135deg, #e0e7ff, #f8fafc); color: #4c5eb5; font: 700 20px Georgia, serif; }
+.advent-editor .advent-grid-preview-art { display: grid; place-items: center; aspect-ratio: var(--preview-ratio, 1.2); background: linear-gradient(135deg, #e0e7ff, #f8fafc); color: #4c5eb5; font: 700 20px Arial, Helvetica, sans-serif; }
 .advent-editor .advent-grid-preview[data-fit="cover"] .advent-grid-preview-art { background: linear-gradient(135deg, #a5b4fc, #c7d2fe); }
 .advent-editor .advent-grid-preview-caption { display: block; height: 14px; border-top: 1px solid #e2e8f0; background: #fff; }
 .advent-editor .advent-grid-advanced { max-width: 980px; margin: 12px auto 0; border: 1px solid #dbe3ef; border-radius: 10px; background: #fff; }
