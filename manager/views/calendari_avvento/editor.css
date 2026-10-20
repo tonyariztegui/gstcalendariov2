@@ -38,6 +38,8 @@
 .advent-editor .advent-day-number { display: flex; align-items: center; justify-content: center; flex-shrink: 0; width: 36px; height: 36px; background: #eef2ff; color: #3949ab; border-radius: 10px; font-weight: 700; }
 .advent-editor .advent-day-status { margin-left: auto; font-size: 12px; color: #64748b; }
 .advent-editor .advent-day-editor > .advent-fields { padding: 20px; }
+.advent-editor .advent-day-type-panel { grid-column: 1 / -1; }
+.advent-editor .advent-day-type-panel > .advent-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
 .advent-editor .advent-grid-presets { max-width: 980px; border: 0; padding: 0; margin: 0 auto 20px; min-width: 0; }
 .advent-editor .advent-grid-presets legend { width: auto; margin-bottom: 10px; color: #334155; }
 .advent-editor .advent-grid-preset-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
@@ -59,7 +61,9 @@
 .advent-editor .advent-grid-preview-tile { display: block; min-width: 0; overflow: hidden; border: 1px solid #cbd5e1; border-radius: var(--preview-radius, 16px); background: #fff; }
 .advent-editor .advent-grid-preview-art { display: grid; place-items: center; aspect-ratio: var(--preview-ratio, 1.2); background: linear-gradient(135deg, #e0e7ff, #f8fafc); color: #4c5eb5; font: 700 20px Arial, Helvetica, sans-serif; }
 .advent-editor .advent-grid-preview[data-fit="cover"] .advent-grid-preview-art { background: linear-gradient(135deg, #a5b4fc, #c7d2fe); }
-.advent-editor .advent-grid-preview-caption { display: block; height: 14px; border-top: 1px solid #e2e8f0; background: #fff; }
+.advent-editor .advent-grid-preview-caption { display: flex; flex-direction: column; gap: 1px; padding: 4px 6px 5px; border-top: 1px solid #e2e8f0; background: #fff; color: #52685b; font: 8px/1.2 Arial, Helvetica, sans-serif; }
+.advent-editor .advent-grid-preview-caption strong { color: #233c34; font-size: 9px; }
+.advent-editor .advent-grid-preview.is-caption-hidden .advent-grid-preview-caption { display: none; }
 .advent-editor .advent-grid-advanced { max-width: 980px; margin: 12px auto 0; border: 1px solid #dbe3ef; border-radius: 10px; background: #fff; }
 .advent-editor .advent-grid-advanced > summary { padding: 12px 16px; color: #34445f; font-size: 13px; font-weight: 650; cursor: pointer; }
 .advent-editor .advent-grid-advanced[open] > summary { border-bottom: 1px solid #e2e8f0; }
@@ -71,7 +75,8 @@
     .advent-editor .advent-grid-preset { display: grid; grid-template-columns: 100px 1fr; column-gap: 12px; align-items: center; }
     .advent-editor .advent-grid-preset-art { grid-row: span 2; height: 40px; margin: 0; }
     .advent-editor .advent-grid-live-header { align-items: flex-start; flex-direction: column; }
-    .advent-editor .advent-fields { grid-template-columns: 1fr; }
+    .advent-editor .advent-fields,
+    .advent-editor .advent-day-type-panel > .advent-fields { grid-template-columns: 1fr; }
     .advent-editor .advent-logo-size-fields { grid-template-columns: 1fr; }
     .advent-editor .advent-footer-blocks { grid-template-columns: 1fr; }
     .advent-editor .advent-day-editor > .advent-fields { padding: 16px; }

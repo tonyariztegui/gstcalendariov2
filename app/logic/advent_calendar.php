@@ -13,7 +13,7 @@ function advent_defaults(): array
         'background' => '', 'background_mobile' => '', 'background_tablet' => '', 'background_wide' => '',
         'accent' => '#185844', 'modal_overlay' => '#102a23', 'modal_overlay_opacity' => 72,
         'grid_columns_mobile' => 2, 'grid_columns_tablet' => 3, 'grid_columns_desktop' => 4,
-        'grid_gap' => 16, 'grid_tile_ratio' => 'classic', 'grid_tile_radius' => 16, 'grid_image_fit' => 'contain',
+        'grid_gap' => 16, 'grid_tile_ratio' => 'classic', 'grid_tile_radius' => 16, 'grid_image_fit' => 'contain', 'grid_show_caption' => true,
         'footer_enabled' => false, 'footer_layout' => 'centered', 'footer_use_main_logo' => true,
         'footer_logo' => '', 'footer_background_image' => '', 'footer_background' => '#ffffff',
         'footer_mode' => 'color', 'footer_image_position_vertical' => 'center', 'footer_image_position_horizontal' => 'center',
@@ -91,6 +91,21 @@ function advent_day_result(array $config, int $day, ?DateTimeImmutable $today = 
     return ['status' => 200, 'day' => $status, 'prize' => $prize];
 }
 
+function advent_day_type(array $prize): string
+{
+    $type = (string) ($prize['type'] ?? 'prize');
+    return in_array($type, ['prize', 'video', 'link'], true) ? $type : 'prize';
+}
+
+function advent_youtube_id(string $url): string
+{
+    if (preg_match('~(?:youtu\.be/|youtube(?:-nocookie)?\.com/(?:watch\?(?:.*&)?v=|embed/|shorts/|live/))([A-Za-z0-9_-]{11})~', $url, $match)) {
+        return $match[1];
+    }
+    return '';
+}
+
+
 function advent_image_url(string $value): bool
 {
     return $value === '' || (bool) preg_match('~^(?:https?://[^\s<>"\x27]+|/(?!/)[a-zA-Z0-9_./%\-]+)$~D', $value);
@@ -119,6 +134,7 @@ function advent_validate(array $input): array
             break;
         }
     }
+    $config['grid_show_caption'] = !array_key_exists('grid_show_caption', $input) || !empty($input['grid_show_caption']);
     $config['grid_tile_ratio'] = is_string($input['grid_tile_ratio'] ?? null) ? $input['grid_tile_ratio'] : 'classic';
     $config['grid_image_fit'] = is_string($input['grid_image_fit'] ?? null) ? $input['grid_image_fit'] : 'contain';
     $config['published'] = !empty($input['published']);
@@ -192,16 +208,28 @@ function advent_validate(array $input): array
     for ($n = 1; $n <= 62; $n++) {
         $row = is_array($input['days'][$n] ?? null) ? $input['days'][$n] : [];
         $config['days'][$n] = [];
-        foreach (['title', 'description', 'code', 'image', 'cover', 'active_cover'] as $key) {
+        $type = is_string($row['type'] ?? null) ? $row['type'] : 'prize';
+        $config['days'][$n]['type'] = in_array($type, ['prize', 'video', 'link'], true) ? $type : 'prize';
+        foreach (['title', 'description', 'code', 'image', 'cover', 'active_cover', 'media_url', 'link_label'] as $key) {
             $value = is_string($row[$key] ?? null) ? trim($row[$key]) : '';
             $config['days'][$n][$key] = $value;
-            if (strlen($value) > ($key === 'description' ? 2000 : 500)) { $errors[] = "Casella $n: il campo $key è troppo lungo."; }
+            $limit = $key === 'description' ? 2000 : ($key === 'media_url' ? 2048 : ($key === 'link_label' ? 80 : 500));
+            if (strlen($value) > $limit) { $errors[] = "Casella $n: il campo $key è troppo lungo."; }
             if (in_array($key, ['image', 'cover', 'active_cover'], true) && !advent_image_url($value)) {
                 $errors[] = "Casella $n: percorso immagine non valido.";
             }
         }
+        $mediaUrl = $config['days'][$n]['media_url'];
+        if ($mediaUrl !== '' && !preg_match('~^https://[^\s<>"\']+$~D', $mediaUrl)) {
+            $errors[] = "Casella $n: il link deve iniziare con https://.";
+        } elseif ($config['days'][$n]['type'] === 'video' && $mediaUrl !== '' && advent_youtube_id($mediaUrl) === '') {
+            $errors[] = "Casella $n: inserisci un link YouTube valido.";
+        }
         if ($config['published'] && isset($days[$n]) && $config['days'][$n]['title'] === '') {
-            $errors[] = "Casella $n: inserisci il titolo del premio prima di pubblicare.";
+            $errors[] = "Casella $n: inserisci un titolo prima di pubblicare.";
+        }
+        if ($config['published'] && isset($days[$n]) && $config['days'][$n]['type'] !== 'prize' && $mediaUrl === '') {
+            $errors[] = "Casella $n: inserisci il link del video o della pagina prima di pubblicare.";
         }
     }
     return [$config, array_values(array_unique($errors))];

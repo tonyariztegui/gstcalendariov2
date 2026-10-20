@@ -78,6 +78,7 @@
         preview.style.setProperty('--preview-ratio', ratios[fields.ratio.value] || '1.2');
         preview.style.setProperty('--preview-radius', `${Math.max(0, Math.min(32, Number(fields.radius.value) || 0))}px`);
         preview.dataset.fit = fields.fit.value;
+        preview.classList.toggle('is-caption-hidden', document.getElementById('cal-grid-show-caption')?.value === '0');
         const resolutions = { square: '1200 × 1200 px', classic: '1200 × 1000 px', wide: '1200 × 800 px' };
         document.querySelectorAll('[data-advent-cover-resolution]').forEach(element => { element.textContent = resolutions[fields.ratio.value] || resolutions.classic; });
         const fitNote = fields.fit.value === 'cover'
@@ -96,6 +97,7 @@
         updatePreview();
     }));
     Object.values(fields).forEach(field => { field.addEventListener('input', updatePreview); field.addEventListener('change', updatePreview); });
+    document.getElementById('cal-grid-show-caption')?.addEventListener('change', updatePreview);
     device.addEventListener('change', updatePreview);
     updatePreview();
 })();
@@ -192,6 +194,40 @@
             show(value);
             syncLogoHeading(value);
         });
+    });
+})();
+(() => {
+    const help = {
+        prize: 'Immagine del premio, descrizione, codice e barcode.',
+        video: 'Incolla un link YouTube. Il video si apre nella casella. L’immagine compare solo quando la casella è scaduta.',
+        link: 'Immagine link e pulsante. Il pulsante apre il link, per esempio una playlist Spotify.'
+    };
+    function applyDayType(select) {
+        const editor = select.closest('.advent-day-editor');
+        if (!editor) return;
+        editor.querySelectorAll('[data-day-panel]').forEach(panel => {
+            const active = panel.dataset.dayPanel.split(/\s+/).includes(select.value);
+            panel.hidden = !active;
+            panel.querySelectorAll('input, textarea, select').forEach(field => {
+                if (field.name && field.name.indexOf('[media_url]') !== -1) field.disabled = !active;
+            });
+        });
+        const imagePanel = editor.querySelector('[data-day-image]');
+        if (imagePanel) {
+            const imageLabel = { link: 'Immagine link', video: 'Immagine della casella scaduta' }[select.value] || 'Immagine del premio';
+            const label = imagePanel.querySelector('label');
+            const file = imagePanel.querySelector('input[type="file"]');
+            const preview = imagePanel.querySelector('.advent-image-preview');
+            if (label) label.textContent = imageLabel;
+            if (file) file.setAttribute('aria-label', `Carica ${imageLabel}`);
+            if (preview) preview.alt = `Anteprima ${imageLabel}`;
+        }
+        const note = editor.querySelector('.js-day-type-help');
+        if (note) note.textContent = help[select.value] || help.prize;
+    }
+    document.querySelectorAll('.js-day-type').forEach(select => {
+        select.addEventListener('change', () => applyDayType(select));
+        applyDayType(select);
     });
 })();
 const adventOverlayOpacity = document.getElementById('cal-modal-overlay-opacity');

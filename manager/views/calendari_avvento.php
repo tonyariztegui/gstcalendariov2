@@ -159,7 +159,10 @@ include __DIR__ . '/../res/inc/header.php';
                 </fieldset>
                 <div class="advent-grid-live-preview" aria-label="Anteprima della griglia">
                     <div class="advent-grid-live-header"><strong>Anteprima del modello</strong><label for="cal-grid-preview-device">Dispositivo <select id="cal-grid-preview-device" class="form-control form-control-sm"><option value="desktop">Computer</option><option value="tablet">Tablet</option><option value="mobile">Smartphone</option></select></label></div>
-                    <div id="cal-grid-preview" class="advent-grid-preview" aria-hidden="true"><?php for ($n=1; $n<=8; $n++): ?><span class="advent-grid-preview-tile"><span class="advent-grid-preview-art"><?= $n ?></span><span class="advent-grid-preview-caption"></span></span><?php endfor; ?></div>
+                    <div id="cal-grid-preview" class="advent-grid-preview" aria-hidden="true"><?php
+                        $previewCaptions = [['01/12', 'Apri la sorpresa'], ['02/12', 'Non ancora disponibile'], ['03/12', 'Scaduta · Premio']];
+                        for ($n=1; $n<=8; $n++): $previewCaption = $previewCaptions[($n - 1) % 3];
+                    ?><span class="advent-grid-preview-tile"><span class="advent-grid-preview-art"><?= $n ?></span><span class="advent-grid-preview-caption"><strong><?= $previewCaption[0] ?></strong><span><?= $previewCaption[1] ?></span></span></span><?php endfor; ?></div>
                     <p id="cal-grid-preset-status" class="text-muted small mb-0" role="status"></p>
                 </div>
                 <details class="advent-grid-advanced"><summary>Regola il modello manualmente</summary><div class="advent-fields">
@@ -170,18 +173,59 @@ include __DIR__ . '/../res/inc/header.php';
                     <div class="advent-field"><label for="cal-grid-tile-ratio">Proporzione dell’immagine</label><select class="form-control" id="cal-grid-tile-ratio" name="grid_tile_ratio"><?php foreach (['square'=>'Quadrata','classic'=>'Rettangolare classica','wide'=>'Rettangolare larga'] as $value=>$label): ?><option value="<?= $value ?>" <?= ($calendar['grid_tile_ratio'] ?? 'classic') === $value ? 'selected' : '' ?>><?= $label ?></option><?php endforeach; ?></select></div>
                     <div class="advent-field"><label for="cal-grid-tile-radius">Angoli arrotondati (px)</label><input class="form-control" id="cal-grid-tile-radius" name="grid_tile_radius" type="number" min="0" max="32" step="1" value="<?= (int) ($calendar['grid_tile_radius'] ?? 16) ?>"></div>
                     <div class="advent-field advent-field--wide"><label for="cal-grid-image-fit">Adattamento immagini delle caselle</label><select class="form-control" id="cal-grid-image-fit" name="grid_image_fit"><option value="contain" <?= ($calendar['grid_image_fit'] ?? 'contain') === 'contain' ? 'selected' : '' ?>>Mostra l’immagine intera</option><option value="cover" <?= ($calendar['grid_image_fit'] ?? 'contain') === 'cover' ? 'selected' : '' ?>>Riempi la casella ritagliando l’immagine</option></select></div>
+                    <div class="advent-field advent-field--wide"><label for="cal-grid-show-caption">Testo sotto la casella</label><select class="form-control" id="cal-grid-show-caption" name="grid_show_caption" aria-describedby="grid-show-caption-help"><option value="1" <?= !empty($calendar['grid_show_caption']) ? 'selected' : '' ?>>Visibile</option><option value="0" <?= empty($calendar['grid_show_caption']) ? 'selected' : '' ?>>Nascosto</option></select><small id="grid-show-caption-help" class="text-muted">Data, Apri la sorpresa, Non ancora disponibile e Scaduta.</small></div>
                 </div></details><p class="text-muted small mt-3 mb-0">Scegli un modello, controlla l’anteprima e salva la configurazione.</p>
             </div>
-            <p class="text-muted small">Il titolo rende il premio disponibile. Immagini, descrizione e codice sono facoltativi. Il barcode EAN-13 viene generato a partire dal codice.</p>
+            <p class="text-muted small">Scegli un tipo per ogni casella: premio, video YouTube o link. Il titolo la rende disponibile.</p>
             <?php if (!$days): ?><p role="status">Imposta un intervallo di date valido per configurare le caselle.</p><?php endif; ?>
             <div class="advent-day-list">
-            <?php foreach ($days as $number => $day): $prize = $calendar['days'][$number] ?? []; $prefix = "days[$number]"; ?>
+            <?php foreach ($days as $number => $day):
+                $prize = $calendar['days'][$number] ?? [];
+                $prefix = "days[$number]";
+                $dayType = advent_day_type($prize);
+                $typeLabels = ['prize' => 'Premio', 'video' => 'Video', 'link' => 'Link'];
+                $summaryTitle = trim((string) ($prize['title'] ?? ''));
+                $summary = $summaryTitle !== '' ? $typeLabels[$dayType] . ' · ' . $summaryTitle : $typeLabels[$dayType] . ' da configurare';
+            ?>
                 <details class="advent-day-editor" <?= $number === 1 ? 'open' : '' ?>>
-                    <summary><span class="advent-day-number"><?= $number ?></span><span><strong>Casella <?= $number ?> <span class="text-muted">· <?= advent_escape($day['label']) ?></span></strong><small><?= advent_escape(($prize['title'] ?? '') ?: 'Premio da configurare') ?></small></span><span class="advent-day-status"><?= empty($prize['title']) ? 'Da completare' : 'Configurata' ?></span></summary>
+                    <summary><span class="advent-day-number"><?= $number ?></span><span><strong>Casella <?= $number ?> <span class="text-muted">· <?= advent_escape($day['label']) ?></span></strong><small><?= advent_escape($summary) ?></small></span><span class="advent-day-status"><?= $summaryTitle === '' ? 'Da completare' : 'Configurata' ?></span></summary>
                     <div class="advent-fields">
-                        <?php advent_editor_field($prefix . '[title]', 'Titolo del premio', $prize['title'] ?? ''); advent_editor_field($prefix . '[code]', 'Codice premio', $prize['code'] ?? ''); ?>
-                        <div class="advent-field advent-field--wide"><label for="description-<?= $number ?>">Descrizione del premio</label><textarea id="description-<?= $number ?>" name="<?= $prefix ?>[description]" rows="2" maxlength="2000" class="form-control"><?= advent_escape($prize['description'] ?? '') ?></textarea></div>
-                        <?php foreach (['cover' => 'Immagine della casella', 'active_cover' => 'Immagine della casella attiva (anche GIF)', 'image' => 'Immagine del premio'] as $key => $label) { advent_editor_image($prefix . '[' . $key . ']', $label, $prize[$key] ?? '', 'day_' . $number . '_' . $key, $calendar['grid_tile_ratio'] ?? 'classic'); } ?>
+                        <div class="advent-field advent-field--wide">
+                            <label for="day-type-<?= $number ?>">Tipo</label>
+                            <select class="form-control js-day-type" id="day-type-<?= $number ?>" name="<?= $prefix ?>[type]">
+                                <?php foreach ($typeLabels as $value => $label): ?><option value="<?= $value ?>" <?= $dayType === $value ? 'selected' : '' ?>><?= $label ?></option><?php endforeach; ?>
+                            </select>
+                            <small class="text-muted js-day-type-help"></small>
+                        </div>
+                        <?php advent_editor_field($prefix . '[title]', 'Titolo', $prize['title'] ?? ''); ?>
+                        <div class="advent-field advent-field--wide"><label for="description-<?= $number ?>">Descrizione</label><textarea id="description-<?= $number ?>" name="<?= $prefix ?>[description]" rows="2" maxlength="2000" class="form-control"><?= advent_escape($prize['description'] ?? '') ?></textarea></div>
+                        <?php foreach (['cover' => 'Immagine della casella', 'active_cover' => 'Immagine della casella attiva (anche GIF)'] as $key => $label) { advent_editor_image($prefix . '[' . $key . ']', $label, $prize[$key] ?? '', 'day_' . $number . '_' . $key, $calendar['grid_tile_ratio'] ?? 'classic'); } ?>
+                        <div class="advent-day-type-panel" data-day-panel="prize" <?= $dayType === 'prize' ? '' : 'hidden' ?>>
+                            <div class="advent-fields">
+                                <?php advent_editor_field($prefix . '[code]', 'Codice premio', $prize['code'] ?? ''); ?>
+                            </div>
+                        </div>
+                        <div class="advent-day-type-panel" data-day-panel="prize link video" data-day-image>
+                            <div class="advent-fields">
+                                <?php advent_editor_image($prefix . '[image]', ['link' => 'Immagine link', 'video' => 'Immagine della casella scaduta'][$dayType] ?? 'Immagine del premio', $prize['image'] ?? '', 'day_' . $number . '_image', $calendar['grid_tile_ratio'] ?? 'classic'); ?>
+                            </div>
+                        </div>
+                        <div class="advent-day-type-panel" data-day-panel="video" <?= $dayType === 'video' ? '' : 'hidden' ?>>
+                            <div class="advent-field">
+                                <label for="video-<?= $number ?>">Link YouTube</label>
+                                <input class="form-control" id="video-<?= $number ?>" name="<?= $prefix ?>[media_url]" type="url" maxlength="2048" value="<?= $dayType === 'video' ? advent_escape($prize['media_url'] ?? '') : '' ?>" placeholder="https://www.youtube.com/watch?v=…" <?= $dayType === 'video' ? '' : 'disabled' ?>>
+                            </div>
+                        </div>
+                        <div class="advent-day-type-panel" data-day-panel="link" <?= $dayType === 'link' ? '' : 'hidden' ?>>
+                            <div class="advent-fields">
+                                <div class="advent-field advent-field--wide">
+                                    <label for="link-<?= $number ?>">Link</label>
+                                    <input class="form-control" id="link-<?= $number ?>" name="<?= $prefix ?>[media_url]" type="url" maxlength="2048" value="<?= $dayType === 'link' ? advent_escape($prize['media_url'] ?? '') : '' ?>" placeholder="https://open.spotify.com/playlist/…" <?= $dayType === 'link' ? '' : 'disabled' ?>>
+                                    <small class="text-muted">Il pulsante apre questo indirizzo. L’immagine resta sopra il pulsante.</small>
+                                </div>
+                                <?php advent_editor_field($prefix . '[link_label]', 'Testo del pulsante', ($prize['link_label'] ?? '') !== '' ? $prize['link_label'] : 'Apri link'); ?>
+                            </div>
+                        </div>
                     </div>
                 </details>
             <?php endforeach; ?>

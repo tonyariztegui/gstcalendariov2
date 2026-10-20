@@ -10,6 +10,10 @@
     const day = document.getElementById('advent-modal-day');
     const description = document.getElementById('advent-modal-description');
     const image = document.getElementById('advent-modal-image');
+    const video = document.getElementById('advent-modal-video');
+    const videoFrame = video ? video.querySelector('iframe') : null;
+    const linkWrap = document.getElementById('advent-modal-link');
+    const link = linkWrap ? linkWrap.querySelector('a') : null;
     const barcode = document.getElementById('advent-modal-barcode');
     const barcodeImage = barcode.querySelector('img');
     const barcodeCode = barcode.querySelector('strong');
@@ -23,19 +27,31 @@
         content.hidden = true;
         image.hidden = true;
         image.removeAttribute('src');
+        image.alt = '';
+        if (video) {
+            video.hidden = true;
+            if (videoFrame) videoFrame.removeAttribute('src');
+        }
+        if (linkWrap) {
+            linkWrap.hidden = true;
+            if (link) {
+                link.removeAttribute('href');
+                link.textContent = '';
+            }
+        }
         barcode.hidden = true;
         barcodeImage.removeAttribute('src');
     }
 
-    async function openPrize(link) {
-        opener = link;
+    async function openPrize(tile) {
+        opener = tile;
         resetModal();
         modal.showModal();
         closeButton.focus();
         request?.abort();
         request = new AbortController();
         try {
-            const url = new URL(link.href, window.location.href);
+            const url = new URL(tile.href, window.location.href);
             url.searchParams.set('advent_json', '1');
             const response = await fetch(url, {
                 headers: { Accept: 'application/json' },
@@ -48,12 +64,22 @@
             day.textContent = `CASELLA ${prize.day} · ${prize.date_label}`;
             title.textContent = prize.title;
             description.textContent = prize.description;
-            if (prize.image_url) {
+            if (prize.type !== 'video' && prize.image_url) {
                 image.src = prize.image_url;
                 image.alt = prize.title;
                 image.hidden = false;
             }
-            if (prize.barcode_svg_data_uri) {
+            if (prize.youtube_id && video && videoFrame) {
+                videoFrame.src = `https://www.youtube-nocookie.com/embed/${prize.youtube_id}`;
+                videoFrame.title = prize.title;
+                video.hidden = false;
+            }
+            if (prize.type === 'link' && prize.media_url && link && linkWrap) {
+                link.href = prize.media_url;
+                link.textContent = prize.link_label || 'Apri link';
+                linkWrap.hidden = false;
+            }
+            if (prize.type !== 'video' && prize.type !== 'link' && prize.barcode_svg_data_uri) {
                 barcodeImage.src = prize.barcode_svg_data_uri;
                 barcodeImage.alt = `Barcode EAN-13 ${prize.barcode_ean13}`;
                 barcodeCode.textContent = prize.code;

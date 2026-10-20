@@ -26,17 +26,23 @@ if ($isJsonRequest) {
         exit;
     }
     $jsonPrize = $result['prize'];
+    $jsonType = advent_day_type($jsonPrize);
+    $jsonMedia = (string) ($jsonPrize['media_url'] ?? '');
     echo json_encode([
         'ok' => true,
         'data' => [
             'day' => $selectedDay,
             'date_label' => $result['day']['label'],
+            'type' => $jsonType,
             'title' => (string) $jsonPrize['title'],
             'description' => (string) ($jsonPrize['description'] ?? ''),
-            'image_url' => advent_asset_url((string) ($jsonPrize['image'] ?? ''), $adventBase),
-            'code' => (string) ($jsonPrize['code'] ?? ''),
-            'barcode_ean13' => advent_ean13((string) ($jsonPrize['code'] ?? '')),
-            'barcode_svg_data_uri' => empty($jsonPrize['code']) ? '' : 'data:image/svg+xml;base64,' . base64_encode(advent_barcode((string) $jsonPrize['code'])),
+            'image_url' => $jsonType === 'video' ? '' : advent_asset_url((string) ($jsonPrize['image'] ?? ''), $adventBase),
+            'code' => $jsonType === 'prize' ? (string) ($jsonPrize['code'] ?? '') : '',
+            'barcode_ean13' => $jsonType === 'prize' ? advent_ean13((string) ($jsonPrize['code'] ?? '')) : '',
+            'barcode_svg_data_uri' => ($jsonType === 'prize' && !empty($jsonPrize['code'])) ? 'data:image/svg+xml;base64,' . base64_encode(advent_barcode((string) $jsonPrize['code'])) : '',
+            'media_url' => $jsonMedia,
+            'youtube_id' => $jsonType === 'video' ? advent_youtube_id($jsonMedia) : '',
+            'link_label' => trim((string) ($jsonPrize['link_label'] ?? '')) !== '' ? (string) $jsonPrize['link_label'] : 'Apri link',
         ],
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     exit;
@@ -150,9 +156,17 @@ $style = '--calendar-accent:' . $accent . ';--calendar-accent-text:' . $accentTe
         <?php else: $prize = $result['prize']; ?>
             <span class="advent-kicker">CASELLA <?= $selectedDay ?> · <?= advent_escape($result['day']['label']) ?></span>
             <h2><?= advent_escape($prize['title']) ?></h2>
-            <?php if (!empty($prize['image'])): ?><img class="advent-prize-image" src="<?= advent_escape(advent_asset_url($prize['image'], $adventBase)) ?>" alt="<?= advent_escape($prize['title']) ?>"><?php endif; ?>
+            <?php
+            $prizeType = advent_day_type($prize);
+            $prizeMedia = (string) ($prize['media_url'] ?? '');
+            $youtubeId = $prizeType === 'video' ? advent_youtube_id($prizeMedia) : '';
+            $linkLabel = trim((string) ($prize['link_label'] ?? '')) !== '' ? (string) $prize['link_label'] : 'Apri link';
+            ?>
+            <?php if ($youtubeId !== ''): ?><div class="advent-embed is-video"><iframe src="https://www.youtube-nocookie.com/embed/<?= advent_escape($youtubeId) ?>" title="<?= advent_escape($prize['title']) ?>" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><?php endif; ?>
+            <?php if ($prizeType !== 'video' && !empty($prize['image'])): ?><img class="advent-prize-image" src="<?= advent_escape(advent_asset_url($prize['image'], $adventBase)) ?>" alt="<?= advent_escape($prize['title']) ?>"><?php endif; ?>
+            <?php if ($prizeType === 'link' && $prizeMedia !== ''): ?><p class="advent-modal-link"><a class="advent-modal-action" href="<?= advent_escape($prizeMedia) ?>" target="_blank" rel="noopener"><?= advent_escape($linkLabel) ?></a></p><?php endif; ?>
             <?php if (!empty($prize['description'])): ?><p><?= nl2br(advent_escape($prize['description'])) ?></p><?php endif; ?>
-            <?php if (!empty($prize['code'])): ?><div class="advent-barcode"><img src="data:image/svg+xml;base64,<?= base64_encode(advent_barcode($prize['code'])) ?>" alt="Barcode EAN-13 <?= advent_escape(advent_ean13($prize['code'])) ?>"><p>Codice premio: <strong><?= advent_escape($prize['code']) ?></strong></p></div><?php endif; ?>
+            <?php if ($prizeType === 'prize' && !empty($prize['code'])): ?><div class="advent-barcode"><img src="data:image/svg+xml;base64,<?= base64_encode(advent_barcode($prize['code'])) ?>" alt="Barcode EAN-13 <?= advent_escape(advent_ean13($prize['code'])) ?>"><p>Codice premio: <strong><?= advent_escape($prize['code']) ?></strong></p></div><?php endif; ?>
         <?php endif; ?>
         </section>
     <?php else: ?>
@@ -164,7 +178,7 @@ $style = '--calendar-accent:' . $accent . ';--calendar-accent-text:' . $accentTe
         <?php elseif (!$adventOpenAll && $todayIso > $calendar['end_date']): ?>
             <p class="advent-notice" role="status">Il calendario è terminato. Grazie per aver partecipato!</p>
         <?php endif; ?>
-        <div class="advent-grid" aria-label="Caselle del calendario">
+        <div class="advent-grid<?= empty($calendar['grid_show_caption']) ? ' is-caption-hidden' : '' ?>" aria-label="Caselle del calendario">
         <?php foreach ($days as $number => $day):
             $prize = $calendar['days'][$number] ?? [];
             $revealPastPrize = !$adventOpenAll && !empty($calendar['allow_past_days']) && $day['state'] === 'past';
@@ -194,7 +208,9 @@ $style = '--calendar-accent:' . $accent . ';--calendar-accent-text:' . $accentTe
         <article class="advent-modal-content" hidden>
             <span class="advent-kicker" id="advent-modal-day"></span>
             <h2 id="advent-modal-title" tabindex="-1"></h2>
+            <div class="advent-embed is-video" id="advent-modal-video" hidden><iframe title="Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
             <img class="advent-prize-image" id="advent-modal-image" src="" alt="" hidden>
+            <p class="advent-modal-link" id="advent-modal-link" hidden><a class="advent-modal-action" href="" target="_blank" rel="noopener"></a></p>
             <p id="advent-modal-description"></p>
             <div class="advent-barcode" id="advent-modal-barcode" hidden>
                 <img src="" alt=""><p>Codice premio: <strong></strong></p>
@@ -202,7 +218,7 @@ $style = '--calendar-accent:' . $accent . ';--calendar-accent-text:' . $accentTe
         </article>
     </div>
 </dialog>
-<script src="<?= advent_escape($adventBase) ?>/public/assets/js/advent-calendar.js" defer></script>
+<script src="<?= advent_escape($adventBase) ?>/public/assets/js/advent-calendar.js?v=<?= (int) filemtime(__DIR__ . '/../../public/assets/js/advent-calendar.js') ?>" defer></script>
 <?php endif; ?>
 </body>
 </html>
