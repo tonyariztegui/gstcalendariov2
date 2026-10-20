@@ -162,10 +162,10 @@ include __DIR__ . '/../res/inc/header.php';
                     <div id="cal-grid-preview" class="advent-grid-preview" aria-hidden="true"><?php
                         $previewCaptions = [['01/12', 'Apri la sorpresa'], ['02/12', 'Non ancora disponibile'], ['03/12', 'Scaduta · Premio']];
                         for ($n=1; $n<=8; $n++): $previewCaption = $previewCaptions[($n - 1) % 3];
-                    ?><span class="advent-grid-preview-tile"><span class="advent-grid-preview-art"><?= $n ?></span><span class="advent-grid-preview-caption"><strong><?= $previewCaption[0] ?></strong><span><?= $previewCaption[1] ?></span></span></span><?php endfor; ?></div>
+                    ?><span class="advent-grid-preview-tile<?= ($n - 1) % 3 === 2 ? ' is-preview-expired' : '' ?>"><span class="advent-grid-preview-art"><?= $n ?><?php if (($n - 1) % 3 === 2): ?><img class="advent-grid-preview-banner" src="<?= advent_escape(advent_asset_url('/public/assets/images/calendario/promozione-non-piu-valida.png', advent_editor_base())) ?>" alt=""><?php endif; ?></span><span class="advent-grid-preview-caption"><strong><?= $previewCaption[0] ?></strong><span><?= $previewCaption[1] ?></span></span></span><?php endfor; ?></div>
                     <p id="cal-grid-preset-status" class="text-muted small mb-0" role="status"></p>
                 </div>
-                <details class="advent-grid-advanced"><summary>Regola il modello manualmente</summary><div class="advent-fields">
+                <details class="advent-disclosure advent-grid-advanced"><summary>Regola il modello manualmente</summary><div class="advent-fields">
                     <div class="advent-field"><label for="cal-grid-columns-mobile">Colonne su smartphone</label><select class="form-control" id="cal-grid-columns-mobile" name="grid_columns_mobile"><?php foreach ([1,2] as $n): ?><option value="<?= $n ?>" <?= (int) ($calendar['grid_columns_mobile'] ?? 2) === $n ? 'selected' : '' ?>><?= $n ?></option><?php endforeach; ?></select></div>
                     <div class="advent-field"><label for="cal-grid-columns-tablet">Colonne su tablet</label><select class="form-control" id="cal-grid-columns-tablet" name="grid_columns_tablet"><?php foreach ([2,3,4] as $n): ?><option value="<?= $n ?>" <?= (int) ($calendar['grid_columns_tablet'] ?? 3) === $n ? 'selected' : '' ?>><?= $n ?></option><?php endforeach; ?></select></div>
                     <div class="advent-field"><label for="cal-grid-columns-desktop">Colonne su computer</label><select class="form-control" id="cal-grid-columns-desktop" name="grid_columns_desktop"><?php foreach ([2,3,4,5,6] as $n): ?><option value="<?= $n ?>" <?= (int) ($calendar['grid_columns_desktop'] ?? 4) === $n ? 'selected' : '' ?>><?= $n ?></option><?php endforeach; ?></select></div>
@@ -174,7 +174,45 @@ include __DIR__ . '/../res/inc/header.php';
                     <div class="advent-field"><label for="cal-grid-tile-radius">Angoli arrotondati (px)</label><input class="form-control" id="cal-grid-tile-radius" name="grid_tile_radius" type="number" min="0" max="32" step="1" value="<?= (int) ($calendar['grid_tile_radius'] ?? 16) ?>"></div>
                     <div class="advent-field advent-field--wide"><label for="cal-grid-image-fit">Adattamento immagini delle caselle</label><select class="form-control" id="cal-grid-image-fit" name="grid_image_fit"><option value="contain" <?= ($calendar['grid_image_fit'] ?? 'contain') === 'contain' ? 'selected' : '' ?>>Mostra l’immagine intera</option><option value="cover" <?= ($calendar['grid_image_fit'] ?? 'contain') === 'cover' ? 'selected' : '' ?>>Riempi la casella ritagliando l’immagine</option></select></div>
                     <div class="advent-field advent-field--wide"><label for="cal-grid-show-caption">Testo sotto la casella</label><select class="form-control" id="cal-grid-show-caption" name="grid_show_caption" aria-describedby="grid-show-caption-help"><option value="1" <?= !empty($calendar['grid_show_caption']) ? 'selected' : '' ?>>Visibile</option><option value="0" <?= empty($calendar['grid_show_caption']) ? 'selected' : '' ?>>Nascosto</option></select><small id="grid-show-caption-help" class="text-muted">Data, Apri la sorpresa, Non ancora disponibile e Scaduta.</small></div>
-                </div></details><p class="text-muted small mt-3 mb-0">Scegli un modello, controlla l’anteprima e salva la configurazione.</p>
+                </div></details>
+                <details class="advent-disclosure">
+                    <summary>Caselle scadute</summary>
+                    <div class="advent-fields advent-expired-options">
+                        <div class="advent-field">
+                            <label for="cal-expired-image">Immagine della casella scaduta</label>
+                            <select class="form-control" id="cal-expired-image" name="expired_image" aria-describedby="expired-image-help">
+                                <option value="promotion" <?= ($calendar['expired_image'] ?? 'promotion') !== 'case' ? 'selected' : '' ?>>Immagine della promozione</option>
+                                <option value="case" <?= ($calendar['expired_image'] ?? 'promotion') === 'case' ? 'selected' : '' ?>>Immagine della casella</option>
+                            </select>
+                            <small id="expired-image-help" class="text-muted">L’immagine della casella usa Adattamento immagini delle caselle, nel riquadro sopra.</small>
+                        </div>
+                        <div class="advent-field" id="cal-expired-image-fit-field" <?= ($calendar['expired_image'] ?? 'promotion') === 'case' ? 'hidden' : '' ?>>
+                            <label for="cal-expired-image-fit">Adattamento immagine della promozione</label>
+                            <select class="form-control" id="cal-expired-image-fit" name="expired_image_fit" aria-describedby="expired-image-fit-help">
+                                <option value="contain" <?= ($calendar['expired_image_fit'] ?? 'contain') !== 'cover' ? 'selected' : '' ?>>Mostra l’immagine intera</option>
+                                <option value="cover" <?= ($calendar['expired_image_fit'] ?? 'contain') === 'cover' ? 'selected' : '' ?>>Riempi la casella ritagliando l’immagine</option>
+                            </select>
+                            <small id="expired-image-fit-help" class="text-muted">Compare solo quando mostri l’immagine della promozione.</small>
+                        </div>
+                        <div class="advent-field">
+                            <label for="cal-expired-message">Messaggio casella scaduta</label>
+                            <select class="form-control" id="cal-expired-message" name="expired_message" aria-describedby="expired-message-help">
+                                <option value="badge" <?= ($calendar['expired_message'] ?? 'badge') !== 'banner' ? 'selected' : '' ?>>Scaduta</option>
+                                <option value="banner" <?= ($calendar['expired_message'] ?? 'badge') === 'banner' ? 'selected' : '' ?>>Promozione non più valida</option>
+                            </select>
+                            <small id="expired-message-help" class="text-muted">Scaduta resta in alto a sinistra. Promozione non più valida lo sostituisce con il banner in basso.</small>
+                        </div>
+                        <div class="advent-field" id="cal-expired-color">
+                            <label for="cal-expired-grayscale">Colore della casella scaduta</label>
+                            <select class="form-control" id="cal-expired-grayscale" name="expired_grayscale">
+                                <option value="0" <?= empty($calendar['expired_grayscale']) ? 'selected' : '' ?>>A colori</option>
+                                <option value="1" <?= !empty($calendar['expired_grayscale']) ? 'selected' : '' ?>>Bianco e nero</option>
+                            </select>
+                            <small class="text-muted">Bianco e nero vale per l’immagine scelta. Con il banner, anche il banner diventa bianco e nero.</small>
+                        </div>
+                    </div>
+                </details>
+                <p class="text-muted small mt-3 mb-0">Scegli un modello, controlla l’anteprima e salva la configurazione.</p>
             </div>
             <p class="text-muted small">Scegli un tipo per ogni casella: premio, video YouTube o link. Il titolo la rende disponibile.</p>
             <?php if (!$days): ?><p role="status">Imposta un intervallo di date valido per configurare le caselle.</p><?php endif; ?>

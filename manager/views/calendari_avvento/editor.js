@@ -79,6 +79,18 @@
         preview.style.setProperty('--preview-radius', `${Math.max(0, Math.min(32, Number(fields.radius.value) || 0))}px`);
         preview.dataset.fit = fields.fit.value;
         preview.classList.toggle('is-caption-hidden', document.getElementById('cal-grid-show-caption')?.value === '0');
+        const expiredMessage = document.getElementById('cal-expired-message');
+        const expiredGray = document.getElementById('cal-expired-grayscale');
+        const expiredImage = document.getElementById('cal-expired-image');
+        const expiredFitField = document.getElementById('cal-expired-image-fit-field');
+        const expiredFit = document.getElementById('cal-expired-image-fit');
+        const useBanner = expiredMessage?.value === 'banner';
+        const usePromotion = (expiredImage?.value || 'promotion') !== 'case';
+        if (expiredFitField) expiredFitField.hidden = !usePromotion;
+        preview.classList.toggle('is-expired-banner', Boolean(useBanner));
+        preview.classList.toggle('is-expired-gray', expiredGray?.value === '1');
+        preview.classList.toggle('is-expired-promotion', usePromotion);
+        preview.classList.toggle('is-expired-promo-cover', Boolean(usePromotion && expiredFit?.value === 'cover'));
         const resolutions = { square: '1200 × 1200 px', classic: '1200 × 1000 px', wide: '1200 × 800 px' };
         document.querySelectorAll('[data-advent-cover-resolution]').forEach(element => { element.textContent = resolutions[fields.ratio.value] || resolutions.classic; });
         const fitNote = fields.fit.value === 'cover'
@@ -98,6 +110,10 @@
     }));
     Object.values(fields).forEach(field => { field.addEventListener('input', updatePreview); field.addEventListener('change', updatePreview); });
     document.getElementById('cal-grid-show-caption')?.addEventListener('change', updatePreview);
+    document.getElementById('cal-expired-message')?.addEventListener('change', updatePreview);
+    document.getElementById('cal-expired-grayscale')?.addEventListener('change', updatePreview);
+    document.getElementById('cal-expired-image')?.addEventListener('change', updatePreview);
+    document.getElementById('cal-expired-image-fit')?.addEventListener('change', updatePreview);
     device.addEventListener('change', updatePreview);
     updatePreview();
 })();

@@ -14,6 +14,7 @@ function advent_defaults(): array
         'accent' => '#185844', 'modal_overlay' => '#102a23', 'modal_overlay_opacity' => 72,
         'grid_columns_mobile' => 2, 'grid_columns_tablet' => 3, 'grid_columns_desktop' => 4,
         'grid_gap' => 16, 'grid_tile_ratio' => 'classic', 'grid_tile_radius' => 16, 'grid_image_fit' => 'contain', 'grid_show_caption' => true,
+        'expired_message' => 'badge', 'expired_grayscale' => false, 'expired_image' => 'promotion', 'expired_image_fit' => 'contain',
         'footer_enabled' => false, 'footer_layout' => 'centered', 'footer_use_main_logo' => true,
         'footer_logo' => '', 'footer_background_image' => '', 'footer_background' => '#ffffff',
         'footer_mode' => 'color', 'footer_image_position_vertical' => 'center', 'footer_image_position_horizontal' => 'center',
@@ -135,6 +136,10 @@ function advent_validate(array $input): array
         }
     }
     $config['grid_show_caption'] = !array_key_exists('grid_show_caption', $input) || !empty($input['grid_show_caption']);
+    $config['expired_message'] = (($input['expired_message'] ?? 'badge') === 'banner') ? 'banner' : 'badge';
+    $config['expired_grayscale'] = !empty($input['expired_grayscale']);
+    $config['expired_image'] = (($input['expired_image'] ?? 'promotion') === 'case') ? 'case' : 'promotion';
+    $config['expired_image_fit'] = (($input['expired_image_fit'] ?? 'contain') === 'cover') ? 'cover' : 'contain';
     $config['grid_tile_ratio'] = is_string($input['grid_tile_ratio'] ?? null) ? $input['grid_tile_ratio'] : 'classic';
     $config['grid_image_fit'] = is_string($input['grid_image_fit'] ?? null) ? $input['grid_image_fit'] : 'contain';
     $config['published'] = !empty($input['published']);

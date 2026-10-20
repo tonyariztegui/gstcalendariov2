@@ -86,6 +86,7 @@ $gridGap = max(0, min(40, (int) ($calendar['grid_gap'] ?? 16)));
 $gridRadius = max(0, min(32, (int) ($calendar['grid_tile_radius'] ?? 16)));
 $gridRatio = ['square' => '1', 'classic' => '1.2', 'wide' => '1.5'][$calendar['grid_tile_ratio'] ?? 'classic'] ?? '1.2';
 $gridImageFit = ($calendar['grid_image_fit'] ?? 'contain') === 'cover' ? 'cover' : 'contain';
+$expiredImageFit = ($calendar['expired_image_fit'] ?? 'contain') === 'cover' ? 'cover' : 'contain';
 $logoWidthMobile = max(60, min(1000, (int) ($calendar['logo_width_mobile'] ?? 320)));
 $logoWidthTablet = max(60, min(1000, (int) ($calendar['logo_width_tablet'] ?? 480)));
 $logoWidthDesktop = max(60, min(1000, (int) ($calendar['logo_width_desktop'] ?? 700)));
@@ -103,13 +104,17 @@ $style = '--calendar-accent:' . $accent . ';--calendar-accent-text:' . $accentTe
         .advent-tile{border-radius:<?= $gridRadius ?>px}
         .advent-tile-art{aspect-ratio:<?= $gridRatio ?>}
         .advent-tile-art img{object-fit:<?= $gridImageFit ?>}
+        .advent-tile.is-expired-promotion .advent-tile-art > img:not(.advent-expired-banner){object-fit:<?= $expiredImageFit ?>}
         @media(min-width:600px){.advent-grid{grid-template-columns:repeat(<?= $gridTablet ?>,minmax(0,1fr))}}
         @media(min-width:1000px){.advent-grid{grid-template-columns:repeat(<?= $gridDesktop ?>,minmax(0,1fr))}}
         .advent-modal::backdrop{background:var(--calendar-modal-overlay,#102a23b8)}
         .advent-tile.is-past.is-revealed{border-style:dashed;border-color:#a9a69d;background:#f2f0e9}
         .advent-tile.is-past.is-revealed .advent-tile-art{filter:saturate(.58);opacity:.84}
+        .advent-tile.is-expired-banner.is-past.is-revealed .advent-tile-art{filter:none;opacity:1}
+        .advent-tile.is-expired-gray .advent-tile-art > img{filter:grayscale(1)}
         .advent-tile.is-past.is-revealed .advent-tile-caption{background:#f2f0e9;color:#59615c}
         .advent-expired-badge{position:absolute;z-index:2;top:10px;left:10px;padding:4px 9px;border-radius:999px;background:#3d4943dd;color:#fff;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 2px 8px #0002}
+        .advent-tile-art .advent-expired-banner{position:absolute;inset:auto 0 0 0;z-index:2;width:100%;height:auto;max-height:42%;object-fit:contain;object-position:bottom center;pointer-events:none}
         .advent-visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
         .advent-hero .advent-logo.is-heading{display:block;width:min(100%,<?= $logoWidthMobile ?>px);max-width:none;max-height:none;height:auto;margin:0 auto 20px;object-fit:contain}
         @media(min-width:600px){.advent-hero .advent-logo.is-heading{width:min(100%,<?= $logoWidthTablet ?>px)}}
@@ -182,14 +187,18 @@ $style = '--calendar-accent:' . $accent . ';--calendar-accent-text:' . $accentTe
         <?php foreach ($days as $number => $day):
             $prize = $calendar['days'][$number] ?? [];
             $revealPastPrize = !$adventOpenAll && !empty($calendar['allow_past_days']) && $day['state'] === 'past';
-            $cover = $revealPastPrize && !empty($prize['image']) ? $prize['image'] : (($day['state'] === 'today' && !empty($prize['active_cover'])) ? $prize['active_cover'] : ($prize['cover'] ?? ''));
+            $expiredBanner = $revealPastPrize && (($calendar['expired_message'] ?? 'badge') === 'banner');
+            $expiredGray = $revealPastPrize && !empty($calendar['expired_grayscale']);
+            $promotionImage = (string) ($prize['image'] ?? '');
+            $expiredPromotion = $revealPastPrize && ($calendar['expired_image'] ?? 'promotion') !== 'case' && $promotionImage !== '';
+            $cover = $expiredPromotion ? $promotionImage : (($day['state'] === 'today' && !empty($prize['active_cover'])) ? $prize['active_cover'] : ($prize['cover'] ?? ''));
             $cover = advent_asset_url($cover, $adventBase);
             $label = $day['is_open'] ? 'Apri la sorpresa' : ($revealPastPrize ? ((string) ($prize['title'] ?? '') ?: 'Premio non configurato') : ($day['state'] === 'past' ? 'Scaduta' : 'Non ancora disponibile'));
             $tag = $day['is_open'] ? 'a' : 'div';
             $href = $adventPageUrl . '?' . http_build_query(array_merge($query, ['day' => $number]));
         ?>
-            <<?= $tag ?> class="advent-tile <?= $day['is_open'] ? 'is-open' : 'is-' . $day['state'] ?><?= $revealPastPrize ? ' is-revealed' : '' ?>" <?= $day['is_open'] ? 'href="' . advent_escape($href) . '"' : 'aria-disabled="true"' ?> aria-label="Casella <?= $number ?>, <?= advent_escape($day['label'] . ', ' . $label) ?>">
-                <div class="advent-tile-art"><?php if ($revealPastPrize): ?><span class="advent-expired-badge">Scaduta</span><?php endif; ?><?php if ($cover !== ''): ?><img src="<?= advent_escape($cover) ?>" alt="" loading="lazy"><?php else: ?><span class="advent-tile-number" aria-hidden="true"><?= $number ?></span><span class="advent-star" aria-hidden="true">✦</span><?php endif; ?></div>
+            <<?= $tag ?> class="advent-tile <?= $day['is_open'] ? 'is-open' : 'is-' . $day['state'] ?><?= $revealPastPrize ? ' is-revealed' : '' ?><?= $expiredPromotion ? ' is-expired-promotion' : '' ?><?= $expiredBanner ? ' is-expired-banner' : '' ?><?= $expiredGray ? ' is-expired-gray' : '' ?>" <?= $day['is_open'] ? 'href="' . advent_escape($href) . '"' : 'aria-disabled="true"' ?> aria-label="Casella <?= $number ?>, <?= advent_escape($day['label'] . ', ' . $label) ?>">
+                <div class="advent-tile-art"><?php if ($revealPastPrize && !$expiredBanner): ?><span class="advent-expired-badge">Scaduta</span><?php endif; ?><?php if ($cover !== ''): ?><img src="<?= advent_escape($cover) ?>" alt="" loading="lazy"><?php else: ?><span class="advent-tile-number" aria-hidden="true"><?= $number ?></span><span class="advent-star" aria-hidden="true">✦</span><?php endif; ?><?php if ($expiredBanner): ?><img class="advent-expired-banner" src="<?= advent_escape(advent_asset_url('/public/assets/images/calendario/promozione-non-piu-valida.png', $adventBase)) ?>" alt="Promozione non più valida"><?php endif; ?></div>
                 <div class="advent-tile-caption"><strong><?= advent_escape($day['label']) ?></strong><span><?= $revealPastPrize ? 'Scaduta · ' : '' ?><?= advent_escape($label) ?></span></div>
             </<?= $tag ?>>
         <?php endforeach; ?>
