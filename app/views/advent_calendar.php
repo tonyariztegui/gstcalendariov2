@@ -129,6 +129,7 @@ $style = '--calendar-accent:' . $accent . ';--calendar-accent-text:' . $accentTe
         @media (min-width:760px){.advent-footer.is-columns .advent-footer-inner{grid-template-columns:repeat(3,minmax(0,1fr));text-align:left}.advent-footer.is-columns .advent-footer-links{justify-content:center;flex-direction:column;align-items:center}.advent-footer.is-columns .advent-footer-entities{text-align:right}.advent-footer.is-columns .advent-footer-legal{grid-column:1/-1}}
         @media (min-width:600px) and (max-width:999px){.advent-page{background-image:var(--calendar-tablet-bg)}}
         @media (min-width:1600px){.advent-page{background-image:var(--calendar-wide-bg)}}
+        <?= advent_container_public_css(advent_containers($calendar), $adventBase) ?>
     </style>
 </head>
 <body class="advent-page" style="<?= advent_escape($style) ?>">
@@ -155,7 +156,18 @@ $style = '--calendar-accent:' . $accent . ';--calendar-accent-text:' . $accentTe
         <section class="advent-message" role="status"><h2>A presto!</h2><p><?= advent_escape($adventFailure) ?></p></section>
     <?php elseif ($result !== null): ?>
         <a class="advent-back" href="<?= advent_escape($backUrl) ?>">← Torna al calendario</a>
-        <section class="advent-prize">
+        <?php
+            $pagePrize = isset($result['error']) ? null : ($result['prize'] ?? null);
+            $pageType = is_array($pagePrize) ? advent_day_type($pagePrize) : '';
+            $pageBox = $pageType !== '' ? advent_containers($calendar)[$pageType] : [];
+            $pageFlags = '';
+            if ($pageBox) {
+                foreach (['show_kicker' => 'is-kicker-off', 'show_title' => 'is-title-off', 'show_description' => 'is-description-off', 'show_code' => 'is-code-off'] as $flag => $class) {
+                    if (empty($pageBox[$flag])) { $pageFlags .= ' ' . $class; }
+                }
+            }
+        ?>
+        <section class="advent-prize<?= $pageType !== '' ? ' is-' . $pageType . $pageFlags : '' ?>">
         <?php if (isset($result['error'])): ?>
             <h2>Casella non disponibile</h2><p role="status"><?= advent_escape($result['error']) ?></p>
         <?php else: $prize = $result['prize']; ?>
@@ -170,7 +182,7 @@ $style = '--calendar-accent:' . $accent . ';--calendar-accent-text:' . $accentTe
             <?php if ($youtubeId !== ''): ?><div class="advent-embed is-video"><iframe src="https://www.youtube-nocookie.com/embed/<?= advent_escape($youtubeId) ?>" title="<?= advent_escape($prize['title']) ?>" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><?php endif; ?>
             <?php if ($prizeType !== 'video' && !empty($prize['image'])): ?><img class="advent-prize-image" src="<?= advent_escape(advent_asset_url($prize['image'], $adventBase)) ?>" alt="<?= advent_escape($prize['title']) ?>"><?php endif; ?>
             <?php if ($prizeType === 'link' && $prizeMedia !== ''): ?><p class="advent-modal-link"><a class="advent-modal-action" href="<?= advent_escape($prizeMedia) ?>" target="_blank" rel="noopener"><?= advent_escape($linkLabel) ?></a></p><?php endif; ?>
-            <?php if (!empty($prize['description'])): ?><p><?= nl2br(advent_escape($prize['description'])) ?></p><?php endif; ?>
+            <?php if (!empty($prize['description'])): ?><p class="advent-prize-description"><?= nl2br(advent_escape($prize['description'])) ?></p><?php endif; ?>
             <?php if ($prizeType === 'prize' && !empty($prize['code'])): ?><div class="advent-barcode"><img src="data:image/svg+xml;base64,<?= base64_encode(advent_barcode($prize['code'])) ?>" alt="Barcode EAN-13 <?= advent_escape(advent_ean13($prize['code'])) ?>"><p>Codice premio: <strong><?= advent_escape($prize['code']) ?></strong></p></div><?php endif; ?>
         <?php endif; ?>
         </section>
@@ -211,7 +223,7 @@ $style = '--calendar-accent:' . $accent . ';--calendar-accent-text:' . $accentTe
 <?php if ($visible && $result === null): ?>
 <dialog class="advent-modal" id="advent-prize-modal" aria-labelledby="advent-modal-title" aria-describedby="advent-modal-description">
     <div class="advent-modal-card">
-        <button class="advent-modal-close" type="button" aria-label="Chiudi il premio">×</button>
+        <button class="advent-modal-close" type="button" aria-label="Chiudi il premio"><span data-close-icon aria-hidden="true">×</span><img data-close-image alt="" hidden></button>
         <div class="advent-modal-loading" role="status">Apro la sorpresa…</div>
         <div class="advent-modal-error" role="alert" hidden></div>
         <article class="advent-modal-content" hidden>
@@ -227,6 +239,7 @@ $style = '--calendar-accent:' . $accent . ';--calendar-accent-text:' . $accentTe
         </article>
     </div>
 </dialog>
+<script type="application/json" id="advent-container-settings"><?= json_encode(advent_container_client(advent_containers($calendar), $adventBase), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?></script>
 <script src="<?= advent_escape($adventBase) ?>/public/assets/js/advent-calendar.js?v=<?= (int) filemtime(__DIR__ . '/../../public/assets/js/advent-calendar.js') ?>" defer></script>
 <?php endif; ?>
 </body>

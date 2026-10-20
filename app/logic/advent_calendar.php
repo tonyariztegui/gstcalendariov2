@@ -35,7 +35,156 @@ function advent_defaults(): array
         'footer_blocks' => ['title' => true, 'dates' => true, 'prize_total' => true, 'links_regulation' => true, 'links_privacy' => true,
             'links_cookie' => false, 'links_assistance' => true, 'promoter' => true, 'delegate' => true,
             'legal_1' => false, 'legal_2' => false],
+        'containers' => advent_container_defaults(),
         'days' => []];
+}
+
+function advent_container_types(): array
+{
+    return ['prize', 'video', 'link'];
+}
+
+function advent_container_defaults(): array
+{
+    $box = [
+        'width_desktop' => 680, 'width_tablet' => 680, 'width_mobile' => 680,
+        'padding' => 28, 'radius' => 20,
+        'background_mode' => 'color', 'background_color' => '#fffdf9', 'background_image' => '',
+        'show_kicker' => true, 'show_title' => true, 'show_description' => true, 'show_code' => true,
+        'media_max_height' => 420,
+        'close_visible' => true, 'close_kind' => 'icon',
+        'close_color' => '#243c34', 'close_background' => '#ffffff', 'close_border' => '#d8ddd6',
+        'close_size' => 42, 'close_shape' => 'circle', 'close_image' => '',
+    ];
+    return array_fill_keys(advent_container_types(), $box);
+}
+
+function advent_containers(array $calendar): array
+{
+    $saved = is_array($calendar['containers'] ?? null) ? $calendar['containers'] : [];
+    $containers = [];
+    foreach (advent_container_types() as $type) {
+        $current = is_array($saved[$type] ?? null) ? $saved[$type] : [];
+        $containers[$type] = array_replace(advent_container_defaults()[$type], $current);
+        $containers[$type]['close_visible'] = true;
+    }
+    return $containers;
+}
+
+function advent_container_appearance_from_source(array $source, array $fallback, bool &$measureError, bool &$colorError, bool &$imageError): array
+{
+    $box = $fallback;
+    foreach (['width_desktop' => [280, 900], 'width_tablet' => [280, 900], 'width_mobile' => [280, 900], 'padding' => [12, 64], 'radius' => [0, 40], 'close_size' => [28, 72]] as $key => $range) {
+        $box[$key] = filter_var($source[$key] ?? $box[$key], FILTER_VALIDATE_INT);
+        if ($box[$key] === false || $box[$key] < $range[0] || $box[$key] > $range[1]) {
+            $measureError = true;
+            $box[$key] = $fallback[$key];
+        }
+    }
+    $box['background_mode'] = (($source['background_mode'] ?? 'color') === 'image') ? 'image' : 'color';
+    $box['close_kind'] = (($source['close_kind'] ?? 'icon') === 'image') ? 'image' : 'icon';
+    $box['close_shape'] = (($source['close_shape'] ?? 'circle') === 'square') ? 'square' : 'circle';
+    $box['close_visible'] = true;
+    foreach (['background_color' => '#fffdf9', 'close_color' => '#243c34', 'close_background' => '#ffffff', 'close_border' => '#d8ddd6'] as $key => $colorFallback) {
+        $box[$key] = is_string($source[$key] ?? null) ? trim($source[$key]) : $colorFallback;
+        if (!preg_match('/^#[0-9a-fA-F]{6}$/D', $box[$key])) {
+            $colorError = true;
+            $box[$key] = $colorFallback;
+        }
+    }
+    foreach (['background_image', 'close_image'] as $key) {
+        $box[$key] = is_string($source[$key] ?? null) ? trim($source[$key]) : '';
+        if (!advent_image_url($box[$key])) {
+            $imageError = true;
+            $box[$key] = '';
+        }
+    }
+    return $box;
+}
+
+function advent_containers_from_input(?array $input): array
+{
+    if ($input === null) { return [advent_container_defaults(), []]; }
+    $defaults = advent_container_defaults();
+    $containers = [];
+    $errors = [];
+    $measureError = false;
+    $colorError = false;
+    $imageError = false;
+    $shared = is_array($input['appearance'] ?? null) ? $input['appearance'] : null;
+    $sharedBox = $shared !== null ? advent_container_appearance_from_source($shared, $defaults['prize'], $measureError, $colorError, $imageError) : null;
+    foreach (advent_container_types() as $type) {
+        $source = is_array($input[$type] ?? null) ? $input[$type] : [];
+        $box = $sharedBox ?? advent_container_appearance_from_source($source, $defaults[$type], $measureError, $colorError, $imageError);
+        $box['media_max_height'] = filter_var($source['media_max_height'] ?? $defaults[$type]['media_max_height'], FILTER_VALIDATE_INT);
+        if ($box['media_max_height'] === false || $box['media_max_height'] < 120 || $box['media_max_height'] > 640) {
+            $measureError = true;
+            $box['media_max_height'] = $defaults[$type]['media_max_height'];
+        }
+        foreach (['show_kicker', 'show_title', 'show_description', 'show_code'] as $key) {
+            $box[$key] = ($source[$key] ?? '1') !== '0';
+        }
+        $box['close_visible'] = true;
+        $containers[$type] = $box;
+    }
+    if ($measureError) { $errors[] = 'Controlla misure, padding e angoli dei contenitori.'; }
+    if ($colorError) { $errors[] = 'I colori dei contenitori devono essere nel formato #fffdf9.'; }
+    if ($imageError) { $errors[] = 'Le immagini dei contenitori devono essere URL http/https o percorsi che iniziano con /.'; }
+    return [$containers, $errors];
+}
+
+function advent_container_css_url(string $value, string $base): string
+{
+    if ($value === '' || !advent_image_url($value)) { return 'none'; }
+    return 'url(' . json_encode(advent_asset_url($value, $base), JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) . ')';
+}
+
+function advent_container_public_css(array $containers, string $base): string
+{
+    $css = '';
+    foreach (advent_container_types() as $type) {
+        $box = $containers[$type];
+        $color = static function (string $value, string $fallback): string {
+            return preg_match('/^#[0-9a-fA-F]{6}$/D', $value) ? $value : $fallback;
+        };
+        $image = $box['background_mode'] === 'image' ? advent_container_css_url((string) $box['background_image'], $base) : 'none';
+        $radius = $box['close_shape'] === 'square' ? '8px' : '50%';
+        $selector = '.advent-modal[data-container="' . $type . '"],.advent-prize.is-' . $type;
+        $css .= $selector . '{--c-width:' . (int) $box['width_mobile'] . 'px;--c-pad:' . (int) $box['padding'] . 'px;--c-radius:' . (int) $box['radius'] . 'px;--c-bg:' . $color((string) $box['background_color'], '#fffdf9') . ';--c-bg-image:' . $image . ';--c-media:' . (int) $box['media_max_height'] . 'px;--c-close-size:' . (int) $box['close_size'] . 'px;--c-close-radius:' . $radius . ';--c-close-color:' . $color((string) $box['close_color'], '#243c34') . ';--c-close-bg:' . $color((string) $box['close_background'], '#ffffff') . ';--c-close-border:' . $color((string) $box['close_border'], '#d8ddd6') . '}';
+        $css .= '@media(min-width:600px){' . $selector . '{--c-width:' . (int) $box['width_tablet'] . 'px}}';
+        $css .= '@media(min-width:1000px){' . $selector . '{--c-width:' . (int) $box['width_desktop'] . 'px}}';
+    }
+    $css .= '.advent-modal[data-container]{width:min(var(--c-width),calc(100% - 24px));border-radius:var(--c-radius);background-color:var(--c-bg);background-image:var(--c-bg-image);background-size:cover;background-position:center}';
+    $css .= '.advent-modal[data-container] .advent-modal-card{padding:calc(var(--c-pad) + 14px) var(--c-pad) var(--c-pad)}';
+    $css .= '.advent-modal[data-container] .advent-modal-close{width:var(--c-close-size);height:var(--c-close-size);padding:0;overflow:hidden;border-color:var(--c-close-border);border-radius:var(--c-close-radius);background:var(--c-close-bg);color:var(--c-close-color);font-size:calc(var(--c-close-size) * .67)}';
+    $css .= '.advent-modal[data-container] .advent-modal-close img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit}';
+    $css .= '.advent-modal.is-kicker-off #advent-modal-day,.advent-prize.is-kicker-off .advent-kicker{display:none!important}';
+    $css .= '.advent-modal.is-title-off #advent-modal-title,.advent-prize.is-title-off > h2{display:none!important}';
+    $css .= '.advent-modal.is-description-off #advent-modal-description,.advent-prize.is-description-off .advent-prize-description{display:none!important}';
+    $css .= '.advent-modal.is-code-off .advent-barcode p,.advent-prize.is-code-off .advent-barcode p{display:none!important}';
+    $css .= '.advent-modal[data-container] .advent-prize-image,.advent-prize[class*="is-"] .advent-prize-image{max-height:var(--c-media)}';
+    $css .= '.advent-modal[data-container] .advent-embed.is-video,.advent-prize[class*="is-"] .advent-embed.is-video{width:min(100%,640px,calc(var(--c-media) * 16 / 9))}';
+    $css .= '.advent-prize[class*="is-"]{max-width:min(var(--c-width),calc(100% - 24px));border-radius:var(--c-radius);background-color:var(--c-bg);background-image:var(--c-bg-image);background-size:cover;background-position:center;padding:var(--c-pad)}';
+    return $css;
+}
+
+function advent_container_client(array $containers, string $base): array
+{
+    $client = [];
+    foreach (advent_container_types() as $type) {
+        $box = $containers[$type];
+        $image = ($box['close_kind'] === 'image' && $box['close_image'] !== '') ? advent_asset_url((string) $box['close_image'], $base) : '';
+        $client[$type] = [
+            'show_kicker' => !empty($box['show_kicker']),
+            'show_title' => !empty($box['show_title']),
+            'show_description' => !empty($box['show_description']),
+            'show_code' => !empty($box['show_code']),
+            'close_visible' => !empty($box['close_visible']),
+            'close_kind' => $box['close_kind'] === 'image' ? 'image' : 'icon',
+            'close_image' => $image,
+        ];
+    }
+    return $client;
 }
 
 function advent_config_path(): string { return __DIR__ . '/../config/advent.json'; }
@@ -46,7 +195,9 @@ function advent_load(): array
     if (!is_file($path)) { return advent_defaults(); }
     $data = json_decode((string) file_get_contents($path), true, 512, JSON_THROW_ON_ERROR);
     if (!is_array($data)) { throw new RuntimeException('Configurazione calendario non valida.'); }
-    return array_replace(advent_defaults(), $data);
+    $config = array_replace(advent_defaults(), $data);
+    $config['containers'] = advent_containers($config);
+    return $config;
 }
 
 function advent_escape($value): string
@@ -140,6 +291,8 @@ function advent_validate(array $input): array
     $config['expired_grayscale'] = !empty($input['expired_grayscale']);
     $config['expired_image'] = (($input['expired_image'] ?? 'promotion') === 'case') ? 'case' : 'promotion';
     $config['expired_image_fit'] = (($input['expired_image_fit'] ?? 'contain') === 'cover') ? 'cover' : 'contain';
+    [$config['containers'], $containerErrors] = advent_containers_from_input(is_array($input['containers'] ?? null) ? $input['containers'] : null);
+    $errors = array_merge($errors, $containerErrors);
     $config['grid_tile_ratio'] = is_string($input['grid_tile_ratio'] ?? null) ? $input['grid_tile_ratio'] : 'classic';
     $config['grid_image_fit'] = is_string($input['grid_image_fit'] ?? null) ? $input['grid_image_fit'] : 'contain';
     $config['published'] = !empty($input['published']);

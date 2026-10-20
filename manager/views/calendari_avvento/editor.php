@@ -39,6 +39,8 @@ function advent_editor_image(string $name, string $label, string $value, ?string
 function advent_editor_uploads(array &$input): void
 {
     $fields = ['logo' => ['logo'], 'background' => ['background'], 'background_mobile' => ['background_mobile'], 'background_tablet' => ['background_tablet'], 'background_wide' => ['background_wide'], 'footer_logo' => ['footer_logo'], 'footer_background_image' => ['footer_background_image']];
+    $fields['container_background'] = ['containers', 'appearance', 'background_image'];
+    $fields['container_close'] = ['containers', 'appearance', 'close_image'];
     for ($n = 1; $n <= 62; $n++) {
         foreach (['image', 'cover', 'active_cover'] as $key) { $fields['day_' . $n . '_' . $key] = ['days', $n, $key]; }
     }

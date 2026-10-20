@@ -12,9 +12,9 @@ if (!function_exists('manager_preview_url')) {
     $styleCustomization = $content_current['style_customization'];
     $content_current['cookie_consent']['enabled'] = true;
     $baseDir = dirname(__DIR__, 3);
-    $footerEditorStep = 4;
+    $footerEditorStep = 5;
     $footerPreviewUrl = 'ajax/preview_advent_footer.php';
-    ?><section id="advent-step-4" class="config-step" role="tabpanel" aria-labelledby="advent-tab-4">
+    ?><section id="advent-step-5" class="config-step" role="tabpanel" aria-labelledby="advent-tab-5">
     <div class="custom-control custom-switch my-3"><input type="checkbox" class="custom-control-input" id="cal-footer-enabled" name="footer_enabled" value="1" <?= !empty($calendar['footer_enabled'])?'checked':'' ?>><label class="custom-control-label" for="cal-footer-enabled">Attiva footer calendario</label></div>
     <?php include __DIR__ . '/../concorso/partials/footer-editor.php'; ?>
     <div class="card card-body mb-3 advent-footer-button-settings">

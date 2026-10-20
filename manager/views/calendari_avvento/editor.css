@@ -73,7 +73,44 @@
 .advent-editor .advent-grid-preview.is-expired-promotion .is-preview-expired .advent-grid-preview-art::before { content: ""; position: absolute; inset: 16% 12% 28%; border-radius: 4px; background: #fff; box-shadow: 0 0 0 1px #e5e7eb; }
 .advent-editor .advent-grid-preview.is-expired-promotion.is-expired-promo-cover .is-preview-expired .advent-grid-preview-art::before { inset: 0; border-radius: 0; }
 .advent-editor .advent-grid-preview.is-expired-gray.is-expired-promotion .is-preview-expired .advent-grid-preview-art::before { background: #eceff3; }
+.advent-editor .advent-container-appearance { max-width: none; margin: 0 0 12px; }
+.advent-editor .advent-container-appearance > p { margin: 0; padding: 12px 16px 0; }
+.advent-editor .advent-container-content > .advent-container-tabs { margin: 0; padding: 16px 16px 0; }
+.advent-editor .advent-container-content > .advent-container-panel { padding: 12px 16px 16px; }
+.advent-editor .advent-container-content > .advent-container-panel > p { margin: 0 0 12px; }
+.advent-editor .advent-container-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.advent-editor .advent-container-tab { min-height: 40px; padding: 8px 16px; border: 1px solid #dbe3ef; border-radius: 999px; background: #fff; color: #34445f; font-weight: 650; cursor: pointer; }
+.advent-editor .advent-container-tab[aria-selected="true"] { border-color: #3949ab; background: #eef2ff; color: #1e2a78; }
+.advent-editor .advent-container-layout { display: flex; flex-direction: column; gap: 16px; }
+.advent-editor .advent-container-preview { max-width: 980px; margin: 0 auto; padding: 16px; border: 1px solid #dbe3ef; border-radius: 12px; background: #f8fafc; }
+.advent-editor .advent-container-preview-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.advent-editor .advent-container-preview-head label { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 13px; }
+.advent-editor .advent-container-preview-head select { width: auto; min-width: 120px; }
+.advent-editor .advent-container-preview-stage { margin: 0 auto; padding: 18px 12px; overflow: visible; border-radius: 10px; background: #8f1d2c; }
+.advent-editor .advent-container-preview-dialog { position: relative; width: min(680px, calc(100% - 16px)); margin: 0 auto; padding: 42px 28px 28px; border-radius: 20px; background: #fffdf9 center/cover no-repeat; color: #233c34; text-align: center; box-shadow: 0 16px 40px #102a2333; }
+.advent-editor .advent-container-preview-close { position: absolute; top: 12px; right: 12px; display: grid; place-items: center; width: 42px; height: 42px; padding: 0; overflow: hidden; border: 1px solid #d8ddd6; border-radius: 50%; background: #fff; color: #243c34; font-size: 28px; line-height: 1; }
+.advent-editor .advent-container-preview-close img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.advent-editor .advent-container-preview-kicker { display: block; font-size: 11px; font-weight: 750; letter-spacing: 2px; color: #52685b; }
+.advent-editor .advent-container-preview-title { display: block; margin: 12px 0 20px; font-size: 28px; font-weight: 600; line-height: 1.3; }
+.advent-editor .advent-container-preview-media { display: block; width: 100%; height: 180px; margin: 0 auto 16px; border-radius: 12px; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 280 180'%3E%3Crect width='280' height='180' fill='%23fff'/%3E%3Crect x='48' y='48' width='184' height='84' rx='8' fill='none' stroke='%23233c34' stroke-width='3'/%3E%3Cpath d='M70 96h140M70 78h90' stroke='%23233c34' stroke-width='3'/%3E%3C/svg%3E") center/cover no-repeat; }
+.advent-editor .advent-container-preview-media.is-video { display: grid; place-items: center; width: min(100%, 640px); height: auto; aspect-ratio: 16/9; background: #111827; color: #fff; font-weight: 700; }
+.advent-editor .advent-container-preview-action { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; margin: 0 0 16px; padding: 10px 22px; border-radius: 8px; background: #185844; color: #fff; font-weight: 700; }
+.advent-editor .advent-container-preview-description { margin: 0 0 12px; color: #233c34; }
+.advent-editor .advent-container-preview-bars { display: block; width: min(220px, 100%); height: 48px; margin: 0 auto 6px; background: repeating-linear-gradient(90deg, #233c34 0 2px, transparent 2px 5px, #233c34 5px 7px, transparent 7px 9px); }
+.advent-editor .advent-container-preview-code small { color: #52685b; font-size: 13px; }
+@media (min-width: 1100px) {
+    .advent-editor .advent-container-layout { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 24px; align-items: start; }
+    .advent-editor .advent-container-settings { grid-column: 1; grid-row: 1; min-width: 0; }
+    .advent-editor .advent-container-previews { grid-column: 2; grid-row: 1; position: sticky; top: 16px; min-width: 0; }
+    .advent-editor .advent-container-preview { width: 100%; max-width: none; margin: 0; }
+    .advent-editor .advent-container-layout .advent-disclosure { max-width: none; margin: 0 0 12px; }
+    .advent-editor .advent-container-settings .advent-fields { grid-template-columns: 1fr; }
+    .advent-editor .advent-container-preview-stage { overflow: visible; }
+}
+.advent-editor .advent-container-close { grid-column: 1 / -1; }
+.advent-editor .advent-container-close > .advent-fields { padding: 0; }
 .advent-editor .advent-disclosure { max-width: 980px; margin: 12px auto 0; border: 1px solid #dbe3ef; border-radius: 10px; background: #fff; }
+.advent-editor details.advent-disclosure:not([open]) > :not(summary) { display: none !important; }
 .advent-editor .advent-disclosure > summary { padding: 12px 16px; color: #34445f; font-size: 13px; font-weight: 650; cursor: pointer; }
 .advent-editor .advent-disclosure[open] > summary { border-bottom: 1px solid #e2e8f0; }
 .advent-editor .advent-disclosure > .advent-fields { padding: 16px; }
@@ -83,7 +120,9 @@
     .advent-editor .advent-grid-preset-list { grid-template-columns: 1fr; }
     .advent-editor .advent-grid-preset { display: grid; grid-template-columns: 100px 1fr; column-gap: 12px; align-items: center; }
     .advent-editor .advent-grid-preset-art { grid-row: span 2; height: 40px; margin: 0; }
-    .advent-editor .advent-grid-live-header { align-items: flex-start; flex-direction: column; }
+    .advent-editor .advent-grid-live-header,
+    .advent-editor .advent-container-preview-head { align-items: flex-start; flex-direction: column; }
+    .advent-editor .advent-container-tabs { flex-wrap: wrap; }
     .advent-editor .advent-fields,
     .advent-editor .advent-day-type-panel > .advent-fields { grid-template-columns: 1fr; }
     .advent-editor .advent-logo-size-fields { grid-template-columns: 1fr; }

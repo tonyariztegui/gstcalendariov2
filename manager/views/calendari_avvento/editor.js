@@ -253,6 +253,168 @@ if (adventOverlayOpacity) {
     adventOverlayOpacity.addEventListener('input', updateAdventOverlayOutput);
     updateAdventOverlayOutput();
 }
+(() => {
+    const tabs = [...document.querySelectorAll('[data-container-tab]')];
+    const panels = [...document.querySelectorAll('[data-container-type]')];
+    if (!tabs.length || !panels.length) return;
+    const accent = document.getElementById('cal-accent');
+    const appearance = document.querySelector('.advent-container-appearance');
+    function field(panel, key) {
+        return panel?.querySelector(`[name="containers[${panel.dataset.containerType}][${key}]"]`) || null;
+    }
+    function appearanceField(key) {
+        return appearance?.querySelector(`[name="containers[appearance][${key}]"]`) || null;
+    }
+    function numberFrom(input, fallback, min, max) {
+        const value = Number(input?.value);
+        if (!Number.isFinite(value)) return fallback;
+        return Math.max(min, Math.min(max, value));
+    }
+    function imageSource(input) {
+        const wrap = input ? input.closest('.advent-image-field') : null;
+        const preview = wrap ? wrap.querySelector('.advent-image-preview') : null;
+        if (preview && !preview.hidden && preview.getAttribute('src')) return preview.src;
+        return input?.value.trim() || '';
+    }
+    function syncAppearanceFields() {
+        if (!appearance) return;
+        const backgroundMode = appearanceField('background_mode')?.value === 'image' ? 'image' : 'color';
+        const closeKind = appearanceField('close_kind')?.value === 'image' ? 'image' : 'icon';
+        appearance.querySelectorAll('[data-container-background]').forEach(item => {
+            item.hidden = item.dataset.containerBackground !== backgroundMode;
+        });
+        appearance.querySelectorAll('[data-container-close-icon]').forEach(item => { item.hidden = closeKind === 'image'; });
+        const closeImageField = appearance.querySelector('[data-container-close-image]');
+        if (closeImageField) closeImageField.hidden = closeKind !== 'image';
+    }
+    function update(type) {
+        const panel = document.querySelector(`[data-container-type="${type}"]`);
+        const preview = document.querySelector(`[data-container-preview="${type}"]`);
+        const dialog = preview?.querySelector('.advent-container-preview-dialog');
+        const stage = preview?.querySelector('.advent-container-preview-stage');
+        const device = preview?.querySelector('.js-container-device')?.value || 'desktop';
+        if (!dialog || !stage) return;
+        const width = numberFrom(appearanceField('width_' + device), 680, 280, 900);
+        const padding = numberFrom(appearanceField('padding'), 28, 12, 64);
+        const radius = numberFrom(appearanceField('radius'), 20, 0, 40);
+        const media = numberFrom(field(panel, 'media_max_height'), 420, 120, 640);
+        const closeSize = numberFrom(appearanceField('close_size'), 42, 28, 72);
+        const closeKind = appearanceField('close_kind')?.value === 'image' ? 'image' : 'icon';
+        const closeShape = appearanceField('close_shape')?.value === 'square' ? 'square' : 'circle';
+        const backgroundMode = appearanceField('background_mode')?.value === 'image' ? 'image' : 'color';
+        stage.style.width = { mobile: '390px', tablet: '768px', desktop: '100%' }[device] || '100%';
+        stage.style.maxWidth = '100%';
+        dialog.style.width = `min(${width}px, calc(100% - 16px))`;
+        dialog.style.borderRadius = `${radius}px`;
+        dialog.style.padding = `${padding + 14}px ${padding}px ${padding}px`;
+        dialog.style.backgroundColor = appearanceField('background_color')?.value || '#fffdf9';
+        const background = backgroundMode === 'image' ? imageSource(appearanceField('background_image')) : '';
+        dialog.style.backgroundImage = background ? `url("${background.replace(/"/g, '')}")` : 'none';
+        const close = preview.querySelector('.advent-container-preview-close');
+        if (close) {
+            close.hidden = false;
+            close.style.width = `${closeSize}px`;
+            close.style.height = `${closeSize}px`;
+            close.style.fontSize = `${Math.round(closeSize * 0.67)}px`;
+            close.style.borderRadius = closeShape === 'square' ? '8px' : '50%';
+            close.style.color = appearanceField('close_color')?.value || '#243c34';
+            close.style.backgroundColor = appearanceField('close_background')?.value || '#ffffff';
+            close.style.borderColor = appearanceField('close_border')?.value || '#d8ddd6';
+            const icon = close.querySelector('[data-preview-close-icon]');
+            const image = close.querySelector('[data-preview-close-image]');
+            const closeImage = closeKind === 'image' ? imageSource(appearanceField('close_image')) : '';
+            if (icon) icon.hidden = Boolean(closeImage);
+            if (image) {
+                image.hidden = !closeImage;
+                if (closeImage) image.src = closeImage;
+                else image.removeAttribute('src');
+            }
+        }
+        const photo = preview.querySelector('.advent-container-preview-media.is-photo');
+        if (photo) photo.style.height = `${media}px`;
+        const video = preview.querySelector('.advent-container-preview-media.is-video');
+        if (video) {
+            const stageMax = { mobile: 390, tablet: 768, desktop: 960 }[device] || 960;
+            const dialogWidth = Math.min(width, stageMax - 40);
+            video.style.width = '100%';
+            video.style.aspectRatio = 'auto';
+            video.style.height = `${Math.round(Math.min(media, dialogWidth * 9 / 16))}px`;
+        }
+        preview.querySelector('.advent-container-preview-kicker').hidden = field(panel, 'show_kicker')?.value === '0';
+        preview.querySelector('.advent-container-preview-title').hidden = field(panel, 'show_title')?.value === '0';
+        preview.querySelector('.advent-container-preview-description').hidden = field(panel, 'show_description')?.value === '0';
+        const code = preview.querySelector('.advent-container-preview-code small');
+        if (code) code.hidden = field(panel, 'show_code')?.value === '0';
+        const action = preview.querySelector('.advent-container-preview-action');
+        if (action && accent) action.style.background = accent.value || '#185844';
+        fitPreview(preview);
+    }
+    function fitPreview(preview) {
+        const stage = preview.querySelector('.advent-container-preview-stage');
+        const dialog = preview.querySelector('.advent-container-preview-dialog');
+        if (!preview || !stage || !dialog) return;
+        dialog.style.transform = 'none';
+        const wrap = preview.closest('.advent-container-previews');
+        if (!wrap) return;
+        if (preview.hidden || window.innerWidth < 1100) {
+            wrap.style.position = '';
+            return;
+        }
+        wrap.style.position = wrap.offsetHeight > window.innerHeight - 24 ? 'static' : 'sticky';
+    }
+    const types = () => panels.map(panel => panel.dataset.containerType);
+    const selectedType = () => tabs.find(tab => tab.getAttribute('aria-selected') === 'true')?.dataset.containerTab || 'prize';
+    function selectType(type) {
+        tabs.forEach(tab => tab.setAttribute('aria-selected', String(tab.dataset.containerTab === type)));
+        panels.forEach(panel => { panel.hidden = panel.dataset.containerType !== type; });
+        document.querySelectorAll('[data-container-preview]').forEach(preview => { preview.hidden = preview.dataset.containerPreview !== type; });
+        update(type);
+    }
+    const contenuto = document.querySelector('.advent-container-content');
+    let switchingSection = false;
+    function showAppearance() {
+        switchingSection = true;
+        if (appearance) appearance.open = true;
+        if (contenuto) contenuto.open = false;
+        switchingSection = false;
+        update(selectedType());
+    }
+    function showContent() {
+        switchingSection = true;
+        if (contenuto) contenuto.open = true;
+        if (appearance) appearance.open = false;
+        switchingSection = false;
+        update(selectedType());
+    }
+    appearance?.addEventListener('toggle', () => {
+        if (switchingSection) return;
+        if (appearance.open) showAppearance();
+        else showContent();
+    });
+    contenuto?.addEventListener('toggle', () => {
+        if (switchingSection) return;
+        if (contenuto.open) showContent();
+        else showAppearance();
+    });
+    tabs.forEach(tab => tab.addEventListener('click', () => selectType(tab.dataset.containerTab)));
+    panels.forEach(panel => {
+        panel.addEventListener('input', () => update(panel.dataset.containerType));
+        panel.addEventListener('change', () => update(panel.dataset.containerType));
+    });
+    document.querySelectorAll('[data-container-preview]').forEach(preview => {
+        preview.addEventListener('input', () => update(preview.dataset.containerPreview));
+        preview.addEventListener('change', () => update(preview.dataset.containerPreview));
+    });
+    appearance?.addEventListener('input', () => { syncAppearanceFields(); types().forEach(update); });
+    appearance?.addEventListener('change', () => { syncAppearanceFields(); types().forEach(update); });
+    syncAppearanceFields();
+    types().forEach(update);
+    accent?.addEventListener('input', () => types().forEach(update));
+    window.addEventListener('resize', () => {
+        const visible = document.querySelector('[data-container-preview]:not([hidden])');
+        if (visible) fitPreview(visible);
+    });
+})();
 const adventFooterOpacity = document.getElementById('cal-footer-opacity');
 if (adventFooterOpacity) {
     const adventFooterOutput = adventFooterOpacity.parentElement.querySelector('output');

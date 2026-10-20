@@ -6,6 +6,12 @@
     const error = modal.querySelector('.advent-modal-error');
     const content = modal.querySelector('.advent-modal-content');
     const closeButton = modal.querySelector('.advent-modal-close');
+    const closeIcon = closeButton ? closeButton.querySelector('[data-close-icon]') : null;
+    const closeImage = closeButton ? closeButton.querySelector('[data-close-image]') : null;
+    const containerSettings = (() => {
+        try { return JSON.parse(document.getElementById('advent-container-settings')?.textContent || '{}'); }
+        catch (error) { return {}; }
+    })();
     const title = document.getElementById('advent-modal-title');
     const day = document.getElementById('advent-modal-day');
     const description = document.getElementById('advent-modal-description');
@@ -43,6 +49,23 @@
         barcodeImage.removeAttribute('src');
     }
 
+    function applyContainer(type) {
+        const settings = containerSettings[type] || containerSettings.prize || {};
+        modal.dataset.container = type || 'prize';
+        modal.classList.toggle('is-kicker-off', settings.show_kicker === false);
+        modal.classList.toggle('is-title-off', settings.show_title === false);
+        modal.classList.toggle('is-description-off', settings.show_description === false);
+        modal.classList.toggle('is-code-off', settings.show_code === false);
+        modal.classList.remove('is-close-off');
+        const useImage = settings.close_kind === 'image' && settings.close_image;
+        if (closeIcon) closeIcon.hidden = Boolean(useImage);
+        if (closeImage) {
+            closeImage.hidden = !useImage;
+            if (useImage) closeImage.src = settings.close_image;
+            else closeImage.removeAttribute('src');
+        }
+    }
+
     async function openPrize(tile) {
         opener = tile;
         resetModal();
@@ -61,6 +84,7 @@
             const payload = await response.json();
             if (!response.ok || !payload.ok) throw new Error(payload.message || 'Premio non disponibile.');
             const prize = payload.data;
+            applyContainer(prize.type);
             day.textContent = `CASELLA ${prize.day} · ${prize.date_label}`;
             title.textContent = prize.title;
             description.textContent = prize.description;

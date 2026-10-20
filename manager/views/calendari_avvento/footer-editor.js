@@ -36,7 +36,7 @@
             if (image) { image.src = URL.createObjectURL(file); image.classList.remove('d-none'); }
             $(this).next('.custom-file-label').text(file.name);
         });
-        $('#advent-step-4').on('input change', 'input, select, textarea', function () {
+        $('#advent-step-5').on('input change', 'input, select, textarea', function () {
             if (typeof window.scheduleFooterPreview === 'function') window.scheduleFooterPreview();
         });
     });

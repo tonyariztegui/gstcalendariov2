@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 unset($_SESSION['advent_preview']);
                 unset($_SESSION['advent_preview_config_hash']);
                 $_SESSION['advent_saved'] = true;
-                header('Location: calendari-avvento?step=' . max(1, min(4, (int) ($_POST['calendar_step'] ?? 1))));
+                header('Location: calendari-avvento?step=' . max(1, min(5, (int) ($_POST['calendar_step'] ?? 1))));
                 exit;
             }
         } catch (Throwable $e) { $errors[] = $e instanceof RuntimeException ? $e->getMessage() : 'Salvataggio non riuscito. Riprova.'; }
@@ -96,13 +96,13 @@ include __DIR__ . '/../res/inc/header.php';
         <div class="config-wizard-header"><div><div class="config-wizard-title"><i class="fa fa-map mr-2" aria-hidden="true"></i>Percorso guidato</div><p class="config-wizard-help mb-0">Spostati tra le sezioni quando serve. Le modifiche vengono salvate con il pulsante Salva configurazione.</p></div><div class="text-muted small" id="advent-progress-text" aria-live="polite"></div></div>
         <div class="wizard-progress" aria-hidden="true"><div class="wizard-progress-bar" id="advent-progress-bar"></div></div>
         <div class="wizard-steps" role="tablist" aria-label="Sezioni del calendario">
-            <?php foreach (['Configurazione', 'Branding', 'Caselle e premi', 'Footer'] as $index => $label): ?><button class="wizard-step" type="button" role="tab" id="advent-tab-<?= $index + 1 ?>" aria-controls="advent-step-<?= $index + 1 ?>" data-calendar-step="<?= $index + 1 ?>"><?= $label ?></button><?php endforeach; ?>
+            <?php foreach (['Configurazione', 'Branding', 'Caselle e premi', 'Contenitori', 'Footer'] as $index => $label): ?><button class="wizard-step" type="button" role="tab" id="advent-tab-<?= $index + 1 ?>" aria-controls="advent-step-<?= $index + 1 ?>" data-calendar-step="<?= $index + 1 ?>"><?= $label ?></button><?php endforeach; ?>
         </div>
     </div>
     <form method="post" enctype="multipart/form-data" id="advent-form">
         <input type="hidden" name="csrf" value="<?= advent_escape($_SESSION['advent_csrf']) ?>">
         <input type="hidden" name="config_version" value="<?= advent_escape($configVersion) ?>">
-        <input type="hidden" name="calendar_step" id="advent-current-step" value="<?= max(1, min(4, (int) ($_POST['calendar_step'] ?? $_GET['step'] ?? 1))) ?>">
+        <input type="hidden" name="calendar_step" id="advent-current-step" value="<?= max(1, min(5, (int) ($_POST['calendar_step'] ?? $_GET['step'] ?? 1))) ?>">
         <div class="config-columns">
         <section class="card mt-3 mb-4 config-step configurazione-section" id="advent-step-1" role="tabpanel" aria-labelledby="advent-tab-1" tabindex="0"><div class="card-body">
             <div class="configurazione-hero"><div><div class="section-title configurazione-title"><i class="fa fa-list-alt mr-2" aria-hidden="true"></i>Dati calendario</div><p class="text-muted small mb-0">Imposta identità e periodo del calendario.</p></div><span class="configurazione-badge"><i class="fa fa-cog mr-1" aria-hidden="true"></i>Configurazione base</span></div>
@@ -269,6 +269,7 @@ include __DIR__ . '/../res/inc/header.php';
             <?php endforeach; ?>
             </div>
         </div></section>
+<?php include __DIR__ . '/calendari_avvento/container-editor.php'; ?>
 <?php include __DIR__ . '/calendari_avvento/footer-editor.php'; ?>
         </div>
         <div class="wizard-actions wizard-actions-bottom"><button class="btn btn-outline-secondary btn-sm" type="button" id="advent-prev"><i class="fa fa-arrow-left mr-1" aria-hidden="true"></i>Indietro</button><span class="text-muted small" id="advent-save-status" role="status">Le modifiche vengono salvate con Salva configurazione.</span><button class="btn btn-primary btn-sm" type="button" id="advent-next">Avanti<i class="fa fa-arrow-right ml-1" aria-hidden="true"></i></button></div>
