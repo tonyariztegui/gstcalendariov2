@@ -120,45 +120,101 @@
     updatePreview();
 })();
 (() => {
-    const preview = document.getElementById('cal-logo-size-preview');
-    const device = document.getElementById('cal-logo-preview-device');
+    const frame = document.getElementById('cal-brand-frame');
     const usage = document.getElementById('cal-logo-replaces-heading');
     const controls = document.querySelector('.advent-logo-sizes');
-    if (!preview || !device || !usage || !controls) return;
-    const sizes = Object.fromEntries(['mobile', 'tablet', 'desktop', 'wide'].map(name => [name, document.getElementById(`cal-logo-width-${name}`)]));
-    const canvas = preview.closest('.advent-logo-preview-canvas');
-    const empty = document.getElementById('cal-logo-preview-empty');
-    function updateLogoPreview() {
-        const selected = device.value;
-        canvas.style.maxWidth = { mobile: '320px', tablet: '480px', desktop: '620px', wide: '800px' }[selected];
-        preview.style.width = `${Math.max(60, Math.min(1000, Number(sizes[selected]?.value) || 700))}px`;
+    const logo = document.getElementById('cal-brand-logo');
+    const row = document.getElementById('cal-brand-row');
+    if (!frame || !usage || !controls || !logo || !row) return;
+    const introField = document.getElementById('cal-intro-field');
+    const intro = document.getElementById('cal-intro');
+    const title = document.getElementById('cal-title');
+    const titlePreview = document.getElementById('cal-brand-title');
+    const introPreview = document.getElementById('cal-brand-intro');
+    const empty = document.getElementById('cal-brand-logo-empty');
+    const status = document.getElementById('cal-brand-preview-status');
+    const tiles = Array.from(row.querySelectorAll('[data-brand-tile]'));
+    const labels = { desktop: 'Computer', tablet: 'Tablet', mobile: 'Smartphone' };
+    let device = 'desktop';
+    function imageUrl(name) {
+        const field = document.querySelector(`input[name="${name}"]`)?.closest('.advent-image-field');
+        if (!field) return '';
+        const img = field.querySelector('.advent-image-preview');
+        const path = field.querySelector('input.form-control')?.value.trim() || '';
+        if (img && !img.hidden && img.getAttribute('src')) return img.src;
+        return /^(https?:\/\/|\/)/.test(path) ? path : '';
     }
-    function updateUsage() { controls.hidden = usage.value !== '1'; }
-    Object.values(sizes).forEach(input => input?.addEventListener('input', updateLogoPreview));
-    device.addEventListener('change', updateLogoPreview);
-    usage.addEventListener('change', updateUsage);
-    const upload = document.querySelector('input[name="logo_upload"]');
-    const savedSrc = preview.getAttribute('src');
-    let temporaryUrl;
-    upload?.addEventListener('change', () => {
-        if (temporaryUrl) URL.revokeObjectURL(temporaryUrl);
-        temporaryUrl = upload.files?.[0] ? URL.createObjectURL(upload.files[0]) : undefined;
-        if (temporaryUrl) {
-            preview.src = temporaryUrl;
-            preview.hidden = false;
-            if (empty) empty.hidden = true;
-        } else if (savedSrc) {
-            preview.src = savedSrc;
-            preview.hidden = false;
+    function introLine() {
+        const html = (window.jQuery && intro && jQuery(intro).data('summernote')) ? jQuery(intro).summernote('code') : (intro?.value || '');
+        const withBreaks = html.replace(/<br\s*\/?>/gi, '\n').replace(/<\/p>/gi, '\n').replace(/<[^>]+>/g, '');
+        return withBreaks.split('\n').map(part => part.replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim()).find(Boolean) || '';
+    }
+    function update() {
+        const fullHeader = usage.value === '1';
+        if (introField) introField.hidden = fullHeader;
+        frame.classList.toggle('is-heading', fullHeader);
+        frame.classList.toggle('is-separate', !fullHeader);
+        frame.classList.toggle('is-desktop', device === 'desktop');
+        frame.classList.toggle('is-tablet', device === 'tablet');
+        frame.classList.toggle('is-mobile', device === 'mobile');
+        document.querySelectorAll('[data-brand-width]').forEach(field => { field.hidden = field.dataset.brandWidth !== device && field.dataset.brandWidth !== 'wide'; });
+        document.querySelectorAll('[data-brand-overlap]').forEach(field => { field.hidden = field.dataset.brandOverlap !== device; });
+        document.querySelectorAll('[data-brand-device]').forEach(button => button.setAttribute('aria-selected', String(button.dataset.brandDevice === device)));
+        const background = imageUrl(device === 'mobile' ? 'background_mobile' : device === 'tablet' ? 'background_tablet' : 'background') || imageUrl('background');
+        frame.style.backgroundImage = background ? `url(${JSON.stringify(background)})` : '';
+        const src = imageUrl('logo');
+        if (src) {
+            logo.src = src;
+            logo.hidden = false;
             if (empty) empty.hidden = true;
         } else {
-            preview.removeAttribute('src');
-            preview.hidden = true;
+            logo.removeAttribute('src');
+            logo.hidden = true;
             if (empty) empty.hidden = false;
         }
+        const width = Math.max(60, Math.min(1000, Number(document.getElementById(`cal-logo-width-${device}`)?.value) || 700));
+        logo.style.width = `min(100%, ${width}px)`;
+        logo.style.maxWidth = 'none';
+        logo.style.maxHeight = 'none';
+        if (titlePreview) titlePreview.textContent = title?.value.trim() || 'Titolo del calendario';
+        if (introPreview) introPreview.textContent = introLine();
+        const columns = Math.max(1, Number(document.getElementById(`cal-grid-columns-${device}`)?.value) || { desktop: 4, tablet: 3, mobile: 2 }[device]);
+        const gap = Math.max(0, Math.min(40, Number(document.getElementById('cal-grid-gap')?.value) || 16));
+        const radius = Math.max(0, Math.min(32, Number(document.getElementById('cal-grid-tile-radius')?.value) || 16));
+        const ratio = { square: '1', classic: '1.2', wide: '1.5' }[document.getElementById('cal-grid-tile-ratio')?.value] || '1.2';
+        const fit = document.getElementById('cal-grid-image-fit')?.value === 'cover' ? 'cover' : 'contain';
+        row.style.gridTemplateColumns = `repeat(${columns}, minmax(0, 1fr))`;
+        row.style.gap = `${gap}px`;
+        tiles.forEach((tile, index) => {
+            tile.hidden = index >= columns;
+            tile.style.borderRadius = `${radius}px`;
+            tile.style.aspectRatio = ratio;
+            const image = tile.querySelector('img');
+            if (image) image.style.objectFit = fit;
+        });
+        const overlap = document.getElementById(`cal-logo-overlap-${device}`);
+        const overlapValue = Number(overlap?.value) || 0;
+        row.style.marginTop = `${overlapValue}px`;
+        if (overlap) {
+            const output = overlap.parentElement?.querySelector('output');
+            if (output) output.textContent = `${overlapValue} px`;
+        }
+        if (status) status.textContent = `${labels[device]} · sovrapposizione ${overlapValue} px`;
+    }
+    document.querySelectorAll('[data-brand-device]').forEach(button => button.addEventListener('click', () => { device = button.dataset.brandDevice; update(); }));
+    ['logo', 'background', 'background_tablet', 'background_mobile'].forEach(name => {
+        const field = document.querySelector(`input[name="${name}"]`)?.closest('.advent-image-field');
+        field?.querySelector('input[type="file"]')?.addEventListener('change', () => setTimeout(update, 0));
+        field?.querySelector('input.form-control')?.addEventListener('input', update);
     });
-    updateLogoPreview();
-    updateUsage();
+    usage.addEventListener('change', update);
+    title?.addEventListener('input', update);
+    intro?.addEventListener('input', update);
+    document.querySelectorAll('[name^="logo_width_"], [name^="logo_overlap_"], [name^="grid_columns_"], #cal-grid-gap, #cal-grid-tile-radius, #cal-grid-tile-ratio, #cal-grid-image-fit').forEach(field => {
+        field.addEventListener('input', update);
+        field.addEventListener('change', update);
+    });
+    update();
 })();
 (() => {
     document.querySelectorAll('.advent-image-field').forEach(field => {

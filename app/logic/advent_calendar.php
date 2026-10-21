@@ -10,6 +10,7 @@ function advent_defaults(): array
         'start_date' => "$year-12-01", 'end_date' => "$year-12-24",
         'logo' => '', 'logo_width_mobile' => 320, 'logo_width_tablet' => 480,
         'logo_width_desktop' => 700, 'logo_width_wide' => 850,
+        'logo_overlap_mobile' => 0, 'logo_overlap_tablet' => 0, 'logo_overlap_desktop' => 0,
         'background' => '', 'background_mobile' => '', 'background_tablet' => '', 'background_wide' => '',
         'accent' => '#185844', 'modal_overlay' => '#102a23', 'modal_overlay_opacity' => 72,
         'grid_columns_mobile' => 2, 'grid_columns_tablet' => 3, 'grid_columns_desktop' => 4,
@@ -205,6 +206,123 @@ function advent_escape($value): string
     return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
+function advent_intro_is_blank(string $value): bool
+{
+    $text = html_entity_decode(strip_tags((string) preg_replace('/<br\s*\/?>/i', ' ', $value)), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    return trim(str_replace("\xc2\xa0", ' ', $text)) === '';
+}
+
+function advent_intro_style(string $style): string
+{
+    $kept = [];
+    foreach (explode(';', $style) as $part) {
+        if (!preg_match('/^\s*(color|background-color|font-size)\s*:\s*(.+)$/i', trim($part), $match)) {
+            continue;
+        }
+        $prop = strtolower($match[1]);
+        $val = strtolower(trim($match[2]));
+        $color = '(?:#[0-9a-f]{3,8}|rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}(?:\s*,\s*(?:0|1|0?\.\d+))?\s*\)|[a-z]{3,20})';
+        $ok = $prop === 'font-size'
+            ? (bool) preg_match('/^\d+(?:\.\d+)?(?:px|em|rem|%)$/', $val)
+            : (bool) preg_match('/^' . $color . '$/', $val);
+        if ($ok) {
+            $kept[] = $prop . ': ' . $val;
+        }
+    }
+    return implode('; ', $kept);
+}
+
+function advent_intro_sanitize(string $html): string
+{
+    if (function_exists('contest_normalize_summernote_font_html')) {
+        $html = contest_normalize_summernote_font_html($html);
+    }
+    if (!class_exists('DOMDocument')) {
+        return nl2br(advent_escape(trim(strip_tags($html))));
+    }
+    $prev = libxml_use_internal_errors(true);
+    $dom = new DOMDocument();
+    $loaded = $dom->loadHTML('<?xml encoding="UTF-8"><div id="advent-intro-root">' . $html . '</div>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+    if (!$loaded) {
+        libxml_clear_errors();
+        libxml_use_internal_errors($prev);
+        return nl2br(advent_escape(trim(strip_tags($html))));
+    }
+    $allowed = ['p' => true, 'br' => true, 'strong' => true, 'b' => true, 'em' => true, 'i' => true, 'u' => true, 'span' => true, 'font' => true, 'ul' => true, 'ol' => true, 'li' => true, 'div' => true];
+    $drop = ['script' => true, 'style' => true, 'iframe' => true, 'object' => true, 'embed' => true, 'link' => true, 'meta' => true];
+    $nodes = [];
+    foreach ((new DOMXPath($dom))->query('//*') ?: [] as $node) {
+        $nodes[] = $node;
+    }
+    foreach (array_reverse($nodes) as $node) {
+        if (!$node instanceof DOMElement || !$node->parentNode || $node->getAttribute('id') === 'advent-intro-root') {
+            continue;
+        }
+        $tag = strtolower($node->tagName);
+        if (isset($drop[$tag])) {
+            $node->parentNode->removeChild($node);
+            continue;
+        }
+        if (!isset($allowed[$tag])) {
+            while ($node->firstChild) {
+                $node->parentNode->insertBefore($node->firstChild, $node);
+            }
+            $node->parentNode->removeChild($node);
+            continue;
+        }
+        $style = $node->getAttribute('style');
+        if ($tag === 'font' && preg_match('/^#?[0-9a-f]{3,8}$/i', $node->getAttribute('color'))) {
+            $color = $node->getAttribute('color');
+            $style = 'color: ' . (str_starts_with($color, '#') ? $color : '#' . $color) . '; ' . $style;
+        }
+        while ($node->attributes->length) {
+            $node->removeAttribute($node->attributes->item(0)->name);
+        }
+        $clean = advent_intro_style($style);
+        if ($clean !== '') {
+            $node->setAttribute('style', $clean);
+        }
+        if ($tag === 'font') {
+            $span = $dom->createElement('span');
+            if ($clean !== '') {
+                $span->setAttribute('style', $clean);
+            }
+            while ($node->firstChild) {
+                $span->appendChild($node->firstChild);
+            }
+            $node->parentNode->replaceChild($span, $node);
+        }
+    }
+    $root = $dom->getElementById('advent-intro-root');
+    $out = '';
+    if ($root) {
+        foreach ($root->childNodes as $child) {
+            $out .= $dom->saveHTML($child);
+        }
+    }
+    libxml_clear_errors();
+    libxml_use_internal_errors($prev);
+    return $out;
+}
+
+function advent_intro_store(string $value): string
+{
+    $value = trim($value);
+    if (advent_intro_is_blank($value)) {
+        return '';
+    }
+    return str_contains($value, '<') ? advent_intro_sanitize($value) : $value;
+}
+
+function advent_intro_html(string $value): string
+{
+    $value = advent_intro_store($value);
+    if ($value === '') {
+        return '';
+    }
+    return str_contains($value, '<') ? $value : nl2br(advent_escape($value));
+}
+
 function advent_date(string $value): ?DateTimeImmutable
 {
     $date = DateTimeImmutable::createFromFormat('!Y-m-d', $value, new DateTimeZone('Europe/Rome'));
@@ -286,6 +404,14 @@ function advent_validate(array $input): array
             break;
         }
     }
+    foreach (['logo_overlap_mobile', 'logo_overlap_tablet', 'logo_overlap_desktop'] as $key) {
+        $config[$key] = filter_var($input[$key] ?? advent_defaults()[$key], FILTER_VALIDATE_INT);
+        if ($config[$key] === false || $config[$key] < -200 || $config[$key] > 120) {
+            $errors[] = 'La sovrapposizione deve essere tra -200 e 120 px per ogni dispositivo.';
+            $config[$key] = 0;
+            break;
+        }
+    }
     $config['grid_show_caption'] = !array_key_exists('grid_show_caption', $input) || !empty($input['grid_show_caption']);
     $config['expired_message'] = (($input['expired_message'] ?? 'badge') === 'banner') ? 'banner' : 'badge';
     $config['expired_grayscale'] = !empty($input['expired_grayscale']);
@@ -315,8 +441,9 @@ function advent_validate(array $input): array
     $config['footer_prize_total'] = max(0, (float) ($input['footer_prize_total'] ?? 0));
     $config['footer_border_sides'] = array_values(array_intersect(['top', 'right', 'bottom', 'left'], is_array($input['footer_border_sides'] ?? null) ? $input['footer_border_sides'] : []));
     foreach (array_keys(advent_defaults()['footer_blocks']) as $key) { $config['footer_blocks'][$key] = !empty($input['footer_blocks'][$key]); }
+    $config['intro'] = advent_intro_store($config['intro']);
     if ($config['title'] === '' || strlen($config['title']) > 180) { $errors[] = 'Inserisci un titolo di massimo 180 caratteri.'; }
-    if (strlen($config['intro']) > 2000) { $errors[] = 'Il testo introduttivo è troppo lungo (massimo 2000 caratteri).'; }
+    if (strlen($config['intro']) > 8000) { $errors[] = 'Il testo introduttivo è troppo lungo.'; }
     $days = advent_days($config);
     if (!$days) { $errors[] = 'Scegli un intervallo valido da 1 a 62 giorni, con la fine successiva o uguale all’inizio.'; }
     if (!preg_match('/^#[0-9a-fA-F]{6}$/D', $config['accent'])) { $errors[] = 'Il colore deve essere nel formato #185844.'; }

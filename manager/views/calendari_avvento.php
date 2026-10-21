@@ -106,9 +106,8 @@ include __DIR__ . '/../res/inc/header.php';
         <div class="config-columns">
         <section class="card mt-3 mb-4 config-step configurazione-section" id="advent-step-1" role="tabpanel" aria-labelledby="advent-tab-1" tabindex="0"><div class="card-body">
             <div class="configurazione-hero"><div><div class="section-title configurazione-title"><i class="fa fa-list-alt mr-2" aria-hidden="true"></i>Dati calendario</div><p class="text-muted small mb-0">Imposta identità e periodo del calendario.</p></div><span class="configurazione-badge"><i class="fa fa-cog mr-1" aria-hidden="true"></i>Configurazione base</span></div>
-            <div class="configurazione-panel"><div class="configurazione-panel-header"><span class="configurazione-panel-icon"><i class="fa fa-pencil" aria-hidden="true"></i></span><div><h6>Identità calendario</h6><p>Informazioni principali mostrate nella pagina pubblica.</p></div></div><div class="advent-fields">
+            <div class="configurazione-panel"><div class="configurazione-panel-header"><span class="configurazione-panel-icon"><i class="fa fa-pencil" aria-hidden="true"></i></span><div><h6>Identità calendario</h6><p>Il titolo compare in pagina. Il testo sotto il titolo si personalizza in Branding, insieme al logo.</p></div></div><div class="advent-fields">
                 <?php advent_editor_field('title', 'Titolo del calendario', $calendar['title'], 'text', true); ?>
-                <div class="advent-field advent-field--wide"><label for="cal-intro">Testo introduttivo</label><textarea id="cal-intro" name="intro" rows="3" maxlength="2000" class="form-control"><?= advent_escape($calendar['intro']) ?></textarea></div>
             </div></div>
             <div class="configurazione-panel"><div class="configurazione-panel-header"><span class="configurazione-panel-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span><div><h6>Date del calendario</h6><p>Gestisci il periodo di apertura delle caselle.</p></div></div><div class="advent-fields">
                 <?php advent_editor_field('start_date', 'Data di inizio', $calendar['start_date'], 'date', true); advent_editor_field('end_date', 'Data di fine', $calendar['end_date'], 'date', true); ?>
@@ -123,21 +122,77 @@ include __DIR__ . '/../res/inc/header.php';
             <div class="configurazione-hero"><div><div class="section-title configurazione-title"><i class="fa fa-image mr-2" aria-hidden="true"></i>Branding</div><p class="text-muted small mb-0">Personalizza logo, sfondi, colori e velatura del popup.</p></div></div>
             <div class="configurazione-panel"><div class="configurazione-panel-header"><span class="configurazione-panel-icon"><i class="fa fa-paint-brush" aria-hidden="true"></i></span><div><h6>Grafica e identità</h6><p>Carica un’immagine per ogni formato. Se tablet, mobile o schermo grande non sono impostati, viene usato automaticamente lo sfondo desktop.</p></div></div><div class="advent-fields">
                 <?php foreach (['logo' => 'Logo', 'background' => 'Sfondo desktop', 'background_wide' => 'Sfondo schermi grandi', 'background_tablet' => 'Sfondo tablet', 'background_mobile' => 'Sfondo mobile'] as $key => $label) { advent_editor_image($key, $label, $calendar[$key]); } ?>
-                <div class="advent-field advent-field--wide">
+            </div>
+            <div class="advent-brand-layout">
+                <div class="advent-brand-preview">
+                    <div class="advent-brand-preview-head">
+                        <strong>Anteprima</strong>
+                        <div class="advent-brand-devices" role="tablist" aria-label="Dispositivo dell’anteprima">
+                            <button class="advent-brand-device" type="button" role="tab" data-brand-device="desktop" aria-selected="true">Computer</button>
+                            <button class="advent-brand-device" type="button" role="tab" data-brand-device="tablet" aria-selected="false">Tablet</button>
+                            <button class="advent-brand-device" type="button" role="tab" data-brand-device="mobile" aria-selected="false">Smartphone</button>
+                        </div>
+                    </div>
+                    <div class="advent-brand-frame is-desktop" id="cal-brand-frame">
+                        <header class="advent-brand-hero">
+                            <img class="advent-brand-logo" id="cal-brand-logo" alt="" <?php if ($calendar['logo'] !== '' && advent_image_url($calendar['logo'])): ?>src="<?= advent_escape(advent_asset_url($calendar['logo'], advent_editor_base())) ?>"<?php else: ?>hidden<?php endif; ?>>
+                            <p class="advent-brand-empty" id="cal-brand-logo-empty" <?= $calendar['logo'] !== '' ? 'hidden' : '' ?>>Carica un logo per vederlo qui.</p>
+                            <div class="advent-brand-copy">
+                                <p class="advent-brand-kicker">UNA SORPRESA AL GIORNO</p>
+                                <h3 class="advent-brand-title" id="cal-brand-title"></h3>
+                                <p class="advent-brand-intro" id="cal-brand-intro"></p>
+                            </div>
+                        </header>
+                        <div class="advent-brand-legend" aria-hidden="true"><span>● Anteprima: tutte le caselle disponibili</span><span>Prova ogni premio prima di pubblicare</span></div>
+                        <div class="advent-brand-row" id="cal-brand-row"><?php
+                            $brandCount = 0;
+                            foreach ($days as $number => $day) {
+                                if ($brandCount >= 6) { break; }
+                                $brandCount++;
+                                $cover = (string) ($calendar['days'][$number]['cover'] ?? '');
+                                $coverUrl = ($cover !== '' && advent_image_url($cover)) ? advent_asset_url($cover, advent_editor_base()) : '';
+                                ?><span class="advent-brand-tile" data-brand-tile="<?= (int) $number ?>"><?php if ($coverUrl !== ''): ?><img src="<?= advent_escape($coverUrl) ?>" alt=""><?php else: ?><span><?= (int) $number ?></span><?php endif; ?></span><?php
+                            }
+                            if ($brandCount === 0) {
+                                for ($n = 1; $n <= 4; $n++) {
+                                    ?><span class="advent-brand-tile" data-brand-tile="<?= $n ?>"><span><?= $n ?></span></span><?php
+                                }
+                            }
+                        ?></div>
+                    </div>
+                    <p class="text-muted small mb-0" id="cal-brand-preview-status" role="status"></p>
+                </div>
+                <div class="advent-brand-settings">
+                <div class="advent-field">
                     <label for="cal-logo-replaces-heading">Utilizzo del logo</label>
                     <select id="cal-logo-replaces-heading" name="logo_replaces_heading" class="form-control" aria-describedby="logo-replaces-heading-help"><option value="0" <?= empty($calendar['logo_replaces_heading']) ? 'selected' : '' ?>>Logo con titolo e descrizione separati</option><option value="1" <?= !empty($calendar['logo_replaces_heading']) ? 'selected' : '' ?>>Testata completa: il logo contiene tutte le scritte</option></select>
-                    <small id="logo-replaces-heading-help" class="text-muted">Con “Testata completa” vengono nascosti visivamente titolo, etichetta e testo introduttivo, perché sono già presenti nell’immagine.</small>
+                    <small id="logo-replaces-heading-help" class="text-muted">Con il logo separato, titolo e testo compaiono sotto. Con “Testata completa” restano nascosti perché sono già nell’immagine.</small>
                 </div>
-                <div class="advent-field advent-field--wide advent-logo-sizes" <?= empty($calendar['logo_replaces_heading']) ? 'hidden' : '' ?>>
-                    <h6>Dimensione della testata completa per dispositivo</h6>
-                    <p class="text-muted small">Imposta la larghezza massima. L’altezza si adatta automaticamente e l’immagine non supera la larghezza dello schermo.</p>
-                    <div class="advent-logo-size-fields">
-                        <?php foreach (['mobile' => 'Smartphone', 'tablet' => 'Tablet', 'desktop' => 'Computer', 'wide' => 'Schermi grandi'] as $device => $label): ?>
-                            <label for="cal-logo-width-<?= $device ?>"><?= $label ?><span class="advent-logo-size-input"><input class="form-control" id="cal-logo-width-<?= $device ?>" name="logo_width_<?= $device ?>" type="number" min="60" max="1000" step="1" value="<?= (int) $calendar['logo_width_' . $device] ?>" required><span>px</span></span></label>
-                        <?php endforeach; ?>
-                    </div>
-                    <div class="advent-logo-size-preview"><label for="cal-logo-preview-device">Anteprima della testata</label><select id="cal-logo-preview-device" class="form-control form-control-sm"><option value="mobile">Smartphone</option><option value="tablet">Tablet</option><option value="desktop" selected>Computer</option><option value="wide">Schermi grandi</option></select><div class="advent-logo-preview-canvas"><img id="cal-logo-size-preview" <?php if ($calendar['logo'] !== ''): ?>src="<?= advent_escape(advent_asset_url($calendar['logo'], advent_editor_base())) ?>"<?php else: ?>hidden<?php endif; ?> alt="Anteprima dimensione della testata completa"><span id="cal-logo-preview-empty" <?= $calendar['logo'] !== '' ? 'hidden' : '' ?>>Carica una testata completa per vedere l’anteprima.</span></div></div>
+                <div class="advent-field" id="cal-intro-field" <?= !empty($calendar['logo_replaces_heading']) ? 'hidden' : '' ?>>
+                    <label for="cal-intro">Testo introduttivo</label>
+                    <textarea id="cal-intro" name="intro" class="form-control"><?= advent_escape($calendar['intro']) ?></textarea>
+                    <small class="text-muted">Compare sotto il titolo. Usa la barra per cambiare dimensione, colore del testo e colore di sfondo.</small>
                 </div>
+                <div class="advent-logo-sizes">
+                    <h6>Larghezza del logo</h6>
+                    <p class="text-muted small">Vale per il logo con titolo e per la testata completa. Il campo segue il dispositivo dell’anteprima. L’altezza si adatta da sola.</p>
+                    <?php foreach (['desktop' => 'Computer', 'tablet' => 'Tablet', 'mobile' => 'Smartphone'] as $device => $label): ?>
+                        <label data-brand-width="<?= $device ?>" for="cal-logo-width-<?= $device ?>" <?= $device === 'desktop' ? '' : 'hidden' ?>>Larghezza su <?= $label ?><span class="advent-logo-size-input"><input class="form-control" id="cal-logo-width-<?= $device ?>" name="logo_width_<?= $device ?>" type="number" min="60" max="1000" step="1" value="<?= (int) $calendar['logo_width_' . $device] ?>" required><span>px</span></span></label>
+                    <?php endforeach; ?>
+                    <label data-brand-width="wide" for="cal-logo-width-wide">Schermi grandi<span class="advent-logo-size-input"><input class="form-control" id="cal-logo-width-wide" name="logo_width_wide" type="number" min="60" max="1000" step="1" value="<?= (int) $calendar['logo_width_wide'] ?>" required><span>px</span></span></label>
+                </div>
+                <div class="advent-brand-overlap">
+                    <?php foreach (['desktop' => 'Computer', 'tablet' => 'Tablet', 'mobile' => 'Smartphone'] as $device => $label): ?>
+                        <div data-brand-overlap="<?= $device ?>" <?= $device === 'desktop' ? '' : 'hidden' ?>>
+                            <label for="cal-logo-overlap-<?= $device ?>">Sovrapposizione <?= $label ?></label>
+                            <div class="advent-range-control"><input id="cal-logo-overlap-<?= $device ?>" name="logo_overlap_<?= $device ?>" type="range" min="-200" max="120" step="2" value="<?= (int) ($calendar['logo_overlap_' . $device] ?? 0) ?>"><output><?= (int) ($calendar['logo_overlap_' . $device] ?? 0) ?> px</output></div>
+                            <small class="text-muted">Sotto zero la prima riga sale sul logo. Sopra zero lascia più spazio.</small>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                </div>
+            </div>
+            <div class="advent-fields">
                 <?php advent_editor_field('accent', 'Colore principale', $calendar['accent'], 'color'); ?>
                 <?php advent_editor_field('modal_overlay', 'Colore velatura popup', $calendar['modal_overlay'], 'color'); ?>
                 <div class="advent-field">
@@ -286,4 +341,4 @@ include __DIR__ . '/../res/inc/header.php';
     </form>
 </div></div></div></div></div></main>
 <script src="views/calendari_avvento/editor.js?v=<?= (int) filemtime(__DIR__ . '/calendari_avvento/editor.js') ?>"></script>
-<?php $scripts = ($scripts ?? '') . '<script src="views/calendari_avvento/footer-editor.js"></script><script src="views/concorso/footer-editor.js"></script>'; include __DIR__ . '/_footer.php'; ?>
+<?php $scripts = ($scripts ?? '') . '<script src="views/calendari_avvento/footer-editor.js"></script><script src="views/concorso/footer-editor.js"></script><script src="views/calendari_avvento/intro-editor.js?v=' . (int) filemtime(__DIR__ . '/calendari_avvento/intro-editor.js') . '"></script>'; include __DIR__ . '/_footer.php'; ?>
