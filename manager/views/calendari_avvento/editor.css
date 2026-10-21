@@ -79,6 +79,9 @@
 .advent-editor .advent-container-content > .advent-container-tabs { margin: 0; padding: 16px 16px 0; }
 .advent-editor .advent-container-content > .advent-container-panel { padding: 12px 16px 16px; }
 .advent-editor .advent-container-content > .advent-container-panel > p { margin: 0 0 12px; }
+.advent-editor .advent-surface-switch { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 20px; }
+.advent-editor .advent-surface-tab { min-height: 44px; padding: 8px 18px; border: 1px solid #dbe3ef; border-radius: 999px; background: #fff; color: #34445f; font-weight: 700; cursor: pointer; }
+.advent-editor .advent-surface-tab[aria-selected="true"] { border-color: #3949ab; background: #eef2ff; color: #1e2a78; }
 .advent-editor .advent-container-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
 .advent-editor .advent-container-tab { min-height: 40px; padding: 8px 16px; border: 1px solid #dbe3ef; border-radius: 999px; background: #fff; color: #34445f; font-weight: 650; cursor: pointer; }
 .advent-editor .advent-container-tab[aria-selected="true"] { border-color: #3949ab; background: #eef2ff; color: #1e2a78; }

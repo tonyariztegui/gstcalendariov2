@@ -36,6 +36,8 @@
     form.addEventListener('invalid', event => {
         const panel = event.target.closest('.config-step');
         if (panel) showStep(panels.indexOf(panel) + 1);
+        const surface = event.target.closest('[data-surface-pane]');
+        if (surface) document.querySelector(`[data-surface="${surface.dataset.surfacePane}"]`)?.click();
         const details = event.target.closest('details');
         if (details) details.open = true;
     }, true);
@@ -414,6 +416,17 @@ if (adventOverlayOpacity) {
         const visible = document.querySelector('[data-container-preview]:not([hidden])');
         if (visible) fitPreview(visible);
     });
+})();
+(() => {
+    const buttons = [...document.querySelectorAll('[data-surface]')];
+    const panes = [...document.querySelectorAll('[data-surface-pane]')];
+    if (!buttons.length || !panes.length) return;
+    function show(name) {
+        buttons.forEach(button => button.setAttribute('aria-selected', String(button.dataset.surface === name)));
+        panes.forEach(pane => { pane.hidden = pane.dataset.surfacePane !== name; });
+        window.dispatchEvent(new Event('resize'));
+    }
+    buttons.forEach(button => button.addEventListener('click', () => show(button.dataset.surface)));
 })();
 const adventFooterOpacity = document.getElementById('cal-footer-opacity');
 if (adventFooterOpacity) {

@@ -7,9 +7,9 @@ $containerCopy = [
     'link' => 'Immagine e pulsante del link. Il colore del pulsante resta quello principale.',
 ];
 ?>
-<section class="card mt-3 mb-4 config-step configurazione-section" id="advent-step-4" role="tabpanel" aria-labelledby="advent-tab-4" tabindex="0"><div class="card-body">
-    <div class="configurazione-hero"><div><div class="section-title configurazione-title"><i class="fa fa-window-maximize mr-2" aria-hidden="true"></i>Contenitori</div><p class="text-muted small mb-0">Modello Classico. L’aspetto del contenitore vale per Premi, Video e Link. Il contenuto resta proprio di ogni tipo.</p></div></div>
+<div id="surface-pane-container" role="tabpanel" aria-labelledby="surface-tab-container" data-surface-pane="container" hidden>
     <div class="configurazione-panel">
+        <div class="configurazione-panel-header"><span class="configurazione-panel-icon"><i class="fa fa-window-maximize" aria-hidden="true"></i></span><div><h6>Contenitore</h6><p>Modello Classico. L’aspetto vale per Premi, Video e Link. Il contenuto resta proprio di ogni tipo.</p></div></div>
         <?php $appearance = $containers['prize']; $appearancePrefix = 'containers[appearance]'; ?>
         <div class="advent-container-layout">
             <div class="advent-container-previews">
@@ -84,4 +84,4 @@ $containerCopy = [
             </div>
         </div>
     </div>
-</div></section>
+</div>
