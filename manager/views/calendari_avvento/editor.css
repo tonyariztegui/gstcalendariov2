@@ -53,7 +53,8 @@
 .advent-editor .advent-grid-preset-art--compact { grid-template-columns: repeat(6, 1fr); gap: 2px; }
 .advent-editor .advent-grid-preset-art--gallery { grid-template-columns: repeat(3, 1fr); gap: 6px; }
 .advent-editor .advent-grid-preset-art i { border: 1px solid #c7d2fe; border-radius: 5px; background: linear-gradient(135deg, #dbeafe, #eef2ff); }
-.advent-editor .advent-grid-live-preview { max-width: 980px; margin: 0 auto 20px; padding: 16px; border: 1px solid #dbe3ef; border-radius: 12px; background: #f8fafc; }
+.advent-editor .advent-grid-layout { display: flex; flex-direction: column; gap: 16px; }
+.advent-editor .advent-grid-live-preview { max-width: 980px; margin: 0 auto; padding: 16px; border: 1px solid #dbe3ef; border-radius: 12px; background: #f8fafc; }
 .advent-editor .advent-grid-live-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
 .advent-editor .advent-grid-live-header label { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 13px; }
 .advent-editor .advent-grid-live-header select { width: auto; min-width: 120px; }
@@ -99,6 +100,11 @@
 .advent-editor .advent-container-preview-bars { display: block; width: min(220px, 100%); height: 48px; margin: 0 auto 6px; background: repeating-linear-gradient(90deg, #233c34 0 2px, transparent 2px 5px, #233c34 5px 7px, transparent 7px 9px); }
 .advent-editor .advent-container-preview-code small { color: #52685b; font-size: 13px; }
 @media (min-width: 1100px) {
+    .advent-editor .advent-grid-layout { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 24px; align-items: start; }
+    .advent-editor .advent-grid-settings { grid-column: 1; grid-row: 1; min-width: 0; }
+    .advent-editor .advent-grid-live-preview { grid-column: 2; grid-row: 1; position: sticky; top: 16px; width: 100%; max-width: none; margin: 0; }
+    .advent-editor .advent-grid-layout .advent-disclosure { max-width: none; margin: 0 0 12px; }
+    .advent-editor .advent-grid-settings .advent-fields { grid-template-columns: 1fr; }
     .advent-editor .advent-container-layout { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 24px; align-items: start; }
     .advent-editor .advent-container-settings { grid-column: 1; grid-row: 1; min-width: 0; }
     .advent-editor .advent-container-previews { grid-column: 2; grid-row: 1; position: sticky; top: 16px; min-width: 0; }

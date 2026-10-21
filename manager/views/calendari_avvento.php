@@ -157,6 +157,7 @@ include __DIR__ . '/../res/inc/header.php';
                         <button type="button" class="advent-grid-preset" data-grid-preset="gallery" data-mobile="1" data-tablet="2" data-desktop="3" data-gap="24" data-ratio="wide" data-radius="20" data-fit="cover" aria-pressed="false"><span class="advent-grid-preset-art advent-grid-preset-art--gallery" aria-hidden="true"><i></i><i></i><i></i></span><strong>Galleria</strong><small>3 colonne, immagini ampie</small></button>
                     </div>
                 </fieldset>
+                <div class="advent-grid-layout">
                 <div class="advent-grid-live-preview" aria-label="Anteprima della griglia">
                     <div class="advent-grid-live-header"><strong>Anteprima del modello</strong><label for="cal-grid-preview-device">Dispositivo <select id="cal-grid-preview-device" class="form-control form-control-sm"><option value="desktop">Computer</option><option value="tablet">Tablet</option><option value="mobile">Smartphone</option></select></label></div>
                     <div id="cal-grid-preview" class="advent-grid-preview" aria-hidden="true"><?php
@@ -165,6 +166,7 @@ include __DIR__ . '/../res/inc/header.php';
                     ?><span class="advent-grid-preview-tile<?= ($n - 1) % 3 === 2 ? ' is-preview-expired' : '' ?>"><span class="advent-grid-preview-art"><?= $n ?><?php if (($n - 1) % 3 === 2): ?><img class="advent-grid-preview-banner" src="<?= advent_escape(advent_asset_url('/public/assets/images/calendario/promozione-non-piu-valida.png', advent_editor_base())) ?>" alt=""><?php endif; ?></span><span class="advent-grid-preview-caption"><strong><?= $previewCaption[0] ?></strong><span><?= $previewCaption[1] ?></span></span></span><?php endfor; ?></div>
                     <p id="cal-grid-preset-status" class="text-muted small mb-0" role="status"></p>
                 </div>
+                <div class="advent-grid-settings">
                 <details class="advent-disclosure advent-grid-advanced"><summary>Regola il modello manualmente</summary><div class="advent-fields">
                     <div class="advent-field"><label for="cal-grid-columns-mobile">Colonne su smartphone</label><select class="form-control" id="cal-grid-columns-mobile" name="grid_columns_mobile"><?php foreach ([1,2] as $n): ?><option value="<?= $n ?>" <?= (int) ($calendar['grid_columns_mobile'] ?? 2) === $n ? 'selected' : '' ?>><?= $n ?></option><?php endforeach; ?></select></div>
                     <div class="advent-field"><label for="cal-grid-columns-tablet">Colonne su tablet</label><select class="form-control" id="cal-grid-columns-tablet" name="grid_columns_tablet"><?php foreach ([2,3,4] as $n): ?><option value="<?= $n ?>" <?= (int) ($calendar['grid_columns_tablet'] ?? 3) === $n ? 'selected' : '' ?>><?= $n ?></option><?php endforeach; ?></select></div>
@@ -212,6 +214,8 @@ include __DIR__ . '/../res/inc/header.php';
                         </div>
                     </div>
                 </details>
+                </div>
+                </div>
                 <p class="text-muted small mt-3 mb-0">Scegli un modello, controlla l’anteprima e salva la configurazione.</p>
             </div>
             <p class="text-muted small">Scegli un tipo per ogni casella: premio, video YouTube o link. Il titolo la rende disponibile.</p>
